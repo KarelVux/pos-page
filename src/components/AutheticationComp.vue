@@ -21,13 +21,13 @@
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
                         <input type="email"
-                               v-model="values.email"
+                               v-model="loginData.email"
                                class="form-control">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
                         <input type="password"
-                               v-model="values.password"
+                               v-model="loginData.password"
                                class="form-control">
                     </div>
                 </div>
@@ -51,10 +51,7 @@ import {ref} from "vue";
 
 
 const identityService = new IdentityService();
-
-// const loginData = ref<ILoginData>({email: "", password: ""})
-
-const values = ref<ILoginData>({
+const loginData = ref<ILoginData>({
     email: "",
     password: "",
 } as ILoginData);
@@ -64,14 +61,14 @@ const onSubmit = async (event: MouseEvent) => {
     console.log('onSubmit', event);
     event.preventDefault();
 
-    if (values.value.email.length == 0 || values.value.password.length == 0) {
+    if (loginData.value.email.length == 0 || loginData.value.password.length == 0) {
         validationErrors.value.push("Bad input values!");
         return;
     }
     // remove errors
     validationErrors.value = [];
 
-    var jwtData = await identityService.login(values.value);
+    var jwtData = await identityService.login(loginData.value);
 
     if (jwtData == undefined) {
         // TODO: get error info
