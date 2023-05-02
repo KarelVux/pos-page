@@ -1,23 +1,36 @@
 <script setup>
-import { ref } from 'vue';
-
-const links = ref(['Dashboard', 'Messages', 'Profile', 'Updates']);
 </script>
 
 <template>
-    <v-app-bar flat>
-        <v-container class="fill-height d-flex align-center">
-            <v-avatar class="me-10 ms-4" color="grey-darken-1" size="32"></v-avatar>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">WebApp</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/Home/Privacy">Privacy</a>
+                        </li>
+                    </ul>
 
-            <v-btn v-for="link in links" :key="link" variant="text">
-                {{ link }}
-            </v-btn>
-
-            <v-spacer></v-spacer>
-
-            <v-responsive max-width="260">
-                <v-text-field density="compact" hide-details variant="solo"></v-text-field>
-            </v-responsive>
-        </v-container>
-    </v-app-bar>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/Identity/Account/Register">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/Identity/Account/Login">Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 </template>

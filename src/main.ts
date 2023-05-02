@@ -1,17 +1,16 @@
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
+import {createApp} from 'vue';
+import {createPinia} from 'pinia';
 
 import App from './App.vue';
 import router from './router';
 import 'vuetify/styles';
-import { createVuetify } from 'vuetify';
+import {createVuetify} from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 
-import './assets/main.css';
-import 'bootstrap/dist/css/bootstrap.css';
+import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap"
 import 'jquery';
-import 'bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
 
 

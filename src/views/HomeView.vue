@@ -1,38 +1,26 @@
 <template>
-    <v-main class='bg-grey-lighten-3'>
-        <v-container>
-            <v-row>
-                <v-col cols='2'>
-                    <v-sheet rounded='lg'>
-                        <v-list rounded='lg'>
-                            <v-list-item v-for='n in 5' :key='n' link>
-                                <v-list-item-title> List Item {{ n }}</v-list-item-title>
-                            </v-list-item>
+    <body>
+    <div class="container">
+        <main role="main" class="pb-3">
 
-                            <v-divider class='my-2'></v-divider>
+            <div class="text-center">
+                <h1 class="display-4">Welcome</h1>
+                <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.
+                </p>
+            </div>
+        </main>
+    </div>
 
-                            <v-list-item link color='grey-lighten-4'>
-                                <v-list-item-title> Refresh</v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-sheet>
-                </v-col>
+    </body>
 
-                <v-col>
-                    <v-sheet min-height='70vh' rounded='lg'>
-                        <!--  -->
-                        <h1>content</h1>
-                    </v-sheet>
-                </v-col>
-            </v-row>
-        </v-container>
-    </v-main>
 </template>
 
 <script setup lang='ts'>
 import {onMounted, ref} from 'vue';
 import type {IGetBusinessQueryParams} from "@/services/shop/ShopsService";
 import ShopsService from "@/services/shop/ShopsService";
+import AutheticationComp from "@/components/AutheticationComp.vue";
+import NavBar from "@/App.vue";
 
 const shopsService = new ShopsService();
 
