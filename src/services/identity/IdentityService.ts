@@ -1,7 +1,8 @@
 import { BaseService } from "../base/BaseService";
-import type { IRegisterData } from '@/dto/IRegisterData';
-import type { IJWTResponse } from '@/dto/IJWTResponse';
-import type { ILoginData } from '@/dto/ILoginData';
+import type {IRegisterData} from "@/dto/identity/IRegisterData";
+import type {ILoginData} from "@/dto/identity/ILoginData";
+import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
+
 
 export class IdentityService extends BaseService {
     constructor() {

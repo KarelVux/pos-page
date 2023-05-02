@@ -30,15 +30,21 @@
 </template>
 
 <script setup lang='ts'>
-import { onMounted, ref } from 'vue';
-import { SettlementsService } from '@/services/management/SettlementsService';
+import {onMounted, ref} from 'vue';
+import type {IGetBusinessQueryParams} from "@/services/shop/ShopsService";
+import ShopsService from "@/services/shop/ShopsService";
 
-const settlementsService = new SettlementsService();
+const shopsService = new ShopsService();
 
 onMounted(() => {
-    var settlements = settlementsService.getAllFree();
+    const params: IGetBusinessQueryParams = {
+        settlementId: ""
 
-    console.log(settlements);
+    }
+
+    var businesses = shopsService.getBusinesses("adasdas", params);
+
+    console.log(businesses);
 });
 
 </script>
