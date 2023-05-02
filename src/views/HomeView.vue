@@ -22,8 +22,6 @@
 import {onMounted, ref} from 'vue';
 import type {IGetBusinessQueryParams} from "@/services/shop/ShopsService";
 import ShopsService from "@/services/shop/ShopsService";
-import AutheticationComp from "@/components/AutheticationComp.vue";
-import NavBar from "@/App.vue";
 
 const shopsService = new ShopsService();
 

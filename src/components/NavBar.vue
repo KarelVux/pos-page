@@ -1,5 +1,6 @@
 <script setup>
-import AutheticationComp from "@/components/AutheticationComp.vue";
+import LoginForm from "@/components/LoginForm.vue";
+import RegisterForm from "@/components/RegisterForm.vue";
 </script>
 
 <template>
@@ -24,10 +25,10 @@ import AutheticationComp from "@/components/AutheticationComp.vue";
 
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Identity/Account/Register">Register</a>
+                            <RegisterForm/>
                         </li>
                         <li class="nav-item">
-                            <AutheticationComp/>
+                            <LoginForm/>
                         </li>
                     </ul>
                 </div>
