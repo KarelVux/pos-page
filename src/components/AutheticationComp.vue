@@ -1,4 +1,38 @@
 <template>
+  <!-- Button trigger modal -->
+    <li  class="nav-link text-dark " data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+      <span class="text-dark custom-mouse-over">Login</span>
+    </li>
+
+  <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Email address</label>
+                            <input type="email" class="form-control" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Password</label>
+                            <input type="password" class="form-control" >
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Log in</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!--
     <div id="content" class="flex">
         <div class="">
             <div class="page-content page-container" id="page-content">
@@ -48,8 +82,17 @@
             </div>
         </div>
     </div>
+-->
 </template>
 
+
+<script setup lang="ts">
+
+import {IdentityService} from "@/services/identity/IdentityService";
+
+const identityService = new IdentityService();
+
+</script>
 <style scoped>body {
     background-color: #f9f9fa;
 }
@@ -104,5 +147,10 @@
 .form-check-input.is-invalid ~ .form-check-label,
 .was-validated .form-check-input:invalid ~ .form-check-label {
     color: #f54394
+}
+
+
+.custom-mouse-over{
+    cursor: pointer;
 }
 </style>

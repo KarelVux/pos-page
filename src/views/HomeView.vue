@@ -1,6 +1,9 @@
 <template>
     <body>
     <div class="container">
+        <AutheticationComp/>
+
+
         <main role="main" class="pb-3">
 
             <div class="text-center">

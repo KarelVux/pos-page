@@ -1,4 +1,5 @@
 <script setup>
+import AutheticationComp from "@/components/AutheticationComp.vue";
 </script>
 
 <template>
@@ -26,7 +27,7 @@
                             <a class="nav-link text-dark" href="/Identity/Account/Register">Register</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Identity/Account/Login">Login</a>
+                            <AutheticationComp/>
                         </li>
                     </ul>
                 </div>
