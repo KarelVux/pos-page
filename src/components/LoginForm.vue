@@ -5,7 +5,7 @@
     </li>
 
   <!-- Modal -->
-    <div class="modal fade" id="loginBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <div class="modal animate__fade" id="loginBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -16,7 +16,7 @@
                 <div class="modal-body">
 
                     <ul :style=" {display: validationErrors.length == 0 ? 'none' : '' }">
-                        <li class="text-danger">{{validationErrors.length > 0 ? validationErrors[0] : ''}}</li>
+                        <li class="text-danger">{{ validationErrors.length > 0 ? validationErrors[0] : '' }}</li>
                     </ul>
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
@@ -48,6 +48,7 @@
 import type {ILoginData} from "@/dto/identity/ILoginData";
 import {IdentityService} from "@/services/identity/IdentityService";
 import {ref} from "vue";
+import  {Modal} from "bootstrap";
 
 
 const identityService = new IdentityService();
@@ -77,6 +78,13 @@ const onSubmit = async (event: MouseEvent) => {
     }
 
     console.log(jwtData)
+
+    // close modal
+    let myModalEl = document.getElementById('loginBackdrop');
+    let modal = Modal.getInstance(myModalEl)
+    modal?.hide()
+
+
 }
 
 </script>

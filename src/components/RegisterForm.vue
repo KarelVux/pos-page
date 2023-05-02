@@ -5,7 +5,7 @@
     </li>
 
   <!-- Modal -->
-    <div class="modal fade" id="registerBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <div class="modal animate__fade" id="registerBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -54,6 +54,7 @@
 import {IdentityService} from "@/services/identity/IdentityService";
 import {ref} from "vue";
 import type {IRegisterData} from "@/dto/identity/IRegisterData";
+import {Modal} from "bootstrap";
 
 
 const identityService = new IdentityService();
@@ -84,6 +85,12 @@ const onSubmit = async (event: MouseEvent) => {
     }
 
     console.log(jwtData)
+
+    // close modal
+    let myModalEl = document.getElementById('registerBackdrop');
+    let modal = Modal.getInstance(myModalEl)
+    modal?.hide()
+
 }
 
 </script>
