@@ -16,7 +16,7 @@
                 <div class="modal-body">
 
                     <ul :style=" {display: validationErrors.length == 0 ? 'none' : '' }">
-                        <li>{{validationErrors.length > 0 ? validationErrors[0] : ''}}</li>
+                        <li class="text-danger">{{validationErrors.length > 0 ? validationErrors[0] : ''}}</li>
                     </ul>
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
