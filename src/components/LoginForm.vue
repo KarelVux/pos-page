@@ -1,16 +1,16 @@
 <template>
   <!-- Button trigger modal -->
-    <li class="nav-link text-dark " data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    <li class="nav-link text-dark " data-bs-toggle="modal" data-bs-target="#loginBackdrop">
         <span class="text-dark custom-mouse-over">Login</span>
     </li>
 
   <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <div class="modal fade" id="loginBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Login</h5>
+                    <h5 class="modal-title" id="loginBackdropLabel">Login</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
