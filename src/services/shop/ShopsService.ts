@@ -1,5 +1,6 @@
 import {BaseService} from "@/services/base/BaseService";
 import type {IBusiness} from "@/dto/shop/IBusiness";
+import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 
 export interface IGetBusinessQueryParams {
     settlementId: string;
@@ -13,14 +14,14 @@ export default class ShopsService extends BaseService {
     }
 
 
-    async getBusinesses(jwt: string, params: IGetBusinessQueryParams): Promise<IBusiness | undefined> {
+    async getBusinesses(jwtData: IJWTResponse, params: IGetBusinessQueryParams): Promise<IBusiness[] | undefined> {
         try {
 
             console.log("gety business")
-            const response = await this.axios.get<IBusiness>('GetBusinesses',
+            const response = await this.axios.get<IBusiness[]>('GetBusinesses',
                 {
                     headers: {
-                        'Authorization': 'Bearer ' + jwt
+                        'Authorization': 'Bearer ' + jwtData.jwt
                     },
                     params: {
                         settlementId: params.settlementId,
