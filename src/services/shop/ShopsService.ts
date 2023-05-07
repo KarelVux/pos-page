@@ -15,9 +15,20 @@ export default class ShopsService extends BaseService {
 
     async getBusinesses(jwt: string, params: IGetBusinessQueryParams): Promise<IBusiness | undefined> {
         try {
-            const response = await this.axios.get<IBusiness>('GetBusinesses', {
-                params
-            });
+
+            console.log("gety business")
+            const response = await this.axios.get<IBusiness>('GetBusinesses',
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + jwt
+                    },
+                    params: {
+                        settlementId: params.settlementId,
+                        businessCategoryId: params.businessCategoryId,
+
+                    }
+                }
+            );
 
 
             console.log('register response', response);

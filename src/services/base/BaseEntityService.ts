@@ -1,17 +1,22 @@
-import type { IBaseEntity } from '@/dto/management/IBaseEntity';
-import { BaseService } from '@/services/base/BaseService';
+import {BaseService} from "./BaseService";
+import type {IBaseEntity} from "@/dto/management/IBaseEntity";
+import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
+import type {AxiosError} from "axios";
+import {IdentityService} from "@/services/identity/IdentityService";
 
 export abstract class BaseEntityService<TEntity extends IBaseEntity> extends BaseService {
-    constructor(baseUrl: string) {
+    constructor(
+        baseUrl: string,
+    ) {
         super(baseUrl);
     }
 
-    async getAll(jwt: string): Promise<TEntity[] | undefined> {
+    async getAll(jwtData: IJWTResponse): Promise<TEntity[] | undefined> {
         try {
             const response = await this.axios.get<TEntity[]>('',
                 {
                     headers: {
-                        'Authorization': 'Bearer ' + jwt
+                        'Authorization': 'Bearer ' + jwtData.jwt
                     }
                 }
             );
@@ -20,25 +25,30 @@ export abstract class BaseEntityService<TEntity extends IBaseEntity> extends Bas
             if (response.status === 200) {
                 return response.data;
             }
+
             return undefined;
         } catch (e) {
-            console.log('error: ', (e as Error).message);
-            return undefined;
-        }
-    }
+       /*     console.log('error: ', (e as Error).message, e);
+            if ((e as AxiosError).response?.status === 401) {
+                console.error("JWT expired, refreshing!");
+                // try to refresh the jwt
+                const identityService = new IdentityService();
+                const refreshedJwt = await identityService.refreshToken(jwtData);
+                if (refreshedJwt) {
+                    this.setJwtResponse(refreshedJwt);
 
-    async getAllFree(): Promise<TEntity[] | undefined> {
-        try {
-            const response = await this.axios.get<TEntity[]>(''
-            );
-
-            console.log('response', response);
-            if (response.status === 200) {
-                return response.data;
-            }
-            return undefined;
-        } catch (e) {
-            console.log('error: ', (e as Error).message);
+                    const response = await this.axios.get<TEntity[]>('',
+                        {
+                            headers: {
+                                'Authorization': 'Bearer ' + refreshedJwt.jwt
+                            }
+                        }
+                    );
+                    if (response.status === 200) {
+                        return response.data;
+                    }
+                }
+            }*/
             return undefined;
         }
     }

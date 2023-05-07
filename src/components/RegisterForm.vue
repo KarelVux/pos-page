@@ -90,7 +90,6 @@ const onSubmit = async (event: MouseEvent) => {
     let myModalEl = document.getElementById('registerBackdrop');
     let modal = Modal.getInstance(myModalEl)
     modal?.hide()
-
 }
 
 </script>
