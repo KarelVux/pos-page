@@ -1,27 +1,21 @@
 <template>
-    <body>
-    <div class="container">
-        <AutheticationComp/>
 
-
-        <main role="main" class="pb-3">
-
-            <div class="text-center">
-                <h1 class="display-4">Welcome</h1>
-                <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.
-                </p>
-
+    <div class="text-center">
+        <ul class="list-group">
+            <li class="list-group-item">
                 <button type="button" class="btn btn-secondary" @click="handleClick">Secondary</button>
-            </div>
-        </main>
-    </div>
 
-    </body>
+            </li>
+            <li class="list-group-item">
+                <RouterLink to="/store/business">Go to businesses</RouterLink>
+            </li>
+        </ul>
+    </div>
 
 </template>
 
 <script setup lang='ts'>
-import {onUpdated, ref} from 'vue';
+import {onUpdated, ref } from 'vue';
 import type {IGetBusinessQueryParams} from "@/services/shop/ShopsService";
 import ShopsService from "@/services/shop/ShopsService";
 import {useIdentityStore} from "@/stores/identityStore";

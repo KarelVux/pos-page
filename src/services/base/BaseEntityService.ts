@@ -28,27 +28,28 @@ export abstract class BaseEntityService<TEntity extends IBaseEntity> extends Bas
 
             return undefined;
         } catch (e) {
-       /*     console.log('error: ', (e as Error).message, e);
-            if ((e as AxiosError).response?.status === 401) {
-                console.error("JWT expired, refreshing!");
-                // try to refresh the jwt
-                const identityService = new IdentityService();
-                const refreshedJwt = await identityService.refreshToken(jwtData);
-                if (refreshedJwt) {
-                    this.setJwtResponse(refreshedJwt);
+            console.log('error: ', (e as Error).message, e);
+            /*     console.log('error: ', (e as Error).message, e);
+                 if ((e as AxiosError).response?.status === 401) {
+                     console.error("JWT expired, refreshing!");
+                     // try to refresh the jwt
+                     const identityService = new IdentityService();
+                     const refreshedJwt = await identityService.refreshToken(jwtData);
+                     if (refreshedJwt) {
+                         this.setJwtResponse(refreshedJwt);
 
-                    const response = await this.axios.get<TEntity[]>('',
-                        {
-                            headers: {
-                                'Authorization': 'Bearer ' + refreshedJwt.jwt
-                            }
-                        }
-                    );
-                    if (response.status === 200) {
-                        return response.data;
-                    }
-                }
-            }*/
+                         const response = await this.axios.get<TEntity[]>('',
+                             {
+                                 headers: {
+                                     'Authorization': 'Bearer ' + refreshedJwt.jwt
+                                 }
+                             }
+                         );
+                         if (response.status === 200) {
+                             return response.data;
+                         }
+                     }
+                 }*/
             return undefined;
         }
     }
