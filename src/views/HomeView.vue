@@ -1,17 +1,15 @@
 <template>
 
-    <div class="text-center">
-        <ul class="list-group">
-            <li class="list-group-item">
-                <button type="button" class="btn btn-secondary" @click="handleClick">Secondary</button>
-
-            </li>
-            <li class="list-group-item">
-                <RouterLink to="/store/business">Go to businesses</RouterLink>
-            </li>
-        </ul>
-    </div>
-
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <p>
+                    <button type="button" class="btn btn-secondary" @click="handleClick">Secondary</button>
+                    <RouterLink to="/store/business">Go to businesses</RouterLink>
+                </p>
+            </div>
+        </div>
+    </section>
 </template>
 
 <script setup lang='ts'>

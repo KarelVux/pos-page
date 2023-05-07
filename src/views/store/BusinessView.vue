@@ -1,4 +1,43 @@
 <template>
+    <div class="col-md-7 col-lg-8">
+        <h4 class="mb-3">Search</h4>
+        <div>
+            <div class="row g-3">
+
+
+                <div class="col-md-3">
+                    <label for="zip" class="form-label">Business Name</label>
+                    <input type="text" class="form-control" id="zip" placeholder="" required>
+
+                </div>
+
+                <div class="col-md-5">
+                    <label for="country" class="form-label">Settlement</label>
+                    <select class="form-select" id="country" required>
+                        <option value="">Choose...</option>
+                        <option>United States</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Please select a valid country.
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="state" class="form-label">State</label>
+                    <select class="form-select" id="state">
+                        <option value="">Choose...</option>
+                        <option>California</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+        </div>
+    </div>
+
+
+    <br>
+
     <div class="col-lg-9">
         <div class="row justify-content-center mb-3">
             <div class="col-md-12">
@@ -56,44 +95,41 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {onMounted, ref} from "vue";
 import {useIdentityStore} from "@/stores/identityStore";
+import {SettlementsService} from "@/services/management/SettlementsService";
+import type IBusinessSearch from "@/dto/shop/businessView/IBusinessSearch";
+import type {ISettlement} from "@/dto/management/ISettlement";
+import {BusinessCategoriesService} from "@/services/management/BusinessCategoriesService";
+import type {IBusiness} from "@/dto/shop/IBusiness";
+import type {IBusinessCategory} from "@/dto/shop/IBusinessCategory";
 
-//const identitySore = useIdentityStore();
-//const settlementService = new SettlementsService();
+
+const identitySore = useIdentityStore();
+const settlementService = new SettlementsService();
+const businessCategoriesService = new BusinessCategoriesService();
+
+const vall = ref<IBusinessSearch>({
+    businessCategoryId: "",
+    businessSearchName: "",
+    settlementId: ""
+})
+const settlements = ref<ISettlement[]>()
+const businessCategories = ref<IBusinessCategory[]>()
+
 
 onMounted(async () => {
     console.log("Open business details")
-    //  let identity = identitySore.$state.authenticationJwt;
-    //  let settlements = (await settlementService.getAll())
-})
+    let identity = identitySore.authenticationJwt;
 
-/*
-const filteredBusinesses = computed(() => {
-    let businessesFiltered = businesses.value.filter((business) => {
-        return (
-            business.name.toLowerCase().includes(search.value.toLowerCase()) &&
-            (selectedCategory.value === '' ||
-                business.categories.includes(selectedCategory.value))
-        );
-    });
 
-    if (selectedSort.value === 'nameAsc') {
-        businessesFiltered.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (selectedSort.value === 'nameDesc') {
-        businessesFiltered.sort((a, b) => b.name.localeCompare(a.name));
-    } else if (selectedSort.value === 'categoryAsc') {
-        businessesFiltered.sort((a, b) =>
-            a.categories.join(', ').localeCompare(b.categories.join(', '))
-        );
-    } else if (selectedSort.value === 'categoryDesc') {
-        businessesFiltered.sort((a, b) =>
-            b.categories.join(', ').localeCompare(a.categories.join(', '))
-        );
+    if (identity === undefined) {
+        console.log("jwt is null")
+        return;
     }
-    return businessesFiltered;
-});
+    settlements.value = (await settlementService.getAll(identity))
+    businessCategories.value = (await businessCategoriesService.getAll(identity))
 
-*/
+})
 </script>
