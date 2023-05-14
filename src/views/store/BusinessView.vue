@@ -192,14 +192,15 @@ const performSearch = async () => {
 
 
     if (responseBusinesses) {
-
         if (responseBusinesses!.length > 0 &&
             inputValues.value.businessSearchName != null ||
-            inputValues.value.businessSearchName!.trim().length != null) {
+            inputValues.value.businessSearchName!.trim().length > 0) {
 
-            responseBusinesses.filter(x => x.name.toLowerCase().includes(inputValues.value.businessSearchName.trim()))
+            businesses.value = responseBusinesses.filter(x => x.name.toLowerCase().includes(inputValues.value.businessSearchName.toLowerCase().trim()))
+        }else{
+            businesses.value = responseBusinesses;
+
         }
-        businesses.value = responseBusinesses;
 
     } else {
         businesses.value = []

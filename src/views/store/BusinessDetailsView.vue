@@ -1,151 +1,171 @@
 <template>
     <main class="mt-5 pt-4">
+
         <div v-if="businessDetails" class="container mt-5">
-            <!--Grid row-->
-            <div class="row">
-                <!--Grid column-->
-                <div class="col-md-6 mb-4">
-                    <img src="https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80"
-                         class="img-fluid" alt=""/>
-                </div>
-                <!--Grid column-->
-
-                <!--Grid column-->
-                <div class="col-md-6 mb-4">
-                    <!--Content-->
-                    <div class="p-4">
-                        <strong><p style="font-size: 20px;">{{ businessDetails.name }}</p></strong>
-
-                        <div class="mb-3">
-                            <span class="badge bg-info me-1">{{ businessDetails.businessCategory.title }}</span>
-                        </div>
-
-
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor suscipit libero eos atque
-                            quia ipsa sint voluptatibus! Beatae sit assumenda asperiores iure at maxime atque
-                            repellendus maiores quia sapiente.</p>
-
-                        <SimpleRowValuePair
-                                strongText="Address: "
-                                :normalText="businessDetails.address"
-                        />
-                        <SimpleRowValuePair
-                                strongText="Email: "
-                                :normalText="businessDetails.email"
-                        />
-                        <SimpleRowValuePair
-                                strongText="Phone number: "
-                                :normalText="businessDetails.phoneNumber"
-                        />
-
-
+            <section>
+                <!--Grid row-->
+                <div class="row">
+                    <!--Grid column-->
+                    <div class="col-md-6 mb-4">
+                        <img src="https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80"
+                             class="img-fluid" alt=""/>
                     </div>
-                    <!--Content-->
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-md-6 mb-4">
+                        <!--Content-->
+                        <div class="p-4">
+                            <strong><p style="font-size: 20px;">{{ businessDetails.name }}</p></strong>
+
+                            <div class="mb-3">
+                                <span class="badge bg-info me-1">{{ businessDetails.businessCategory.title }}</span>
+                            </div>
+
+
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor suscipit libero eos
+                                atque
+                                quia ipsa sint voluptatibus! Beatae sit assumenda asperiores iure at maxime atque
+                                repellendus maiores quia sapiente.</p>
+
+                            <SimpleRowValuePair
+                                    strongText="Address: "
+                                    :normalText="businessDetails.address"
+                            />
+                            <SimpleRowValuePair
+                                    strongText="Email: "
+                                    :normalText="businessDetails.email"
+                            />
+                            <SimpleRowValuePair
+                                    strongText="Phone number: "
+                                    :normalText="businessDetails.phoneNumber"
+                            />
+                        </div>
+                        <!--Content-->
+                    </div>
+                    <!--Grid column-->
                 </div>
-                <!--Grid column-->
-            </div>
-            <!--Grid row-->
+                <!--Grid row-->
+            </section>
 
-            <hr/>
+            <section>
+                <div class="container">
+                    <div class="col-lg-12">
+                        <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
+                            <strong class="d-block py-2">{{ businessDetails.products.length }} Items found </strong>
+<!--                            <div class="ms-auto">
+                                <select class="form-select d-inline-block w-auto border pt-1">
+                                    <option value="0">Best match</option>
+                                    <option value="1">Recommended</option>
+                                    <option value="2">High rated</option>
+                                    <option value="3">Randomly</option>
+                                </select>
 
-            <!--Grid row-->
-            <div class="row d-flex justify-content-center">
-                <!--Grid column-->
-                <div class="col-md-6 text-center">
+                            </div>-->
+                        </header>
 
-                    <h4 class="my-4 h4">Additional information</h4>
+                        <div class="row justify-content-center mb-3" v-for="product in businessDetails.products" :key="product.id">
+                            <div class="col-md-12">
+                                <div class="card shadow-0 border rounded-3">
+                                    <div class="card-body">
+                                        <div class="row g-0">
+                                            <div class="col-xl-3 col-md-4 d-flex justify-content-center">
+                                                <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
+                                                    <img src="../../assets/image-not-found.png"
+                                                         class="w-100">
+                                                    <a href="#!">
+                                                        <div class="hover-overlay">
+                                                            <div class="mask"
+                                                                 style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-7 col-md-6 col-sm-8">
+                                                <h5>{{ product.name }}</h5>
+                                                <div class="d-flex flex-row">
 
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta
-                        odit voluptates, quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum
-                        in laborum.</p>
+                                                    <div class="mb-3">
+                                                        <span class="badge bg-info me-1">{{ product.productCategory.title }}</span>
+                                                    </div>
+
+
+                                                </div>
+
+                                                <p class="text mb-4 mb-md-0">
+                                                    {{product.description}}
+                                                </p>
+                                            </div>
+                                            <div class="col-xl-2 col-md-2 col-sm-4">
+
+                                                <div v-if="product.unitDiscount" class="d-flex flex-row align-items-center mb-1">
+                                                    <h4 class="mb-1 me-1">{{product.unitPrice + product.unitDiscount}} {{product.currency}}</h4>
+                                                    <span class="text-danger"><s>{{product.unitPrice}} {{product.currency}}</s></span>
+                                                </div>
+                                                <div v-else class="d-flex flex-row align-items-center mb-1">
+                                                    <h4 class="mb-1 me-1">{{product.unitPrice}} {{product.currency}}</h4>
+                                                </div>
+
+                                                <div class="mt-4">
+                                                    <button class="btn btn-primary shadow-0" type="button">Buy this
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!--Grid column-->
-            </div>
-            <!--Grid row-->
+            </section>
 
-            <!--Grid row-->
-            <div class="row">
-                <!--Grid column-->
-                <div class="col-lg-4 col-md-12 mb-4">
-                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg"
-                         class="img-fluid" alt=""/>
-                </div>
-                <!--Grid column-->
+            <!--
+            Grid row
+                        <div class="row d-flex justify-content-center">
+                            Grid column
+                            <div class="col-md-6 text-center">
 
-                <!--Grid column-->
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg"
-                         class="img-fluid" alt=""/>
-                </div>
-                <!--Grid column-->
+                                <h4 class="my-4 h4">Additional information</h4>
 
-                <!--Grid column-->
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg"
-                         class="img-fluid" alt=""/>
-                </div>
-                <!--Grid column-->
-            </div>
-            <!--Grid row-->
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta
+                                    odit voluptates, quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum
+                                    in laborum.</p>
+                            </div>
+                            Grid column
+                        </div>
+                        Grid row
+
+                        Grid row
+                        <div class="row">
+                            Grid column
+                            <div class="col-lg-4 col-md-12 mb-4">
+                                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg"
+                                     class="img-fluid" alt=""/>
+                            </div>
+                            Grid column
+
+                            Grid column
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg"
+                                     class="img-fluid" alt=""/>
+                            </div>
+                            Grid column
+
+                            Grid column
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg"
+                                     class="img-fluid" alt=""/>
+                            </div>
+                            Grid column
+                        </div>
+                        -->
         </div>
         <div v-else>
             <NotFound/>
         </div>
     </main>
-
-
-  <!--    <body>
-      <div class="container">
-          <div class="row">
-              <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                  <div class="card border-0 shadow rounded-3 my-5">
-                      <div class="card-body p-4 p-sm-5">
-                          <h5 class="card-title text-center mb-5 fw-light fs-5">Sign In</h5>
-                          <form>
-                              <div class="form-floating mb-3">
-                                  <input type="email" class="form-control" id="floatingInput"
-                                         placeholder="name@example.com">
-                                  <label for="floatingInput">Email address</label>
-                              </div>
-                              <div class="form-floating mb-3">
-                                  <input type="password" class="form-control" id="floatingPassword"
-                                         placeholder="Password">
-                                  <label for="floatingPassword">Password</label>
-                              </div>
-
-                              <div class="form-check mb-3">
-                                  <input class="form-check-input" type="checkbox" value="" id="rememberPasswordCheck">
-                                  <label class="form-check-label" for="rememberPasswordCheck">
-                                      Remember password
-                                  </label>
-                              </div>
-                              <div class="d-grid">
-                                  <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Sign
-                                      in
-                                  </button>
-                              </div>
-                              <hr class="my-4">
-                              <div class="d-grid mb-2">
-                                  <button class="btn btn-google btn-login text-uppercase fw-bold" type="submit">
-                                      <i class="fab fa-google me-2"></i> Sign in with Google
-                                  </button>
-                              </div>
-                              <div class="d-grid">
-                                  <button class="btn btn-facebook btn-login text-uppercase fw-bold" type="submit">
-                                      <i class="fab fa-facebook-f me-2"></i> Sign in with Facebook
-                                  </button>
-                              </div>
-                          </form>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-      </body>
-      -->
-    <body>
-    Business page
-    </body>
 </template>
 
 <script setup lang="ts">
