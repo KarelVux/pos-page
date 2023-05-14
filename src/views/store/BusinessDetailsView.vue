@@ -53,18 +53,19 @@
                     <div class="col-lg-12">
                         <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
                             <strong class="d-block py-2">{{ businessDetails.products.length }} Items found </strong>
-<!--                            <div class="ms-auto">
-                                <select class="form-select d-inline-block w-auto border pt-1">
-                                    <option value="0">Best match</option>
-                                    <option value="1">Recommended</option>
-                                    <option value="2">High rated</option>
-                                    <option value="3">Randomly</option>
-                                </select>
+                            <!--                            <div class="ms-auto">
+                                                            <select class="form-select d-inline-block w-auto border pt-1">
+                                                                <option value="0">Best match</option>
+                                                                <option value="1">Recommended</option>
+                                                                <option value="2">High rated</option>
+                                                                <option value="3">Randomly</option>
+                                                            </select>
 
-                            </div>-->
+                                                        </div>-->
                         </header>
 
-                        <div class="row justify-content-center mb-3" v-for="product in businessDetails.products" :key="product.id">
+                        <div class="row justify-content-center mb-3" v-for="product in businessDetails.products"
+                             :key="product.id">
                             <div class="col-md-12">
                                 <div class="card shadow-0 border rounded-3">
                                     <div class="card-body">
@@ -86,30 +87,36 @@
                                                 <div class="d-flex flex-row">
 
                                                     <div class="mb-3">
-                                                        <span class="badge bg-info me-1">{{ product.productCategory.title }}</span>
+                                                        <span class="badge bg-info me-1">{{
+                                                            product.productCategory.title
+                                                            }}</span>
                                                     </div>
 
 
                                                 </div>
 
                                                 <p class="text mb-4 mb-md-0">
-                                                    {{product.description}}
+                                                    {{ product.description }}
                                                 </p>
                                             </div>
                                             <div class="col-xl-2 col-md-2 col-sm-4">
 
-                                                <div v-if="product.unitDiscount" class="d-flex flex-row align-items-center mb-1">
-                                                    <h4 class="mb-1 me-1">{{product.unitPrice + product.unitDiscount}} {{product.currency}}</h4>
-                                                    <span class="text-danger"><s>{{product.unitPrice}} {{product.currency}}</s></span>
+                                                <div v-if="product.unitDiscount"
+                                                     class="d-flex flex-row align-items-center mb-1">
+                                                    <h4 class="mb-1 me-1">{{ product.unitPrice + product.unitDiscount }}
+                                                        {{ product.currency }}</h4>
+                                                    <span class="text-danger"><s>{{ product.unitPrice }} {{ product.currency }}</s></span>
                                                 </div>
                                                 <div v-else class="d-flex flex-row align-items-center mb-1">
-                                                    <h4 class="mb-1 me-1">{{product.unitPrice}} {{product.currency}}</h4>
+                                                    <h4 class="mb-1 me-1">{{ product.unitPrice }}
+                                                        {{ product.currency }}</h4>
                                                 </div>
 
                                                 <div class="mt-4">
-                                                    <button class="btn btn-primary shadow-0" type="button">Buy this
-                                                    </button>
-
+                                                    <div class="form-floating mb-3">
+                                                        <input type="number" class="form-control" min="0" :max="product.unitCount" id="floatingInput">
+                                                        <label for="floatingInput">Unit count</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
