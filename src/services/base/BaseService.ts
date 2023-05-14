@@ -50,7 +50,10 @@ export abstract class BaseService {
                         if (config) {
                             config.headers!.Authorization = 'Bearer ' + refreshedJwt.jwt;
                             console.log("Sending previously failed request")
-                            return this.axios.request(config);
+
+                            const newResponse = this.axios.request(config);
+                            console.log(newResponse)
+                            return newResponse;
                         }
 
                         /*

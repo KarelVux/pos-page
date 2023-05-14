@@ -25,9 +25,10 @@ const router = createRouter({
             component: BusinessView
         },
         {
-            path: '/store/businessDetails',
+            path: '/store/businessDetails/:id',
             name: 'businessDetails',
-            component: BusinessDetailsView
+            component: BusinessDetailsView,
+            props: true
         }
     ]
 })
