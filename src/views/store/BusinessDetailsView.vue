@@ -50,8 +50,8 @@
 
             <section>
                 <div class="container">
-                    <div class="col-lg-12">
-                        <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
+                    <div class="col-lg-12 ">
+                        <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3 d-flex flex-row justify-content-between">
                             <strong class="d-block py-2">{{ businessDetails.products.length }} Items found </strong>
                             <!--                            <div class="ms-auto">
                                                             <select class="form-select d-inline-block w-auto border pt-1">
@@ -62,6 +62,7 @@
                                                             </select>
 
                                                         </div>-->
+                            <button type="button" class="btn btn-primary" @click="createInvoice">Create invoice</button>
                         </header>
 
                         <div class="row justify-content-center mb-3" v-for="product in businessDetails.products"
@@ -105,16 +106,38 @@
                                                      class="d-flex flex-row align-items-center mb-1">
                                                     <h4 class="mb-1 me-1">{{ product.unitPrice + product.unitDiscount }}
                                                         {{ product.currency }}</h4>
-                                                    <span class="text-danger"><s>{{ product.unitPrice }} {{ product.currency }}</s></span>
+                                                    <span class="text-danger"><s>{{
+                                                        product.unitPrice
+                                                        }} {{ product.currency }}</s></span>
                                                 </div>
                                                 <div v-else class="d-flex flex-row align-items-center mb-1">
-                                                    <h4 class="mb-1 me-1">{{ product.unitPrice }}
-                                                        {{ product.currency }}</h4>
+                                                    <div v-if="product.userSelectedProductCount">
+
+                                                        <h4 class="mb-1 me-1">
+
+                                                            {{ product.userSelectedProductCount }} X
+                                                            {{ product.unitPrice }}{{ product.currency }} =
+                                                            {{
+                                                            product.userSelectedProductCount * product.unitPrice
+                                                            }}{{ product.currency }}
+                                                        </h4>
+                                                    </div>
+
+                                                    <div v-else>
+
+                                                        <h4 class="mb-1 me-1">
+                                                            {{ product.unitPrice }}{{ product.currency }}
+                                                        </h4>
+                                                    </div>
+
                                                 </div>
 
                                                 <div class="mt-4">
                                                     <div class="form-floating mb-3">
-                                                        <input type="number" class="form-control" min="0" v-model="product.userSelectedProductCount"  :max="product.unitCount" id="floatingInput"  @input="handleInputField($event, product)" >
+                                                        <input type="number" class="form-control" min="0"
+                                                               v-model="product.userSelectedProductCount"
+                                                               :max="product.unitCount" id="floatingInput"
+                                                               @input="handleInputField($event, product)">
                                                         <label for="floatingInput">Unit count</label>
                                                     </div>
                                                 </div>
@@ -184,8 +207,10 @@ import {useRoute} from "vue-router";
 import type {IBusiness} from "@/dto/shop/IBusiness";
 import NotFound from "@/components/NotFound.vue";
 import SimpleRowValuePair from "@/components/Shops/Elements/SimpleRowValuePair.vue";
-import {th} from "vuetify/locale";
 import type {IProduct} from "@/dto/shop/IProduct";
+import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
+import {id} from "vuetify/locale";
+import type IInvoiceCreateEditProduct from "@/dto/shop/IInvoiceCreateEditProduct";
 
 const identitySore = useIdentityStore();
 const shopsService = new ShopsService();
@@ -194,13 +219,50 @@ const route = useRoute();
 const businessDetails = ref<IBusiness>()
 
 const handleInputField = (event: Event, product: IProduct) => {
-    console.log("in input filed", product.name, product.userSelectedProductCount)
 
-    if (product.userSelectedProductCount > product.unitCount){
+    if (product.userSelectedProductCount > product.unitCount) {
         product.userSelectedProductCount = product.unitCount;
     }
 }
+const createInvoice = async () => {
+    let sendableData: ICreateEditInvoice;
+    sendableData = {
+        InvoiceCreateEditProducts: [],
+        businessId: businessDetails.value!.id,
+    };
 
+    if (businessDetails.value) {
+
+        businessDetails.value?.products.forEach((itemProduct) => {
+            if (itemProduct.id &&
+                itemProduct.userSelectedProductCount > 0 &&
+                itemProduct.userSelectedProductCount <= itemProduct.unitCount) {
+
+                console.log(itemProduct.userSelectedProductCount)
+                const invoiceCreateEditProduct = {
+                    productId: itemProduct.id,
+                    productUnitCount: itemProduct.userSelectedProductCount,
+                }
+                sendableData.InvoiceCreateEditProducts.push(invoiceCreateEditProduct)
+            }
+        });
+
+
+        let identity = identitySore.authenticationJwt;
+        if (identity) {
+            var result = await shopsService.createInvoice(identity, sendableData)
+
+
+
+            if (result){
+                console.log("Was ite received successfully")
+                console.log(result)
+            }
+        }
+    }
+
+
+}
 
 onBeforeMount(async () => {
     console.log("Open business details")
