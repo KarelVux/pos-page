@@ -209,8 +209,6 @@ import NotFound from "@/components/NotFound.vue";
 import SimpleRowValuePair from "@/components/Shops/Elements/SimpleRowValuePair.vue";
 import type {IProduct} from "@/dto/shop/IProduct";
 import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
-import {id} from "vuetify/locale";
-import type IInvoiceCreateEditProduct from "@/dto/shop/IInvoiceCreateEditProduct";
 
 const identitySore = useIdentityStore();
 const shopsService = new ShopsService();
@@ -249,14 +247,14 @@ const createInvoice = async () => {
 
 
         let identity = identitySore.authenticationJwt;
-        if (identity) {
-            var result = await shopsService.createInvoice(identity, sendableData)
+        if (identity && sendableData && sendableData.InvoiceCreateEditProducts.length > 0) {
 
+            let result = (await shopsService.createInvoice(identity, sendableData)) as ICreateEditInvoice
+            console.log("result", result)
+            if (result && result.id) {
 
-
-            if (result){
-                console.log("Was ite received successfully")
-                console.log(result)
+                throw new Error("Routing needs to be added for invoice")
+                //     router.push({name: ‘animals’, params: {id: ‘5’}, query: {foo: ‘bar’}})
             }
         }
     }

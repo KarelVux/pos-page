@@ -2,6 +2,8 @@ import {BaseService} from "@/services/base/BaseService";
 import type {IBusiness} from "@/dto/shop/IBusiness";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
+import type {IInvoiceData} from "@/dto/shop/IInvoiceData";
+import {da} from "vuetify/locale";
 
 export interface IGetBusinessQueryParams {
     settlementId: string;
@@ -44,8 +46,6 @@ export default class ShopsService extends BaseService {
 
     async getBusiness(jwtData: IJWTResponse, businessId: string): Promise<IBusiness | undefined> {
         try {
-
-            console.log("gety business")
             const response = await this.axios.get<IBusiness>(`GetBusiness/${businessId}`,
                 {
                     headers: {
@@ -67,9 +67,26 @@ export default class ShopsService extends BaseService {
 
     async createInvoice(jwtData: IJWTResponse, createEditInvoice: ICreateEditInvoice): Promise<ICreateEditInvoice | undefined> {
         try {
+            const response = await this.axios.post<ICreateEditInvoice>(`CreateInvoice`, createEditInvoice,
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + jwtData.jwt
+                    }
+                }
+            );
 
-            console.log("gety business")
-            const response = await this.axios.post(`CreateInvoice`, createEditInvoice,
+            if (response.status === 201) {
+                return response.data;
+            }
+            return undefined;
+        } catch (e) {
+            console.log('error: ', (e as Error).message);
+            return undefined;
+        }
+    }
+    async getInvoice(jwtData: IJWTResponse, invoiceId: string): Promise<IInvoiceData | undefined> {
+        try {
+            const response = await this.axios.get<IInvoiceData>(`GetInvoice/${invoiceId}`,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + jwtData.jwt
