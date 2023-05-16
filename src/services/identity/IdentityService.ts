@@ -79,7 +79,7 @@ export class IdentityService extends BaseService {
 
             console.log('refresh token response', response);
             if (response.status === 200) {
-                this.identityStore.$state.authenticationJwt = response.data;
+                this.identityStore.$state.authenticationJwt  = response.data;
                 return response.data;
             }
             return undefined;

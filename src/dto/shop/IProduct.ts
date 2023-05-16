@@ -6,6 +6,7 @@ export interface IProduct extends IBaseEntity {
     description: string,
     unitPrice: number,
     unitDiscount: number,
+    userSelectedProductCount: bigint,
     unitCount: bigint,
     currency: string,
     frozen: boolean,

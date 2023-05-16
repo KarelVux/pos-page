@@ -114,7 +114,7 @@
 
                                                 <div class="mt-4">
                                                     <div class="form-floating mb-3">
-                                                        <input type="number" class="form-control" min="0" :max="product.unitCount" id="floatingInput">
+                                                        <input type="number" class="form-control" min="0" v-model="product.userSelectedProductCount"  :max="product.unitCount" id="floatingInput"  @input="handleInputField($event, product)" >
                                                         <label for="floatingInput">Unit count</label>
                                                     </div>
                                                 </div>
@@ -176,6 +176,7 @@
 </template>
 
 <script setup lang="ts">
+
 import {onBeforeMount, onMounted, ref} from 'vue'
 import {useIdentityStore} from "@/stores/identityStore";
 import ShopsService from "@/services/shop/ShopsService";
@@ -183,12 +184,23 @@ import {useRoute} from "vue-router";
 import type {IBusiness} from "@/dto/shop/IBusiness";
 import NotFound from "@/components/NotFound.vue";
 import SimpleRowValuePair from "@/components/Shops/Elements/SimpleRowValuePair.vue";
+import {th} from "vuetify/locale";
+import type {IProduct} from "@/dto/shop/IProduct";
 
 const identitySore = useIdentityStore();
 const shopsService = new ShopsService();
 
 const route = useRoute();
 const businessDetails = ref<IBusiness>()
+
+const handleInputField = (event: Event, product: IProduct) => {
+    console.log("in input filed", product.name, product.userSelectedProductCount)
+
+    if (product.userSelectedProductCount > product.unitCount){
+        product.userSelectedProductCount = product.unitCount;
+    }
+}
+
 
 onBeforeMount(async () => {
     console.log("Open business details")
@@ -208,6 +220,8 @@ onBeforeMount(async () => {
     }
 
 })
+
+
 </script>
 
 <style scoped>
