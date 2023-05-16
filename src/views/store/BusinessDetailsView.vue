@@ -209,6 +209,7 @@ import NotFound from "@/components/NotFound.vue";
 import SimpleRowValuePair from "@/components/Shops/Elements/SimpleRowValuePair.vue";
 import type {IProduct} from "@/dto/shop/IProduct";
 import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
+import router from "@/router";
 
 const identitySore = useIdentityStore();
 const shopsService = new ShopsService();
@@ -253,8 +254,7 @@ const createInvoice = async () => {
             console.log("result", result)
             if (result && result.id) {
 
-                throw new Error("Routing needs to be added for invoice")
-                //     router.push({name: ‘animals’, params: {id: ‘5’}, query: {foo: ‘bar’}})
+                await router.push({name: 'invoiceDetails', params: {id: result.id}});
             }
         }
     }
