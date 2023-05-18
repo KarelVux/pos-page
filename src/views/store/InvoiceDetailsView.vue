@@ -61,13 +61,13 @@
 
 <script lang="ts" setup>
 import {useIdentityStore} from "@/stores/identityStore";
-import ShopsService from "@/services/shop/ShopsService";
 import {useRoute} from "vue-router";
 import {onBeforeMount, ref} from "vue";
 import type {IInvoice} from "@/dto/shop/IInvoice";
+import InvoicesService from "@/services/shop/InvoicesService";
 
 const identitySore = useIdentityStore();
-const shopsService = new ShopsService();
+const invoicesService = new InvoicesService();
 
 const route = useRoute();
 const invoiceData = ref<IInvoice>()
@@ -83,7 +83,7 @@ onBeforeMount(async () => {
   }
 
   if (route.params.id) {
-    invoiceData.value = (await shopsService.getInvoice(identity, route.params.id as string))
+    invoiceData.value = (await invoicesService.getInvoice(identity, route.params.id as string))
     console.log("Invoice details", invoiceData)
   } else {
     console.error("Invoice  id is not initialized")

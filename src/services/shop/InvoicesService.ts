@@ -1,8 +1,6 @@
 import {BaseService} from "@/services/base/BaseService";
-import type {IBusiness} from "@/dto/shop/IBusiness";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
-import {da} from "vuetify/locale";
 import type {IInvoice} from "@/dto/shop/IInvoice";
 
 export interface IGetBusinessQueryParams {
@@ -11,30 +9,23 @@ export interface IGetBusinessQueryParams {
 }
 
 
-export default class ShopsService extends BaseService {
+export default class InvoicesService extends BaseService {
     constructor() {
-        super('v1/public/shops/');
+        super('v1/public/invoices/');
     }
 
 
-    async getBusinesses(jwtData: IJWTResponse, params: IGetBusinessQueryParams): Promise<IBusiness[] | undefined> {
+    async createInvoice(jwtData: IJWTResponse, createEditInvoice: ICreateEditInvoice): Promise<ICreateEditInvoice | undefined> {
         try {
-
-            const response = await this.axios.get<IBusiness[]>('GetBusinesses',
+            const response = await this.axios.post<ICreateEditInvoice>(`CreateInvoice`, createEditInvoice,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + jwtData.jwt
-                    },
-                    params: {
-                        settlementId: params.settlementId,
-                        businessCategoryId: params.businessCategoryId,
-
                     }
                 }
             );
 
-//            console.log('register response', response);
-            if (response.status === 200) {
+            if (response.status === 201) {
                 return response.data;
             }
             return undefined;
@@ -43,10 +34,9 @@ export default class ShopsService extends BaseService {
             return undefined;
         }
     }
-
-    async getBusiness(jwtData: IJWTResponse, businessId: string): Promise<IBusiness | undefined> {
+    async getInvoice(jwtData: IJWTResponse, invoiceId: string): Promise<IInvoice | undefined> {
         try {
-            const response = await this.axios.get<IBusiness>(`GetBusiness/${businessId}`,
+            const response = await this.axios.get<IInvoice>(`GetInvoice/${invoiceId}`,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + jwtData.jwt
@@ -64,4 +54,5 @@ export default class ShopsService extends BaseService {
             return undefined;
         }
     }
+
 }

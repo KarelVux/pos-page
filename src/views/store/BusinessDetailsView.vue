@@ -210,9 +210,11 @@ import SimpleRowValuePair from "@/components/Shops/Elements/SimpleRowValuePair.v
 import type {IProduct} from "@/dto/shop/IProduct";
 import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
 import router from "@/router";
+import InvoicesService from "../../services/shop/InvoicesService";
 
 const identitySore = useIdentityStore();
 const shopsService = new ShopsService();
+const invoicesService = new InvoicesService();
 
 const route = useRoute();
 const businessDetails = ref<IBusiness>()
@@ -250,7 +252,7 @@ const createInvoice = async () => {
         let identity = identitySore.authenticationJwt;
         if (identity && sendableData && sendableData.InvoiceCreateEditProducts.length > 0) {
 
-            let result = (await shopsService.createInvoice(identity, sendableData)) as ICreateEditInvoice
+            let result = (await invoicesService.createInvoice(identity, sendableData)) as ICreateEditInvoice
             console.log("result", result)
             if (result && result.id) {
 
