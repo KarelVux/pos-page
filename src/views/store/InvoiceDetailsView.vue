@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-6 mb-7">
+  <div class="container mt-6 mb-7" v-if="invoiceData">
     <div class="row justify-content-center">
       <div class="col-lg-12 col-xl-7">
         <div class="card">
@@ -8,7 +8,7 @@
               Hey ,
             </h2>
             <p class="fs-sm">
-              This is the receipt for a payment of <strong>{{ invoiceData.finalTotalPrice }}</strong>
+              This is the receipt for a payment of <strong >{{ invoiceData.finalTotalPrice }}</strong>
             </p>
 
             <table class="table border-bottom border-gray-200 mt-3">
@@ -57,6 +57,7 @@
       </div>
     </div>
   </div>
+  <div v-else>Loading</div>
 </template>
 
 <script lang="ts" setup>

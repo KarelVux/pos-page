@@ -17,7 +17,7 @@ export default class InvoicesService extends BaseService {
 
     async createInvoice(jwtData: IJWTResponse, createEditInvoice: ICreateEditInvoice): Promise<ICreateEditInvoice | undefined> {
         try {
-            const response = await this.axios.post<ICreateEditInvoice>(`CreateInvoice`, createEditInvoice,
+            const response = await this.axios.post<ICreateEditInvoice>(``, createEditInvoice,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + jwtData.jwt
@@ -36,7 +36,7 @@ export default class InvoicesService extends BaseService {
     }
     async getInvoice(jwtData: IJWTResponse, invoiceId: string): Promise<IInvoice | undefined> {
         try {
-            const response = await this.axios.get<IInvoice>(`GetInvoice/${invoiceId}`,
+            const response = await this.axios.get<IInvoice>(`${invoiceId}`,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + jwtData.jwt

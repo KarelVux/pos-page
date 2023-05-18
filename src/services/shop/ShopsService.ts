@@ -20,7 +20,7 @@ export default class ShopsService extends BaseService {
     async getBusinesses(jwtData: IJWTResponse, params: IGetBusinessQueryParams): Promise<IBusiness[] | undefined> {
         try {
 
-            const response = await this.axios.get<IBusiness[]>('GetBusinesses',
+            const response = await this.axios.get<IBusiness[]>('',
                 {
                     headers: {
                         'Authorization': 'Bearer ' + jwtData.jwt
@@ -46,7 +46,7 @@ export default class ShopsService extends BaseService {
 
     async getBusiness(jwtData: IJWTResponse, businessId: string): Promise<IBusiness | undefined> {
         try {
-            const response = await this.axios.get<IBusiness>(`GetBusiness/${businessId}`,
+            const response = await this.axios.get<IBusiness>(`/${businessId}`,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + jwtData.jwt
