@@ -13,4 +13,5 @@ export interface IProduct extends IBaseEntity {
     productCategoryId: string,
     productCategory: IProductCategory,
     businessId: string,
+    TaxPercent: number,
 }

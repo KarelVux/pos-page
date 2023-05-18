@@ -2,8 +2,8 @@ import {BaseService} from "@/services/base/BaseService";
 import type {IBusiness} from "@/dto/shop/IBusiness";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
-import type {IInvoiceData} from "@/dto/shop/IInvoiceData";
 import {da} from "vuetify/locale";
+import type {IInvoice} from "@/dto/shop/IInvoice";
 
 export interface IGetBusinessQueryParams {
     settlementId: string;
@@ -84,9 +84,9 @@ export default class ShopsService extends BaseService {
             return undefined;
         }
     }
-    async getInvoice(jwtData: IJWTResponse, invoiceId: string): Promise<IInvoiceData | undefined> {
+    async getInvoice(jwtData: IJWTResponse, invoiceId: string): Promise<IInvoice | undefined> {
         try {
-            const response = await this.axios.get<IInvoiceData>(`GetInvoice/${invoiceId}`,
+            const response = await this.axios.get<IInvoice>(`GetInvoice/${invoiceId}`,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + jwtData.jwt
