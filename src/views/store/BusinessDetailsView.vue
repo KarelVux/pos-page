@@ -1,57 +1,14 @@
 <template>
     <main class="mt-5 pt-4">
-
         <div v-if="businessDetails" class="container mt-5">
-            <section>
-                <!--Grid row-->
-                <div class="row">
-                    <!--Grid column-->
-                    <div class="col-md-6 mb-4">
-                        <img src="https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80"
-                             class="img-fluid" alt=""/>
-                    </div>
-                    <!--Grid column-->
+            <BusinessIntroduction :businessDetails="businessDetails"/>
 
-                    <!--Grid column-->
-                    <div class="col-md-6 mb-4">
-                        <!--Content-->
-                        <div class="p-4">
-                            <strong><p style="font-size: 20px;">{{ businessDetails.name }}</p></strong>
-
-                            <div class="mb-3">
-                                <span class="badge bg-info me-1">{{ businessDetails.businessCategory.title }}</span>
-                            </div>
-
-
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor suscipit libero eos
-                                atque
-                                quia ipsa sint voluptatibus! Beatae sit assumenda asperiores iure at maxime atque
-                                repellendus maiores quia sapiente.</p>
-
-                            <SimpleRowValuePair
-                                    strongText="Address: "
-                                    :normalText="businessDetails.address"
-                            />
-                            <SimpleRowValuePair
-                                    strongText="Email: "
-                                    :normalText="businessDetails.email"
-                            />
-                            <SimpleRowValuePair
-                                    strongText="Phone number: "
-                                    :normalText="businessDetails.phoneNumber"
-                            />
-                        </div>
-                        <!--Content-->
-                    </div>
-                    <!--Grid column-->
-                </div>
-                <!--Grid row-->
-            </section>
 
             <section>
                 <div class="container">
                     <div class="col-lg-12 ">
-                        <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3 d-flex flex-row justify-content-between">
+                        <header
+                            class="d-sm-flex align-items-center border-bottom mb-4 pb-3 d-flex flex-row justify-content-between">
                             <strong class="d-block py-2">{{ businessDetails.products.length }} Items found </strong>
                             <!--                            <div class="ms-auto">
                                                             <select class="form-select d-inline-block w-auto border pt-1">
@@ -72,7 +29,8 @@
                                     <div class="card-body">
                                         <div class="row g-0">
                                             <div class="col-xl-3 col-md-4 d-flex justify-content-center">
-                                                <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
+                                                <div
+                                                    class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
                                                     <img src="../../assets/image-not-found.png"
                                                          class="w-100">
                                                     <a href="#!">
@@ -89,7 +47,7 @@
 
                                                     <div class="mb-3">
                                                         <span class="badge bg-info me-1">{{
-                                                            product.productCategory.title
+                                                                product.productCategory.title
                                                             }}</span>
                                                     </div>
 
@@ -107,7 +65,7 @@
                                                     <h4 class="mb-1 me-1">{{ product.unitPrice + product.unitDiscount }}
                                                         {{ product.currency }}</h4>
                                                     <span class="text-danger"><s>{{
-                                                        product.unitPrice
+                                                            product.unitPrice
                                                         }} {{ product.currency }}</s></span>
                                                 </div>
                                                 <div v-else class="d-flex flex-row align-items-center mb-1">
@@ -118,7 +76,7 @@
                                                             {{ product.userSelectedProductCount }} X
                                                             {{ product.unitPrice }}{{ product.currency }} =
                                                             {{
-                                                            product.userSelectedProductCount * product.unitPrice
+                                                                product.userSelectedProductCount * product.unitPrice
                                                             }}{{ product.currency }}
                                                         </h4>
                                                     </div>
@@ -211,6 +169,7 @@ import type {IProduct} from "@/dto/shop/IProduct";
 import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
 import router from "@/router";
 import InvoicesService from "../../services/shop/InvoicesService";
+import BusinessIntroduction from "@/components/Shops/BusinessIntroduction.vue";
 
 const identitySore = useIdentityStore();
 const shopsService = new ShopsService();

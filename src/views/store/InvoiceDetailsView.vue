@@ -76,14 +76,16 @@ import {RouterLink, useRouter, useRoute } from "vue-router";
 import {onBeforeMount, ref} from "vue";
 import type {IInvoice} from "@/dto/shop/IInvoice";
 import InvoicesService from "@/services/shop/InvoicesService";
+import ShopsService from "@/services/shop/ShopsService";
+import type {IBusiness} from "@/dto/shop/IBusiness";
 
 const identitySore = useIdentityStore();
 const invoicesService = new InvoicesService();
 
+
 const route = useRoute();
 const router = useRouter()
 const invoiceData = ref<IInvoice>()
-
 
 const acceptInput = async () => {
   let identity = identitySore.authenticationJwt;

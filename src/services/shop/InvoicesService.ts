@@ -3,6 +3,7 @@ import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
 import type {IInvoice} from "@/dto/shop/IInvoice";
 import type {IAcceptInvoice} from "@/dto/shop/IAcceptInvoice";
+import type {IInvoiceOrder} from "@/dto/shop/IInvoiceOrder";
 
 export interface IGetBusinessQueryParams {
     settlementId: string;
@@ -94,6 +95,27 @@ export default class InvoicesService extends BaseService {
             console.log('register response', response);
             if (response.status === 204) {
                 return response.status;
+            }
+            return undefined;
+        } catch (e) {
+            console.log('error: ', (e as Error).message);
+            return undefined;
+        }
+    }
+
+    async getInvoiceOrder(jwtData: IJWTResponse, invoiceId: string): Promise<IInvoiceOrder | undefined> {
+        try {
+            const response = await this.axios.get(`/${invoiceId}/order`,
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + jwtData.jwt
+                    },
+                }
+            );
+
+            console.log('register response', response);
+            if (response.status === 200) {
+                return response.data;
             }
             return undefined;
         } catch (e) {

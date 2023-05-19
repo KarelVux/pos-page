@@ -1,62 +1,99 @@
 <template>
-  <!-- Steps form -->
-  <div class="card">
-    <div class="card-body mb-4">
+    <!-- Steps form -->
+    <div class="card">
+        <div class="card-body mb-4">
+            <h2 class="card-title text-center py-2">
+                Here is you order status from {{ businessLimitedData.name }}
+            </h2>
+            <div>
 
-      <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-        <div class="progress-bar bg-success" style="width: 25%"></div>
-      </div>
+            </div>
+            <OrderProgressStatus v-if="invoiceOrderData.order.givenToClient"
+                                 header="Order has been picked up. Have a nice meal"
+                                 strongText=""
+                                 :progressbarWidth="100"
+            />
+            <OrderProgressStatus v-else-if="invoiceOrderData.order.ready"
+                                 header="Your order is ready for pickup"
+                                 strongText=""
+                                 :progressbarWidth="75"
+            />
+            <OrderProgressStatus v-else-if="invoiceOrderData.order.accepted"
+                                 header="Business owner has accepted the order and preparing it"
+                                 strongText=""
+                                 :progressbarWidth="50"
+            />
+            <OrderProgressStatus v-else-if="!invoiceOrderData.order.accepted"
+                                 header="Business owner is checking the order"
+                                 strongText="Please wait"
+                                 progressbarWidth="25"
+            />
 
-
-
-      <h2 class="text-center font-weight-bold pt-4 pb-5"><strong>Steps form example</strong></h2>
-
-      <p>
-        <strong>
-          Detailed documentation and more examples you can find in our
-        </strong>
-      </p>
-
-
-
-
-
+            <div class ="container">
+                <BusinessIntroduction :businessDetails="businessLimitedData"/>
+            </div>
+        </div>
     </div>
-  </div>
-  <!-- Steps form --></template>
-
+</template>
 
 
 <script lang="ts" setup>
 import {useIdentityStore} from "@/stores/identityStore";
 import {useRoute, RouterLink} from "vue-router";
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, onMounted, onUnmounted, ref} from "vue";
 import InvoicesService from "@/services/shop/InvoicesService";
+import type {IInvoiceOrder} from "@/dto/shop/IInvoiceOrder";
+import ShopsService from "@/services/shop/ShopsService";
+import type {IBusiness} from "@/dto/shop/IBusiness";
+import OrderProgressStatus from "@/components/Shops/Elements/OrderProgressStatus.vue";
+import BusinessIntroduction from "@/components/Shops/BusinessIntroduction.vue";
 
 const identitySore = useIdentityStore();
+
 const invoicesService = new InvoicesService();
+const shopsService = new ShopsService();
+
+const invoiceOrderData = ref<IInvoiceOrder>()
+const businessLimitedData = ref<IBusiness>()
+
+
 const props = defineProps({
-  id: String,
+    id: String,
 })
 
 const route = useRoute();
+let timerId: number;
 
 onBeforeMount(async () => {
-  let identity = identitySore.authenticationJwt;
+    let identity = identitySore.authenticationJwt;
 
-  console.log("Invoice details id is recieved",props.id )
-  if (identity === undefined) {
-    console.log("jwt is null")
-    return;
-  }
+    console.log("Invoice details id is recieved", props.id)
+    if (identity === undefined) {
+        console.log("jwt is null")
+        return;
+    }
 
-  if (route.params.id) {
-   // invoiceData.value = (await invoicesService.getInvoice(identity, route.params.id as string))
-   // console.log("Invoice details", invoiceData)
-  } else {
-    console.error("Invoice  id is not initialized")
-  }
+    if (props.id) {
+        invoiceOrderData.value = await invoicesService.getInvoiceOrder(identity, props.id)
+        businessLimitedData.value = await shopsService.getBusinessInfo(identity, invoiceOrderData.value!.businessId)
+    } else {
+        console.error("Invoice id is not initialized")
+    }
 
 })
 
+onMounted(() => {
+    let identity = identitySore.authenticationJwt;
+
+    timerId = setInterval(async () => {
+
+        if (identity && props.id)
+            invoiceOrderData.value = await invoicesService.getInvoiceOrder(identity, props.id)
+    }, 5000);
+});
+
+// call out to remove memory leaks?
+onUnmounted(() => {
+    clearInterval(timerId);
+});
 </script>
