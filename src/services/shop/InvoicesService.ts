@@ -80,4 +80,26 @@ export default class InvoicesService extends BaseService {
         }
     }
 
+
+    async deleteInvoice(jwtData: IJWTResponse, invoiceId: string): Promise<number | undefined> {
+        try {
+            const response = await this.axios.delete(`/${invoiceId}`,
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + jwtData.jwt
+                    },
+                }
+            );
+
+            console.log('register response', response);
+            if (response.status === 204) {
+                return response.status;
+            }
+            return undefined;
+        } catch (e) {
+            console.log('error: ', (e as Error).message);
+            return undefined;
+        }
+    }
+
 }

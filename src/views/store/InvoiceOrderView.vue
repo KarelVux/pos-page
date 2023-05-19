@@ -12,13 +12,16 @@ import InvoicesService from "@/services/shop/InvoicesService";
 
 const identitySore = useIdentityStore();
 const invoicesService = new InvoicesService();
+const props = defineProps({
+  id: String,
+})
 
 const route = useRoute();
 
 onBeforeMount(async () => {
   let identity = identitySore.authenticationJwt;
 
-  console.log("Invoice details id is recieved",route.params.id )
+  console.log("Invoice details id is recieved",props.id )
   if (identity === undefined) {
     console.log("jwt is null")
     return;
