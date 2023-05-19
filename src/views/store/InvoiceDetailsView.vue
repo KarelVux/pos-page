@@ -8,7 +8,7 @@
               Hey ,
             </h2>
             <p class="fs-sm">
-              This is the receipt for a payment of <strong >{{ invoiceData.finalTotalPrice }}</strong>
+              This is the receipt for a payment of <strong>{{ invoiceData.finalTotalPrice }}</strong>
             </p>
 
             <table class="table border-bottom border-gray-200 mt-3">
@@ -49,10 +49,20 @@
               </div>
             </div>
           </div>
-          <a href="#!"
-             class="btn btn-dark btn-lg card-footer-btn justify-content-center text-uppercase-bold-sm hover-lift-light">
-            Pay Now
-          </a>
+          <button
+              class="btn btn-warning btn-lg card-footer-btn justify-content-center text-uppercase-bold-sm hover-lift-light">
+            Go and Edit
+          </button>
+          <RouterLink :to="{name:'invoiceOrder', params: {id: route.params.id}}"
+                      class="btn btn-dark btn-lg card-footer-btn justify-content-center text-uppercase-bold-sm hover-lift-light"
+          >Edit
+          </RouterLink>
+          <RouterLink
+              @click="acceptInput"
+              :to="{name:'invoiceOrder', params: {id: route.params.id}}"
+              class="btn btn-dark btn-lg card-footer-btn justify-content-center text-uppercase-bold-sm hover-lift-light">
+            Accept and Order
+          </RouterLink>
         </div>
       </div>
     </div>
@@ -62,7 +72,7 @@
 
 <script lang="ts" setup>
 import {useIdentityStore} from "@/stores/identityStore";
-import {useRoute} from "vue-router";
+import {useRoute, RouterLink} from "vue-router";
 import {onBeforeMount, ref} from "vue";
 import type {IInvoice} from "@/dto/shop/IInvoice";
 import InvoicesService from "@/services/shop/InvoicesService";
@@ -73,8 +83,22 @@ const invoicesService = new InvoicesService();
 const route = useRoute();
 const invoiceData = ref<IInvoice>()
 
+const acceptInput = async () => {
+  let identity = identitySore.authenticationJwt;
+
+  if (identity) {
+    let result = (await invoicesService.acceptInvoice(identity, route.params.id as string, {acceptance: true}))
+
+    if (result == 204) {
+      console.log("Invoice status was changed")
+    }
+  } else {
+    console.log("Identit porblem")
+  }
+}
+
+
 onBeforeMount(async () => {
-  console.log("Open business details")
   let identity = identitySore.authenticationJwt;
 
 
