@@ -1,6 +1,29 @@
 <template>
-  Invoice order
-</template>
+  <!-- Steps form -->
+  <div class="card">
+    <div class="card-body mb-4">
+
+      <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar bg-success" style="width: 25%"></div>
+      </div>
+
+
+
+      <h2 class="text-center font-weight-bold pt-4 pb-5"><strong>Steps form example</strong></h2>
+
+      <p>
+        <strong>
+          Detailed documentation and more examples you can find in our
+        </strong>
+      </p>
+
+
+
+
+
+    </div>
+  </div>
+  <!-- Steps form --></template>
 
 
 
