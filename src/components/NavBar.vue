@@ -1,7 +1,4 @@
-<script setup>
-import LoginForm from "@/components/LoginForm.vue";
-import RegisterForm from "@/components/RegisterForm.vue";
-</script>
+
 
 <template>
     <header>
@@ -23,7 +20,7 @@ import RegisterForm from "@/components/RegisterForm.vue";
                         </li>
                     </ul>
 
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav" >
                         <li class="nav-item">
                             <RegisterForm/>
                         </li>
@@ -36,3 +33,27 @@ import RegisterForm from "@/components/RegisterForm.vue";
         </nav>
     </header>
 </template>
+
+
+
+<script  lang="ts" setup>
+import LoginForm from "@/components/LoginForm.vue";
+import RegisterForm from "@/components/RegisterForm.vue";
+
+import {useIdentityStore} from "@/stores/identityStore";
+import {onMounted} from "vue";
+
+const identitySore = useIdentityStore();
+
+
+onMounted(() =>{
+    console.log("Open identity")
+
+
+    let auth = identitySore.authenticationJwt
+
+
+    console.log(auth)
+
+})
+</script>

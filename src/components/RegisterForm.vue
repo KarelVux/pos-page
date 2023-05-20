@@ -1,11 +1,12 @@
 <template>
-  <!-- Button trigger modal -->
+    <!-- Button trigger modal -->
     <li class="nav-link text-dark " data-bs-toggle="modal" data-bs-target="#registerBackdrop">
         <span class="text-dark custom-mouse-over">Register</span>
     </li>
 
-  <!-- Modal -->
-    <div class="modal animate__fade" id="registerBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <!-- Modal -->
+    <div class="modal animate__fade" id="registerBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -42,6 +43,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" v-on:click="onSubmit">Register</button>
+                    <p id="registerHider" data-bs-dismiss="modal" style="visibility: hidden"></p>
                 </div>
             </div>
         </div>
@@ -87,9 +89,8 @@ const onSubmit = async (event: MouseEvent) => {
     console.log(jwtData)
 
     // close modal
-    let myModalEl = document.getElementById('registerBackdrop');
-    let modal = Modal.getInstance(myModalEl)
-    modal?.hide()
+    let hider = document.getElementById('registerHider');
+    hider.click();
 }
 
 </script>

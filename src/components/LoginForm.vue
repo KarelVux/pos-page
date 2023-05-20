@@ -1,10 +1,10 @@
 <template>
-  <!-- Button trigger modal -->
+    <!-- Button trigger modal -->
     <li class="nav-link text-dark " data-bs-toggle="modal" data-bs-target="#loginBackdrop">
         <span class="text-dark custom-mouse-over">Login</span>
     </li>
 
-  <!-- Modal -->
+    <!-- Modal -->
     <div class="modal animate__fade" id="loginBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -36,6 +36,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" v-on:click="onSubmit">Log in</button>
+                    <p id="loginHider" data-bs-dismiss="modal" style="visibility: hidden"></p>
                 </div>
             </div>
         </div>
@@ -48,7 +49,7 @@
 import type {ILoginData} from "@/dto/identity/ILoginData";
 import {IdentityService} from "@/services/identity/IdentityService";
 import {ref} from "vue";
-import  {Modal} from "bootstrap";
+import {Modal} from "bootstrap";
 
 
 const identityService = new IdentityService();
@@ -58,6 +59,12 @@ const loginData = ref<ILoginData>({
 } as ILoginData);
 
 const validationErrors = ref<string []>([])
+
+const logText =async (event: MouseEvent) => {
+    console.log('onSubmit', event);
+    event.preventDefault();
+}
+
 const onSubmit = async (event: MouseEvent) => {
     console.log('onSubmit', event);
     event.preventDefault();
@@ -79,12 +86,8 @@ const onSubmit = async (event: MouseEvent) => {
 
     console.log(jwtData)
 
-    // close modal
-    let myModalEl = document.getElementById('loginBackdrop');
-    let modal = Modal.getInstance(myModalEl)
-    modal?.hide()
-
-
+    let hider = document.getElementById('loginHider');
+    hider.click()
 }
 
 </script>
