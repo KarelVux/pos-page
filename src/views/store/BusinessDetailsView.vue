@@ -62,17 +62,50 @@
 
                                                 <div v-if="product.unitDiscount"
                                                      class="d-flex flex-row align-items-center mb-1">
-                                                    <h4 class="mb-1 me-1">{{ product.unitPrice + product.unitDiscount }}
-                                                        {{ product.currency }}</h4>
-                                                    <span class="text-danger"><s>{{
-                                                            product.unitPrice
-                                                        }} {{ product.currency }}</s></span>
+                                                    <div v-if="product.userSelectedProductCount">
+                                                        <h4 class="mb-1 me-1">
+                                                            {{ product.userSelectedProductCount }}
+                                                            X
+                                                            {{ product.unitPrice + product.unitDiscount }}
+                                                            {{ product.currency }}
+                                                        </h4>
+                                                        <span class="text-danger">
+                                                            <s>
+                                                                {{ product.unitPrice }} {{ product.currency }}
+                                                            </s>
+                                                        </span>
+
+                                                        <h4 class="mb-1 me-1">
+                                                            =
+                                                            {{
+                                                                product.userSelectedProductCount * (product.unitPrice + product.unitDiscount)
+                                                            }}
+                                                            {{ product.currency }}
+                                                         </h4>
+
+                                                        <span class="text-danger">
+                                                            <s>
+                                                                {{
+                                                                    product.userSelectedProductCount * product.unitPrice
+                                                                }}
+                                                                {{ product.currency }}
+                                                            </s>
+                                                        </span>
+
+                                                    </div>
+                                                    <div v-else>
+                                                        <h4 class="mb-1 me-1">
+                                                            {{ product.unitPrice + product.unitDiscount }}
+                                                            {{ product.currency }}</h4>
+                                                        <span class="text-danger"><s>{{
+                                                                product.unitPrice
+                                                            }} {{ product.currency }}</s></span>
+
+                                                    </div>
                                                 </div>
                                                 <div v-else class="d-flex flex-row align-items-center mb-1">
                                                     <div v-if="product.userSelectedProductCount">
-
                                                         <h4 class="mb-1 me-1">
-
                                                             {{ product.userSelectedProductCount }} X
                                                             {{ product.unitPrice }}{{ product.currency }} =
                                                             {{
@@ -82,7 +115,6 @@
                                                     </div>
 
                                                     <div v-else>
-
                                                         <h4 class="mb-1 me-1">
                                                             {{ product.unitPrice }}{{ product.currency }}
                                                         </h4>
