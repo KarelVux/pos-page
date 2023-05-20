@@ -158,7 +158,7 @@
 
 <script setup lang="ts">
 
-import {onBeforeMount, onMounted, ref} from 'vue'
+import {onBeforeMount, onMounted, ref, watch} from 'vue'
 import {useIdentityStore} from "@/stores/identityStore";
 import ShopsService from "@/services/shop/ShopsService";
 import {useRoute} from "vue-router";
@@ -177,6 +177,7 @@ const invoicesService = new InvoicesService();
 
 const route = useRoute();
 const businessDetails = ref<IBusiness>()
+
 
 const handleInputField = (event: Event, product: IProduct) => {
 
@@ -208,7 +209,7 @@ const createInvoice = async () => {
 
         let identity = identitySore.authenticationJwt;
 
-        if (identity == undefined){
+        if (identity == undefined) {
             console.error("Please log in")
         }
         if (identity && sendableData && sendableData.InvoiceCreateEditProducts.length > 0) {
@@ -227,6 +228,11 @@ const createInvoice = async () => {
 }
 
 onBeforeMount(async () => {
+
+    await loadData();
+})
+
+const loadData = async () => {
     console.log("Open business details")
     let identity = identitySore.authenticationJwt;
 
@@ -242,9 +248,7 @@ onBeforeMount(async () => {
     } else {
         console.error("Business id is not initialized")
     }
-
-})
-
+}
 
 </script>
 
