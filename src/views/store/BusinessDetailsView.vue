@@ -197,8 +197,6 @@ const createInvoice = async () => {
             if (itemProduct.id &&
                 itemProduct.userSelectedProductCount > 0 &&
                 itemProduct.userSelectedProductCount <= itemProduct.unitCount) {
-
-                console.log(itemProduct.userSelectedProductCount)
                 const invoiceCreateEditProduct = {
                     productId: itemProduct.id,
                     productUnitCount: itemProduct.userSelectedProductCount,
@@ -209,8 +207,13 @@ const createInvoice = async () => {
 
 
         let identity = identitySore.authenticationJwt;
+
+        if (identity == undefined){
+            console.error("Please log in")
+        }
         if (identity && sendableData && sendableData.InvoiceCreateEditProducts.length > 0) {
 
+            console.log(identity.jwt)
             let result = (await invoicesService.createInvoice(identity, sendableData)) as ICreateEditInvoice
             console.log("result", result)
             if (result && result.id) {

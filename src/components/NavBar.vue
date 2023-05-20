@@ -1,5 +1,3 @@
-
-
 <template>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -20,12 +18,17 @@
                         </li>
                     </ul>
 
-                    <ul class="navbar-nav" >
+                    <ul class="navbar-nav" v-if="identitySore.authenticationJwt == undefined || showLogin">
                         <li class="nav-item">
-                            <RegisterForm/>
+                            <RegisterForm @update:value="handleLoginDisplay"/>
                         </li>
                         <li class="nav-item">
-                            <LoginForm/>
+                            <LoginForm @update:value="handleLoginDisplay"/>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav" v-else>
+                        <li class="nav-link text-dark ">
+                            <span class="text-dark custom-mouse-over" @click="doLogout">Logout</span>
                         </li>
                     </ul>
                 </div>
@@ -35,25 +38,34 @@
 </template>
 
 
-
-<script  lang="ts" setup>
+<script lang="ts" setup>
 import LoginForm from "@/components/LoginForm.vue";
 import RegisterForm from "@/components/RegisterForm.vue";
 
 import {useIdentityStore} from "@/stores/identityStore";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
+import {IdentityService} from "@/services/identity/IdentityService";
 
 const identitySore = useIdentityStore();
 
+// Must be initialized otherwise login/logout will fail
+const showLogin = ref(true)
+const handleLoginDisplay = (newValue: boolean) => {
+    showLogin.value = newValue;
+};
 
-onMounted(() =>{
-    console.log("Open identity")
+const identityService = new IdentityService();
 
 
+const doLogout = () => {
     let auth = identitySore.authenticationJwt
-
-
-    console.log(auth)
-
-})
+    identityService.logout(auth!)
+    showLogin.value = true;
+}
 </script>
+
+<style scoped>
+.custom-mouse-over {
+    cursor: pointer;
+}
+</style>

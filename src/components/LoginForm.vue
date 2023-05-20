@@ -36,7 +36,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" v-on:click="onSubmit">Log in</button>
-                    <p id="loginHider" data-bs-dismiss="modal" style="visibility: hidden"></p>
+                    <p id="loginHider" data-bs-dismiss="modal" style="visibility: hidden" @click="$emit('update:value', false)"></p>
                 </div>
             </div>
         </div>
@@ -59,6 +59,7 @@ const loginData = ref<ILoginData>({
 } as ILoginData);
 
 const validationErrors = ref<string []>([])
+const emits = defineEmits(['update:value']);
 
 const logText =async (event: MouseEvent) => {
     console.log('onSubmit', event);

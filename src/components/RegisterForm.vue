@@ -43,7 +43,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" v-on:click="onSubmit">Register</button>
-                    <p id="registerHider" data-bs-dismiss="modal" style="visibility: hidden"></p>
+                    <p id="registerHider" data-bs-dismiss="modal" style="visibility: hidden" @click="$emit('update:value', false)"></p>
                 </div>
             </div>
         </div>
@@ -67,6 +67,8 @@ const registerData = ref<IRegisterData>({
 } as IRegisterData);
 
 const validationErrors = ref<string []>([])
+const emits = defineEmits(['update:value']);
+
 const onSubmit = async (event: MouseEvent) => {
     console.log('onSubmit', event);
     event.preventDefault();
@@ -90,7 +92,7 @@ const onSubmit = async (event: MouseEvent) => {
 
     // close modal
     let hider = document.getElementById('registerHider');
-    hider.click();
+    hider!.click();
 }
 
 </script>
