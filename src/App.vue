@@ -2,7 +2,7 @@
     <NavBar/>
     <body>
 
-    <div v-if="messageIsFound">
+    <div v-if="messageIsFound" >
         <MessagePopup v-for="(errorMessage, index) in messageStore.getAllMessages()" :key="index"
                       :popupMessage="errorMessage" @handleMessageRemoval="handleRemoval"/>
     </div>
