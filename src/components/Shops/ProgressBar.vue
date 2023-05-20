@@ -19,11 +19,11 @@
 
 <script lang="ts" setup>
 import {watch} from "vue";
-interface Props {
+interface IProps {
   progressbarWidth: number
 }
 
-const props = defineProps<Props>()
+const props = defineProps<IProps>()
 
 watch(() => props.progressbarWidth,  () => {
   // do something when the data changes

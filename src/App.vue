@@ -1,30 +1,11 @@
-<script setup lang="ts">
-import {RouterView} from 'vue-router';
-import NavBar from '@/components/NavBar.vue';
-import FooterBar from "@/components/FooterBar.vue";
-import {useMessageStore} from "@/stores/messageStore";
-import {onMounted} from "vue";
-import MessagePopup from "@/components/shared/MessagePopup.vue";
-
-const messageStore = useMessageStore();
-
-import { ref, computed } from 'vue';
-
-// Compute a reactive variable to determine if the popup should be shown
-const showPopup = computed(() => {
-    return messageStore.messageExsists();
-});
-
-
-onMounted(() => {
-
-})
-</script>
-
 <template>
     <NavBar/>
     <body>
-    <MessagePopup v-if="showPopup"/>
+
+    <div v-if="messageIsFound">
+        <MessagePopup v-for="(errorMessage, index) in messageStore.getAllMessages()" :key="index"
+                      :popupMessage="errorMessage" @handleMessageRemoval="handleRemoval"/>
+    </div>
     <div class="container">
         <main role="main" class="pb-3">
             <router-view></router-view>
@@ -33,4 +14,51 @@ onMounted(() => {
     </body>
     <FooterBar/>
 </template>
+
+<script setup lang="ts">
+import {RouterView} from 'vue-router';
+import NavBar from '@/components/NavBar.vue';
+import FooterBar from "@/components/FooterBar.vue";
+import {useMessageStore} from "@/stores/messageStore";
+import {onBeforeMount, onMounted, onUpdated} from "vue";
+import MessagePopup from "@/components/shared/MessagePopup.vue";
+
+const messageStore = useMessageStore();
+
+import {ref, computed} from 'vue';
+import type {IMessage} from "@/dto/shared/IMessage";
+
+// Compute a reactive variable to determine if the popup should be shown
+const messageIsFound = computed(() => {
+    return messageStore.messageExists();
+});
+
+
+onBeforeMount(() => {
+    let message: IMessage = {message: "MEssage", statusCode: 0}
+    messageStore.addMessage(message)
+    let message2: IMessage = {message: "222", statusCode: 0}
+    messageStore.addMessage(message2)
+
+    let message3: IMessage = {message: "33", statusCode: 0}
+    messageStore.addMessage(message3)
+
+    let message4: IMessage = {message: "444", statusCode: 0}
+    messageStore.addMessage(message4)
+
+    let message5: IMessage = {message: "555", statusCode: 0}
+    messageStore.addMessage(message5)
+
+})
+
+const handleRemoval = (message: IMessage) => {
+    messageStore.removeSpecifiedMessage(message);
+};
+
+
+onUpdated(() => {
+})
+</script>
 <style scoped></style>
+
+
