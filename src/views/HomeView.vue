@@ -14,6 +14,7 @@
 
 <script setup lang='ts'>
 import {onUpdated, ref } from 'vue';
+import {RouterLink } from 'vue-router';
 import type {IGetBusinessQueryParams} from "@/services/shop/ShopsService";
 import ShopsService from "@/services/shop/ShopsService";
 import {useIdentityStore} from "@/stores/identityStore";

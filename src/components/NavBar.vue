@@ -28,6 +28,9 @@
                     </ul>
                     <ul class="navbar-nav" v-else>
                         <li class="nav-link text-dark ">
+                            <RouterLink :to="{name:'invoiceHistories'}" class="text-dark custom-mouse-over remove-link-design">Invoice Histories</RouterLink>
+                        </li>
+                        <li class="nav-link text-dark ">
                             <span class="text-dark custom-mouse-over" @click="doLogout">Logout</span>
                         </li>
                     </ul>
@@ -44,6 +47,7 @@ import RegisterForm from "@/components/RegisterForm.vue";
 
 import {useIdentityStore} from "@/stores/identityStore";
 import {onMounted, ref} from "vue";
+import {RouterLink} from "vue-router";
 import {IdentityService} from "@/services/identity/IdentityService";
 
 const identitySore = useIdentityStore();
@@ -67,5 +71,9 @@ const doLogout = () => {
 <style scoped>
 .custom-mouse-over {
     cursor: pointer;
+}
+
+.remove-link-design{
+    text-decoration: none;
 }
 </style>
