@@ -35,19 +35,7 @@ const messageIsFound = computed(() => {
 
 
 onBeforeMount(() => {
-    let message: IMessage = {message: "MEssage", statusCode: 0}
-    messageStore.addMessage(message)
-    let message2: IMessage = {message: "222", statusCode: 0}
-    messageStore.addMessage(message2)
 
-    let message3: IMessage = {message: "33", statusCode: 0}
-    messageStore.addMessage(message3)
-
-    let message4: IMessage = {message: "444", statusCode: 0}
-    messageStore.addMessage(message4)
-
-    let message5: IMessage = {message: "555", statusCode: 0}
-    messageStore.addMessage(message5)
 
 })
 

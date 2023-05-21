@@ -2,8 +2,6 @@
     <main class="mt-5 pt-4">
         <div v-if="businessDetails" class="container mt-5">
             <BusinessIntroduction :businessDetails="businessDetails"/>
-
-
             <section>
                 <div class="container">
                     <div class="col-lg-12 ">
@@ -159,7 +157,6 @@ const invoicesService = new InvoicesService();
 
 const route = useRoute();
 const businessDetails = ref<IBusiness>()
-
 
 const handleInputField = (event: Event, product: IProduct) => {
 
