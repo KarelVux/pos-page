@@ -11,22 +11,22 @@
                 <div>
 
                 </div>
-                <OrderProgressStatus v-if="invoiceOrderData.order.givenToClient"
+                <OrderProgressStatus v-if="invoiceData.order.givenToClient"
                                      header="Order has been picked up. Have a nice meal"
                                      strongText=""
                                      :progressbarWidth="100"
                 />
-                <OrderProgressStatus v-else-if="invoiceOrderData.order.ready"
+                <OrderProgressStatus v-else-if="invoiceData.order.ready"
                                      header="Your order is ready for pickup"
                                      strongText=""
                                      :progressbarWidth="75"
                 />
-                <OrderProgressStatus v-else-if="invoiceOrderData.order.accepted"
+                <OrderProgressStatus v-else-if="invoiceData.order.accepted"
                                      header="Business owner has accepted the order and preparing it"
                                      strongText=""
                                      :progressbarWidth="50"
                 />
-                <OrderProgressStatus v-else-if="!invoiceOrderData.order.accepted"
+                <OrderProgressStatus v-else-if="!invoiceData.order.accepted"
                                      header="Business owner is checking the order"
                                      strongText="Please wait"
                                      progressbarWidth="25"
@@ -64,10 +64,8 @@ const identitySore = useIdentityStore();
 const invoicesService = new InvoicesService();
 const shopsService = new ShopsService();
 
-const invoiceOrderData = ref<IInvoiceOrder>()
 const businessLimitedData = ref<IBusiness>()
 const invoiceData = ref<IInvoice>()
-
 
 const props = defineProps({
     id: String,
@@ -86,9 +84,8 @@ onBeforeMount(async () => {
     }
 
     if (id) {
-        invoiceOrderData.value = await invoicesService.getInvoiceOrder(identity, route.params.id)
-        businessLimitedData.value = await shopsService.getBusinessInfo(identity, invoiceOrderData.value!.businessId)
-        invoiceData.value = (await invoicesService.getInvoice(identity, props.id as string))
+        invoiceData.value = (await invoicesService.getInvoice(identity, route.params.id))
+        businessLimitedData.value = await shopsService.getBusinessInfo(identity, invoiceData.value!.businessId)
     } else {
         console.error("Invoice id is not initialized")
     }
@@ -101,7 +98,7 @@ onMounted(() => {
     timerId = setInterval(async () => {
 
         if (identity && props.id)
-            invoiceOrderData.value = await invoicesService.getInvoiceOrder(identity, props.id)
+            invoiceData.value = await invoicesService.getInvoice(identity, props.id)
     }, 5000);
 });
 
