@@ -9,6 +9,7 @@ export interface IInvoice extends IBaseEntity {
     totalPriceWithoutTax: number
     paymentCompleted: boolean
     userAccepted: boolean
+    creationTime: Date
     businessId: string
     orderId: string
     order: IOrder

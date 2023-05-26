@@ -18,11 +18,14 @@
                     </thead>
                     <tbody>
                     <tr v-for="openInvoice in openInvoices " :key="openInvoice.id">
-                        <td @click="openInvoiceOrderDetails(openInvoice.id)"
+                        <td @click="openInvoiceOrderDetails(openInvoice.id!)"
                             class="px-0 custom-link"
-                        >{{ openInvoice.id }}</td>
+                        >{{ openInvoice.id }}
+                        </td>
                         <td class=" px-0">{{ openInvoice.businessId }}</td>
-                        <td class="text-end px-0">Kana</td>
+                        <td class="text-end px-0">
+                            {{getFormattedDate(openInvoice.creationTime) }}
+                        </td>
                         <td class="text-end px-0">{{ openInvoice.finalTotalPrice }}</td>
                     </tr>
                     </tbody>
@@ -48,7 +51,11 @@
                     <tr v-for="closedInvoice in closedInvoices " :key="closedInvoice.id">
                         <td class="px-0">{{ closedInvoice.id }}</td>
                         <td class=" px-0">{{ closedInvoice.businessId }}</td>
-                        <td class="text-end px-0">dsds</td>
+
+                        <td class="text-end px-0">{{
+                                getFormattedDate(closedInvoice.creationTime)
+                            }}
+                        </td>
                         <td class="text-end px-0">{{ closedInvoice.finalTotalPrice }}</td>
                     </tr>
                     </tbody>
@@ -70,6 +77,7 @@ import {useRoute, RouterLink, useRouter} from "vue-router";
 import {onBeforeMount, onMounted, onUnmounted, ref} from "vue";
 import InvoicesService from "@/services/shop/InvoicesService";
 import type {IInvoice} from "../../dto/shop/IInvoice";
+import {getFormattedDate} from "@/helpers/UnifiedFormatter";
 
 const identitySore = useIdentityStore();
 
@@ -91,7 +99,7 @@ onBeforeMount(async () => {
         return;
     }
 
-    let invoices: IInvoice[] = await invoicesService.getAllUserInvoices(identity);
+    let invoices = await invoicesService.getAllUserInvoices(identity);
 
     if (invoices) {
         invoices.forEach(function (item) {
@@ -105,9 +113,9 @@ onBeforeMount(async () => {
     }
 })
 
-const openInvoiceOrderDetails = async (invoiceId) => {
+const openInvoiceOrderDetails = async (invoiceId: string) => {
     console.log('openInvoiceOrderDetails', invoiceId);
-  await  router.push({name:'invoiceOrder', params: {id: invoiceId}})
+    await router.push({name: 'invoiceOrder', params: {id: invoiceId}})
 }
 
 
