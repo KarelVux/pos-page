@@ -124,4 +124,25 @@ export default class InvoicesService extends BaseService {
         }
     }
 
+    async getAllUserInvoices(jwtData: IJWTResponse): Promise<IInvoice [] | undefined> {
+        try {
+            const response = await this.axios.get(``,
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + jwtData.jwt
+                    },
+                }
+            );
+
+            console.log('register response', response);
+            if (response.status === 200) {
+                return response.data;
+            }
+            return undefined;
+        } catch (e) {
+            console.log('error: ', (e as Error).message);
+            return undefined;
+        }
+    }
+
 }

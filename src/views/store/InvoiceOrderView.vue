@@ -78,15 +78,15 @@ let timerId: number;
 
 onBeforeMount(async () => {
     let identity = identitySore.authenticationJwt;
-
-    console.log("Invoice details id is recieved", props.id)
+    let id = route.params.id
+    console.log("Invoice details id is recieved", id)
     if (identity === undefined) {
         console.log("jwt is null")
         return;
     }
 
-    if (props.id) {
-        invoiceOrderData.value = await invoicesService.getInvoiceOrder(identity, props.id)
+    if (id) {
+        invoiceOrderData.value = await invoicesService.getInvoiceOrder(identity, route.params.id)
         businessLimitedData.value = await shopsService.getBusinessInfo(identity, invoiceOrderData.value!.businessId)
         invoiceData.value = (await invoicesService.getInvoice(identity, props.id as string))
     } else {
