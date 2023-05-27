@@ -53,10 +53,11 @@ import RegisterForm from "@/components/RegisterForm.vue";
 
 import {useIdentityStore} from "@/stores/identityStore";
 import {onMounted, ref} from "vue";
-import {RouterLink} from "vue-router";
+import {RouterLink, useRouter} from "vue-router";
 import {IdentityService} from "@/services/identity/IdentityService";
 
 const identitySore = useIdentityStore();
+const router = useRouter()
 
 // Must be initialized otherwise login/logout will fail
 const showLogin = ref(true)
@@ -67,10 +68,12 @@ const handleLoginDisplay = (newValue: boolean) => {
 const identityService = new IdentityService();
 
 
-const doLogout = () => {
+const doLogout = async () => {
     let auth = identitySore.authenticationJwt
-    identityService.logout(auth!)
+    await identityService.logout(auth!)
     showLogin.value = true;
+    await router.push({name: 'home'})
+
 }
 </script>
 
