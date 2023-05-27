@@ -147,7 +147,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, onUpdated, ref, watch} from "vue";
+import {onBeforeMount, onMounted, onUpdated, ref, watch} from "vue";
 import {useIdentityStore} from "@/stores/identityStore";
 import {SettlementsService} from "@/services/management/SettlementsService";
 import type IBusinessSearch from "@/dto/shop/businessView/IBusinessSearch";
@@ -157,6 +157,7 @@ import type {IBusinessCategory} from "@/dto/shop/IBusinessCategory";
 import type {IBusiness} from "@/dto/shop/IBusiness";
 import ShopsService from "@/services/shop/ShopsService";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
+import {ManagerBusinessService} from "@/services/manager/ManagerBusinessService";
 
 
 const identitySore = useIdentityStore();
@@ -173,6 +174,19 @@ const inputValues = ref<IBusinessSearch>({
 const businesses = ref<IBusiness[]>()
 const settlements = ref<ISettlement[]>()
 const businessCategories = ref<IBusinessCategory[]>()
+/*
+const managerBusinessService = new ManagerBusinessService();
+onBeforeMount(async () => {
+    let identity = identitySore.authenticationJwt;
+
+    if (identity){
+        var value = await managerBusinessService.getAll(identity)
+        console.log("USer businesses", value)
+
+    }
+
+});
+*/
 
 watch(() => identitySore.authenticationJwt, async () => {
     // do something when the data changes

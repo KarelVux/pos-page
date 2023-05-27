@@ -84,7 +84,7 @@ onBeforeMount(async () => {
     }
 
     if (id) {
-        invoiceData.value = (await invoicesService.getInvoice(identity, route.params.id))
+        invoiceData.value = (await invoicesService.getInvoice(identity, route.params.id.toString()))
         businessLimitedData.value = await shopsService.getBusinessInfo(identity, invoiceData.value!.businessId)
     } else {
         console.error("Invoice id is not initialized")

@@ -46,7 +46,7 @@ export const useMessageStore = defineStore('message', () => {
     }
     // delete element if searchable element is found
     const removeSpecifiedMessage = (removeSpecifiedMessage: IMessage): void => {
-        const index = messages.value.findIndex((item: IMessage) => item.statusCode === removeSpecifiedMessage.statusCode && item.message === removeSpecifiedMessage.message);
+        const index = messages.value.findIndex((item: IMessage) => item.status === removeSpecifiedMessage.status && item.message === removeSpecifiedMessage.message);
         if (index !== -1) {
             messages.value.splice(index, 1);
         }

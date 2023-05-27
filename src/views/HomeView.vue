@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang='ts'>
-import {onUpdated, ref } from 'vue';
+import {onBeforeMount, onUpdated, ref} from 'vue';
 import {RouterLink } from 'vue-router';
 import type {IGetBusinessQueryParams} from "@/services/shop/ShopsService";
 import ShopsService from "@/services/shop/ShopsService";
@@ -21,6 +21,7 @@ import {useIdentityStore} from "@/stores/identityStore";
 import {SettlementsService} from "@/services/management/SettlementsService";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import type {ISettlement} from "@/dto/management/ISettlement";
+import {ManagerBusinessService} from "@/services/manager/ManagerBusinessService";
 
 const shopsService = new ShopsService();
 const settlementService = new SettlementsService();
@@ -49,8 +50,6 @@ const handleClick = async () => {
 
 }
 
-onUpdated(() => {
 
-});
 
 </script>

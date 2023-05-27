@@ -88,7 +88,7 @@ const onSubmit = async (event: MouseEvent) => {
     console.log(jwtData)
 
     let hider = document.getElementById('loginHider');
-    hider.click()
+    hider!.click()
 }
 
 </script>
