@@ -3,8 +3,11 @@
     <body>
 
     <div v-if="messageIsFound" >
-        <MessagePopup v-for="(errorMessage, index) in messageStore.getAllMessages()" :key="index"
-                      :popupMessage="errorMessage" @handleMessageRemoval="handleRemoval"/>
+        <MessagePopup v-for="(errorMessage, index) in messageStore.getAllMessages()"
+                      :key="index"
+                      :popupMessage="errorMessage"
+                      :count="index + 1"
+                      @handleMessageRemoval="handleRemoval"/>
     </div>
     <div class="container">
         <main role="main" class="pb-3">

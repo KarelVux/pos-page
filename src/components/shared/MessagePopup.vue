@@ -1,8 +1,23 @@
 <template>
-        <div class="alert alert-danger alert-dismissible fade show  mt-alerts " role="alert">
-            <strong>{{ props.popupMessage.status }}</strong> {{ props.popupMessage.message }}
-            <button type="button" class="btn-close" aria-label="Close" @click="sendRemovalEmit"></button>
+    <div class="alert alert-danger alert-dismissible fade show  mt-alerts " role="alert">
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="col-md-11">
+                    <strong>({{props.count}}) {{ props.popupMessage.status }}</strong>
+                    <p>
+                        {{ props.popupMessage.message }}
+                    </p>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn-close" aria-label="Close" @click="sendRemovalEmit"></button>
+                </div>
+
+            </div>
         </div>
+
+    </div>
 </template>
 
 
@@ -12,7 +27,8 @@ import type {IMessage} from "@/dto/shared/IMessage";
 import {onMounted, onUnmounted} from "vue";
 
 interface IProps {
-    popupMessage: IMessage
+    popupMessage: IMessage,
+    count: number
 }
 
 const emits = defineEmits(['handleMessageRemoval']);
