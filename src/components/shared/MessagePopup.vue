@@ -9,6 +9,7 @@
 <script lang="ts" setup>
 
 import type {IMessage} from "@/dto/shared/IMessage";
+import {onMounted, onUnmounted} from "vue";
 
 interface IProps {
     popupMessage: IMessage
@@ -21,7 +22,19 @@ const props = defineProps<IProps>()
 const sendRemovalEmit = () => {
     emits('handleMessageRemoval', props.popupMessage);
 };
+let timerId: number;
 
+
+onMounted(() => {
+
+    timerId = setInterval(async () => {
+        sendRemovalEmit()
+    }, 5000);
+});
+
+onUnmounted(() => {
+    clearInterval(timerId);
+});
 </script>
 
 <style scoped>
