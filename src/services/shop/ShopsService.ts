@@ -46,7 +46,6 @@ export default class ShopsService extends BaseService {
     }
 
 
-
     async getBusiness(jwtData: IJWTResponse, businessId: string): Promise<IBusiness | undefined> {
         try {
             const response = await this.axios.get<IBusiness>(`/${businessId}`,

@@ -78,15 +78,18 @@ export abstract class BaseService {
 
                 if (error.response) {
                     const message: IMessage = {message: error.message, status: error.response.statusText}
+
+
+
                     if (error.response.data) {
                         const responseDate: IErrorData = (error.response.data) as IErrorData
 
-                        console.log(responseDate)
+                        console.log("Initial response",responseDate)
+                        message.message = error.response.data as string
+                        messageStore.addMessage(message)
 
                         if (responseDate) {
                             message.status += ": " +responseDate.status.toString()
-
-
 
                             if (responseDate.errors) {
                                 message.message = ": " + JSON.stringify(responseDate.errors)
@@ -99,8 +102,11 @@ export abstract class BaseService {
                             if (responseDate.message) {
                                 message.message += ": " + responseDate.message;
                             }
-
+                        } else {
+                            console.log("Error response",error.response.data)
+                            message.message = error.response.data as string
                         }
+
                     }
 
                     console.log("message, ", message)

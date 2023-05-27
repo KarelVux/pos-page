@@ -28,8 +28,9 @@
                     </ul>
                     <ul class="navbar-nav" v-else>
                         <li class="nav-link text-dark ">
-                            <div class="text-dark custom-mouse-over remove-link-design">Your businesses</div>
-                        </li>
+                            <RouterLink :to="{name:'userBusinesses'}"
+                                        class="text-dark custom-mouse-over remove-link-design">User businesses
+                            </RouterLink>                        </li>
                         <li class="nav-link text-dark ">
                             <RouterLink :to="{name:'invoiceHistories'}"
                                         class="text-dark custom-mouse-over remove-link-design">Invoice Histories
