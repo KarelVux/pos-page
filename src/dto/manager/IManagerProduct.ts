@@ -18,8 +18,4 @@ export interface IManagerProduct extends IBaseEntity {
     productCategoryId: string
     productCategory: IManagerProductCategory
     businessId: string
-    business: IManagerBusiness
-    invoiceRows: IManagerInvoiceRow[]
-    productPicture: IManagerProductPicture
-    productTags: IManagerProductTag[]
 }

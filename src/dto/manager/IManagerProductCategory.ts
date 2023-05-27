@@ -4,5 +4,4 @@ import type {IManagerProduct} from "@/dto/manager/IManagerProduct";
 
 export interface IManagerProductCategory extends IBaseEntity {
     title: string
-    products: IManagerProduct[]
 }
