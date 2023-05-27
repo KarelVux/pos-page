@@ -28,8 +28,14 @@
                     </ul>
                     <ul class="navbar-nav" v-else>
                         <li class="nav-link text-dark ">
-                            <RouterLink :to="{name:'invoiceHistories'}" class="text-dark custom-mouse-over remove-link-design">Invoice Histories</RouterLink>
+                            <div class="text-dark custom-mouse-over remove-link-design">Your businesses</div>
                         </li>
+                        <li class="nav-link text-dark ">
+                            <RouterLink :to="{name:'invoiceHistories'}"
+                                        class="text-dark custom-mouse-over remove-link-design">Invoice Histories
+                            </RouterLink>
+                        </li>
+
                         <li class="nav-link text-dark ">
                             <span class="text-dark custom-mouse-over" @click="doLogout">Logout</span>
                         </li>
@@ -73,7 +79,7 @@ const doLogout = () => {
     cursor: pointer;
 }
 
-.remove-link-design{
+.remove-link-design {
     text-decoration: none;
 }
 </style>

@@ -31,9 +31,12 @@ import {onBeforeMount, ref} from "vue";
 import type {IInvoice} from "@/dto/shop/IInvoice";
 import InvoicesService from "@/services/shop/InvoicesService";
 import InvoiceDetailsCard from "@/components/Shops/InvoiceDetailsCard.vue";
+import {useMessageStore} from "@/stores/messageStore";
+import type {IMessage} from "@/dto/shared/IMessage";
 
 const identitySore = useIdentityStore();
 const invoicesService = new InvoicesService();
+const messageStore = useMessageStore();
 
 
 const route = useRoute();
@@ -50,6 +53,11 @@ const acceptInput = async () => {
             console.log("Invoice status was changed")
             await router.push({name: 'invoiceOrder'});
         } else {
+            let message : IMessage={
+                message: "Error occurred when accepting order", status: ""
+
+            }
+            messageStore.addMessage(message)
             console.warn("Error occurred when accepting order")
         }
     } else {

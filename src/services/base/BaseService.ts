@@ -3,6 +3,9 @@ import type {AxiosResponse, AxiosRequestConfig, AxiosInstance} from 'axios';
 import {IdentityService} from "@/services/identity/IdentityService";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import {useIdentityStore} from "@/stores/identityStore";
+import type {IMessage} from "@/dto/shared/IMessage";
+import {useMessageStore} from "@/stores/messageStore";
+import type {IErrorData} from "@/dto/shared/IErrorData";
 
 export abstract class BaseService {
     private static hostBaseURL = 'http://localhost:5009/api/';
@@ -65,8 +68,47 @@ export abstract class BaseService {
                                                 */
                     }
 
+
                     return Promise.reject(error);
                 }
+
+                const messageStore = useMessageStore();
+
+
+
+                if (error.response) {
+                    const message: IMessage = {message: error.message, status: error.response.statusText}
+                    if (error.response.data) {
+                        const responseDate: IErrorData = (error.response.data) as IErrorData
+
+                        console.log(responseDate)
+
+                        if (responseDate) {
+                            message.status += ": " +responseDate.status.toString()
+
+
+
+                            if (responseDate.errors) {
+                                message.message = ": " + JSON.stringify(responseDate.errors)
+                            }
+
+                            if (responseDate.error) {
+                                message.message += ": " + responseDate.error
+                            }
+
+                            if (responseDate.message) {
+                                message.message += ": " + responseDate.message;
+                            }
+
+                        }
+                    }
+
+                    console.log("message, ", message)
+                    messageStore.addMessage(message)
+                    console.log(message)
+                }
+
+
             }
         )
     }

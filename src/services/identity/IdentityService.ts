@@ -36,6 +36,7 @@ export class IdentityService extends BaseService {
                 this.identityStore.$state.authenticationJwt = response.data;
                 return response.data;
             }
+
             return undefined;
         } catch (e) {
             console.log('error: ', (e as Error).message);
