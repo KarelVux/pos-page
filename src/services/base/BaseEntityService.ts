@@ -33,6 +33,26 @@ export abstract class BaseEntityService<TEntity extends IBaseEntity> extends Bas
         }
     }
 
+    async getById(jwtData: IJWTResponse, id: string): Promise<TEntity | undefined> {
+        try {
+            const response = await this.axios.get<TEntity>(`/${id}`,
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + jwtData.jwt
+                    }
+                }
+            );
+
+            console.log('register response', response);
+            if (response.status === 200) {
+                return response.data;
+            }
+            return undefined;
+        } catch (e) {
+            console.log('error: ', (e as Error).message);
+            return undefined;
+        }
+    }
 
     async create(jwtData: IJWTResponse, entity: TEntity): Promise<TEntity | undefined> {
         try {

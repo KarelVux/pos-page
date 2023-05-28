@@ -54,9 +54,10 @@
 import {onMounted, onUpdated, watch} from "vue";
 import type {IBusiness} from "@/dto/shop/IBusiness";
 import SimpleRowValuePair from "@/components/Shops/Elements/SimpleRowValuePair.vue";
+import type {IManagerBusiness} from "@/dto/manager/IManagerBusiness";
 
 interface IProps {
-    businessDetails: IBusiness,
+    businessDetails: IBusiness | IManagerBusiness,
 }
 
 const props = defineProps<IProps>();
