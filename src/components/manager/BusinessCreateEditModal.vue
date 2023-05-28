@@ -239,7 +239,7 @@ const onSubmit = async (event: MouseEvent) => {
         return
     }
 
-    emits('update', business);
+    emits('update');
     let hider = document.getElementById('businessCreatorHider');
     hider!.click()
 

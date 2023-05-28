@@ -118,8 +118,8 @@ watch(() => managerBusinessData.value, async () => {
 });
 
 // Method to update objectData
-const updateObjectData = async (businessData: IManagerBusiness) => {
-    managerBusinessData.value = businessData;
+const updateObjectData = async () => {
+   // managerBusinessData.value = businessData;
     await loadPageData();
 };
 
