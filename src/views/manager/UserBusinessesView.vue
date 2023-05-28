@@ -94,8 +94,6 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </section>
             <!-- End modal-->
@@ -225,7 +223,6 @@ const sendUserBusinessViewRequests = async () => {
 onMounted(async () => {
     console.log("Open business details")
     let identity = identitySore.authenticationJwt;
-
 
     if (identity === undefined) {
         console.log("jwt is null")

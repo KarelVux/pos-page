@@ -8,6 +8,8 @@
                         <button type="button" class="btn btn-outline-primary" @click="modifyBusinessData">
                             Modify businessData
                         </button>
+
+                        <BusinessCreateEditModal />
                     </BusinessIntroduction>
                 </div>
                 <div v-else>
@@ -101,11 +103,11 @@ import {useIdentityStore} from "@/stores/identityStore";
 import {onBeforeMount, onMounted, ref} from "vue";
 import type {IManagerBusiness} from "@/dto/manager/IManagerBusiness";
 import {useRoute} from "vue-router";
-import router from "@/router";
 import {useMessageStore} from "@/stores/messageStore";
 import BusinessIntroduction from "@/components/Shops/BusinessIntroduction.vue";
 import LoadingData from "@/components/shared/LoadingData.vue";
 import type {IManagerProduct} from "@/dto/manager/IManagerProduct";
+import BusinessCreateEditModal from "@/components/manager/BusinessCreateEditModal.vue";
 
 const managerBusinessService = new ManagerBusinessService();
 const identitySore = useIdentityStore();
@@ -119,7 +121,7 @@ const modifyBusinessData = async () => {
 
     let identity = identitySore.authenticationJwt
 
-    managerBusinessData.value.name = "asdasdasdas name";
+    managerBusinessData.value!.name = "asdasdasdas name";
 
     if (identity) {
         let business = await managerBusinessService.update(identity, route.params.id, managerBusinessData.value)
