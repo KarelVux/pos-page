@@ -2,14 +2,21 @@
     <div class="container">
         <div class="card">
             <div class="card-body mb-4">
-                <div  v-if="managerBusinessData">
-                    <BusinessIntroduction :businessDetails="managerBusinessData"/>
+                <!-- Start Business info-->
+                <div v-if="managerBusinessData">
+                    <BusinessIntroduction :businessDetails="managerBusinessData">
+                        <button type="button" class="btn btn-outline-primary" @click="modifyBusinessData">
+                            Modify businessData
+                        </button>
+                    </BusinessIntroduction>
                 </div>
                 <div v-else>
                     <LoadingData/>
                 </div>
+                <!-- End Business info-->
 
-                <table class="table table-striped table-sm">
+                <!-- Start Product info-->
+                <table v-if=" managerBusinessData && managerBusinessData.products" class="table table-striped table-sm">
                     <thead>
                     <tr>
                         <th>
@@ -53,7 +60,7 @@
                             {{ item.description }}
                         </td>
                         <td>
-                            {{item.productCategory.title}}
+                            {{ item.productCategory.title }}
                         </td>
                         <td>
                             {{ item.unitCount }}
@@ -79,6 +86,8 @@
                     </tr>
                     </tbody>
                 </table>
+                <!-- End Product info-->
+
             </div>
 
         </div>
@@ -104,6 +113,22 @@ const messageStore = useMessageStore();
 
 const route = useRoute();
 const managerBusinessData = ref<IManagerBusiness>();
+
+const modifyBusinessData = async () => {
+    console.log("modify data")
+
+    let identity = identitySore.authenticationJwt
+
+    managerBusinessData.value.name = "asdasdasdas name";
+
+    if (identity) {
+        let business = await managerBusinessService.update(identity, route.params.id, managerBusinessData.value)
+        if (business) {
+            managerBusinessData.value = business;
+        }
+    }
+
+}
 
 onBeforeMount(async () => {
     let identity = identitySore.authenticationJwt

@@ -76,4 +76,28 @@ export abstract class BaseEntityService<TEntity extends IBaseEntity> extends Bas
         }
     }
 
+
+    async update(jwtData: IJWTResponse, id: string, entity: TEntity): Promise<TEntity | undefined> {
+        try {
+            const response = await this.axios.put<TEntity>(`/${id}`, entity,
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + jwtData.jwt
+                    }
+                }
+            );
+
+            console.log('response', response);
+            if (response.status === 200 || response.status === 204) {
+                return response.data;
+            }
+
+            return undefined;
+        } catch (e) {
+            console.log('error: ', (e as Error).message, e);
+            return undefined;
+        }
+    }
+
+
 }

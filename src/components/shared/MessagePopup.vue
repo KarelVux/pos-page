@@ -45,7 +45,7 @@ onMounted(() => {
 
     timerId = setInterval(async () => {
         sendRemovalEmit()
-    }, 5000);
+    }, 15000);
 });
 
 onUnmounted(() => {
