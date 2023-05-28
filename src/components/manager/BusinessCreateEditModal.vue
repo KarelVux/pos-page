@@ -212,7 +212,7 @@ const onSubmit = async (event: MouseEvent) => {
     let business: IManagerBusiness | undefined;
     if (props.create) {
         business = await managerBusinessService.create(identity, displayData.value)
-        if (identity) {
+        if (business) {
             console.log("Business creation was successful")
         } else {
             console.error("Unable to create business")
@@ -230,13 +230,6 @@ const onSubmit = async (event: MouseEvent) => {
             console.error("Error occurred when editing business")
             return
         }
-    }
-
-    if (identity) {
-        console.log("Business creation/edit was successful")
-    } else {
-        console.error("Unable to create/edit business")
-        return
     }
 
     emits('update');
