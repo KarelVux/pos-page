@@ -86,7 +86,6 @@ export abstract class BaseService {
 
                         console.log("Initial response",responseDate)
                         message.message = error.response.data as string
-                        messageStore.addMessage(message)
 
                         if (responseDate) {
                             message.status += ": " +responseDate.status.toString()

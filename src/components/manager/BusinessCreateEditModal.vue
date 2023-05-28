@@ -4,7 +4,14 @@
         <div class="d-flex">
 
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                    data-bs-target="#addNewBusiness">Add new business
+                    data-bs-target="#addNewBusiness">
+                <span v-if="props.create">
+                Add new business
+                </span>
+                <span v-else>
+                Edit
+                </span>
+
             </button>
             <!-- Modal -->
             <div class="modal fade" id="addNewBusiness" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -12,7 +19,15 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="addNewBusinessLabel">Add new business</h1>
+                            <h1 class="modal-title fs-5" id="addNewBusinessLabel">
+                                <span v-if="props.create">
+                                    Add new business
+                                </span>
+                                <span v-else>
+                                    Edit
+                                </span>
+
+                            </h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                         </div>
@@ -82,11 +97,15 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
                             </button>
-                            <button type="button" class="btn btn-primary" v-on:click="onSubmit">Create new
-                                Business
+                            <button type="button" class="btn btn-primary" v-on:click="onSubmit">
+                                <span v-if="props.create">
+                                    Add new business
+                                </span>
+                                <span v-else>
+                                    Save Updates
+                                </span>
                             </button>
-                            <p id="businessCreatorHider" data-bs-dismiss="modal" style="visibility: hidden"
-                               @click="$emit('update:value', false)"></p>
+                            <p id="businessCreatorHider" data-bs-dismiss="modal" style="visibility: hidden"></p>
 
                         </div>
                     </div>
@@ -110,19 +129,7 @@ import {useMessageStore} from "@/stores/messageStore";
 import {SettlementsService} from "@/services/management/SettlementsService";
 import {BusinessCategoriesService} from "@/services/management/BusinessCategoriesService";
 
-const registerBusinessInputData = ref<IManagerBusiness>({
-    address: "",
-    businessCategoryId: "",
-    description: "",
-    email: "",
-    latitude: 0,
-    longitude: 0,
-    name: "",
-    phoneNumber: "",
-    picturePath: "",
-    rating: 0,
-    settlementId: ""
-} as IManagerBusiness)
+
 const settlements = ref<ISettlement[]>()
 const businessCategories = ref<IBusinessCategory[]>()
 
@@ -132,6 +139,18 @@ const messageStore = useMessageStore();
 const settlementService = new SettlementsService();
 const businessCategoriesService = new BusinessCategoriesService();
 
+
+interface IProps {
+    businessData: IManagerBusiness,
+    create: boolean
+}
+
+// Define the props and emits
+const props = defineProps<IProps>();
+const emits = defineEmits(['update']);
+
+// Create a localData ref to hold the updated values
+const registerBusinessInputData = ref<IManagerBusiness>(props.businessData)
 
 onBeforeMount(async () => {
     await sendUserBusinessViewRequests();
@@ -143,7 +162,6 @@ const sendUserBusinessViewRequests = async () => {
     if (identity) {
         settlements.value = (await settlementService.getAll(identity))
         businessCategories.value = (await businessCategoriesService.getAll(identity))
-
     }
 }
 
@@ -157,18 +175,33 @@ const onSubmit = async (event: MouseEvent) => {
         console.log("jwt is null")
         return;
     }
-
-    let businesses = await managerBusinessService.create(identity, registerBusinessInputData.value)
-
-    if (businesses) {
-        console.log("Business creation was successful", businesses)
+    let business: IManagerBusiness | undefined;
+    if (props.create) {
+        business = await managerBusinessService.create(identity, registerBusinessInputData.value)
+        if (identity) {
+            console.log("Business creation was successful")
+        } else {
+            console.error("Unable to create business")
+            return
+        }
     } else {
-        console.error("Unable to create business")
+        let [, status] = await managerBusinessService.update(identity, registerBusinessInputData.value.id!, registerBusinessInputData.value)
+        if (status) {
+            console.log("Business Edit was successful")
+        } else {
+            console.error("Error occurred when editing business")
+            return
+        }
+    }
+
+    if (identity) {
+        console.log("Business creation/edit was successful")
+    } else {
+        console.error("Unable to create/edit business")
         return
     }
 
-
-    await sendUserBusinessViewRequests();
+    emits('update', business);
     let hider = document.getElementById('businessCreatorHider');
     hider!.click()
 

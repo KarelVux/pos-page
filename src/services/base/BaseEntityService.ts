@@ -77,7 +77,7 @@ export abstract class BaseEntityService<TEntity extends IBaseEntity> extends Bas
     }
 
 
-    async update(jwtData: IJWTResponse, id: string, entity: TEntity): Promise<TEntity | undefined> {
+    async update(jwtData: IJWTResponse, id: string, entity: TEntity): Promise<[TEntity | undefined, boolean]> {
         try {
             const response = await this.axios.put<TEntity>(`/${id}`, entity,
                 {
@@ -89,13 +89,13 @@ export abstract class BaseEntityService<TEntity extends IBaseEntity> extends Bas
 
             console.log('response', response);
             if (response.status === 200 || response.status === 204) {
-                return response.data;
+                return [response.data, true];
             }
 
-            return undefined;
+            return [undefined, false];
         } catch (e) {
             console.log('error: ', (e as Error).message, e);
-            return undefined;
+            return [undefined, false];
         }
     }
 
