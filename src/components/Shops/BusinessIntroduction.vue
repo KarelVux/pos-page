@@ -1,9 +1,9 @@
 <template>
     <section>
         <!--Grid row-->
-        <div class="row">
+        <div class="row mb-2">
             <!--Grid column-->
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6">
 
                 <img v-if="!businessDetails.picturePath"
                      src="https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80"
@@ -15,12 +15,12 @@
             <!--Grid column-->
 
             <!--Grid column-->
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6">
                 <!--Content-->
                 <div class="p-4">
                     <strong><p style="font-size: 20px;">{{ businessDetails.name }}</p></strong>
 
-                    <div class="mb-3" v-if="businessDetails.businessCategory">
+                    <div class="" v-if="businessDetails.businessCategory">
                         <span class="badge bg-info me-1">{{ businessDetails.businessCategory.title }}</span>
                     </div>
 
@@ -42,11 +42,16 @@
                         strongText="Phone number: "
                         :normalText="businessDetails.phoneNumber"
                     />
+
+                    <slot>
+                    </slot>
                 </div>
                 <!--Content-->
+
             </div>
             <!--Grid column-->
         </div>
+
         <!--Grid row-->
     </section>
 </template>
