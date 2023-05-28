@@ -37,34 +37,34 @@
                                 <div class="col-md-6 mb-3">
                                     <label>Business Name</label>
                                     <input type="text" class="form-control"
-                                           v-model="registerBusinessInputData.name">
+                                           v-model="displayData.name">
 
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label>Address</label>
                                     <input type="text" class="form-control"
-                                           v-model="registerBusinessInputData.address">
+                                           v-model="displayData.address">
 
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label>Phone number</label>
                                     <input type="text" class="form-control"
-                                           v-model="registerBusinessInputData.phoneNumber">
+                                           v-model="displayData.phoneNumber">
                                 </div>
 
 
                                 <div class="col-md-6 mb-3">
                                     <label>Email</label>
                                     <input type="email" class="form-control"
-                                           v-model="registerBusinessInputData.email">
+                                           v-model="displayData.email">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Business Category</label>
                                     <select class="form-select"
-                                            v-model="registerBusinessInputData.businessCategoryId">
+                                            v-model="displayData.businessCategoryId">
                                         <option value="-1" selected disabled>Please select value</option>
                                         <option v-for="businessCategoryItem in businessCategories"
                                                 :key="businessCategoryItem.id"
@@ -76,7 +76,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Settlement</label>
                                     <select class="form-select"
-                                            v-model="registerBusinessInputData.settlementId">
+                                            v-model="displayData.settlementId">
                                         <option value="-1" selected disabled>Please select value</option>
                                         <option
                                             v-for="settlementItem in settlements"
@@ -90,7 +90,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Description</label>
                                 <input type="email" class="form-control"
-                                       v-model="registerBusinessInputData.description">
+                                       v-model="displayData.description">
                             </div>
 
                         </div>
@@ -150,11 +150,45 @@ const props = defineProps<IProps>();
 const emits = defineEmits(['update']);
 
 // Create a localData ref to hold the updated values
-const registerBusinessInputData = ref<IManagerBusiness>(props.businessData)
+const originalData = ref<IManagerBusiness>(props.businessData)
+const displayData = ref<IManagerBusiness>({
+    address: "",
+    businessCategoryId: "",
+    description: "",
+    email: "",
+    name: "",
+    phoneNumber: "",
+    settlementId: ""
+} as IManagerBusiness)
 
 onBeforeMount(async () => {
     await sendUserBusinessViewRequests();
+
+    if (!props.create) {
+        originalToDisplay();
+
+    }
 })
+
+const originalToDisplay = () =>{
+    displayData.value.address = originalData.value.address
+    displayData.value.businessCategoryId = originalData.value.businessCategoryId
+    displayData.value.description = originalData.value.description
+    displayData.value.email = originalData.value.email
+    displayData.value.name = originalData.value.name
+    displayData.value.phoneNumber = originalData.value.phoneNumber
+    displayData.value.settlementId = originalData.value.settlementId
+}
+
+const mapDisplayToOriginal = () =>{
+    originalData.value.address = displayData.value.address
+    originalData.value.businessCategoryId = displayData.value.businessCategoryId
+    originalData.value.description = displayData.value.description
+    originalData.value.email = displayData.value.email
+    originalData.value.name = displayData.value.name
+    originalData.value.phoneNumber = displayData.value.phoneNumber
+    originalData.value.settlementId = displayData.value.settlementId
+}
 
 const sendUserBusinessViewRequests = async () => {
     let identity = identitySore.authenticationJwt
@@ -177,7 +211,7 @@ const onSubmit = async (event: MouseEvent) => {
     }
     let business: IManagerBusiness | undefined;
     if (props.create) {
-        business = await managerBusinessService.create(identity, registerBusinessInputData.value)
+        business = await managerBusinessService.create(identity, displayData.value)
         if (identity) {
             console.log("Business creation was successful")
         } else {
@@ -185,7 +219,11 @@ const onSubmit = async (event: MouseEvent) => {
             return
         }
     } else {
-        let [, status] = await managerBusinessService.update(identity, registerBusinessInputData.value.id!, registerBusinessInputData.value)
+
+        mapDisplayToOriginal();
+
+
+        let [, status] = await managerBusinessService.update(identity, originalData.value.id!, originalData.value)
         if (status) {
             console.log("Business Edit was successful")
         } else {
