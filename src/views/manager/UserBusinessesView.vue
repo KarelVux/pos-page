@@ -1,67 +1,86 @@
 <template>
     <div class="row justify-content-center mb-3">
         <div class="col-md-12">
-            <!-- Start modal-->
-            <section>
-                <div class="d-flex">
-                    <h1 class="pe-3">Owned businesses</h1>
+            <section v-if="userInManagerRole">
 
-                    <BusinessCreateEditModal :create="true"
-                                             @update="updateObjectData" businessData=""/>
+                <!-- Start modal-->
+                <section>
+                    <div class="d-flex">
+                        <h1 class="pe-3">Owned businesses</h1>
+
+                        <BusinessCreateEditModal :create="true"
+                                                 @update="updateObjectData" businessData=""/>
+                    </div>
+                </section>
+                <!-- End modal-->
+
+                <!-- Start business loading-->
+                <div class="table-responsive" v-if="managerBusinessesData">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th>
+                                Business ID
+                            </th>
+                            <th>
+                                Business name
+                            </th>
+                            <th>
+                                Address
+                            </th>
+                            <th>
+                                Business description
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="item  in managerBusinessesData" :key="item.id" class="a">
+                            <td class="">
+                                <RouterLink :to="{ name: 'userBusinessesManagement', params: { id: item.id } }">
+                                    {{
+                                        item.id
+                                    }}
+                                </RouterLink>
+                            </td>
+                            <td>
+                                <RouterLink :to="{ name: 'userBusinessesManagement', params: { id: item.id } }">
+                                    {{
+                                        item.name
+                                    }}
+                                </RouterLink>
+                            </td>
+                            <td>
+                                {{ item.address }}
+                            </td>
+                            <td>
+                                {{ item.description }}
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div v-else>
+                    <LoadingData/>
+                </div>
+                <!-- End business loading-->
+            </section>
+            <section v-else>
+                <div class="card text-center">
+
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Do you want to add your own business?
+                        </h5>
+                        <div>
+                            <button type="button" class="btn btn-primary mx-2" @click="router.go(-1)">Go back</button>
+                            <button type="button" class="btn btn-primary mx-2" @click="addUserToTheRoleAndNavigate">
+                                Right
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </section>
-            <!-- End modal-->
-
-            <!-- Start business loading-->
-            <div class="table-responsive" v-if="managerBusinessesData">
-                <table class="table table-striped table-sm">
-                    <thead>
-                    <tr>
-                        <th>
-                            Business ID
-                        </th>
-                        <th>
-                            Business name
-                        </th>
-                        <th>
-                            Address
-                        </th>
-                        <th>
-                            Business description
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="item  in managerBusinessesData" :key="item.id" class="a">
-                        <td class="">
-                            <RouterLink :to="{ name: 'userBusinessesManagement', params: { id: item.id } }">
-                                {{
-                                    item.id
-                                }}
-                            </RouterLink>
-                        </td>
-                        <td>
-                            <RouterLink :to="{ name: 'userBusinessesManagement', params: { id: item.id } }">
-                                {{
-                                    item.name
-                                }}
-                            </RouterLink>
-                        </td>
-                        <td>
-                            {{ item.address }}
-                        </td>
-                        <td>
-                            {{ item.description }}
-                        </td>
-
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div v-else>
-                <LoadingData/>
-            </div>
-            <!-- End business loading-->
         </div>
     </div>
 
@@ -82,12 +101,17 @@ import type {ISettlement} from "@/dto/management/ISettlement";
 import type {IBusinessCategory} from "@/dto/shop/IBusinessCategory";
 import LoadingData from "@/components/shared/LoadingData.vue";
 import BusinessCreateEditModal from "@/components/manager/BusinessCreateEditModal.vue";
+import {findUserNameFromJwt, findUserRoleFromJwt} from "@/helpers/jwtHelper";
+import {useRouter} from "vue-router";
+import {IdentityService} from "@/services/identity/IdentityService";
 
 const managerBusinessService = new ManagerBusinessService();
 const identitySore = useIdentityStore();
 const messageStore = useMessageStore();
 const settlementService = new SettlementsService();
+const identityService = new IdentityService();
 const businessCategoriesService = new BusinessCategoriesService();
+const router = useRouter()
 
 const settlements = ref<ISettlement[]>()
 const businessCategories = ref<IBusinessCategory[]>()
@@ -110,9 +134,22 @@ const registerBusinessInputData = ref<IManagerBusiness>({
 } as IManagerBusiness)
 
 
+const userInManagerRole = ref<boolean>(false)
+
 onBeforeMount(async () => {
-    await sendUserBusinessViewRequests();
+    let identity = identitySore.authenticationJwt;
+
+    let userRole = findUserRoleFromJwt(identity!.jwt)
+    console.log("User role ", userRole)
+
+    if (userRole === "BusinessManager") {
+        userInManagerRole.value = true
+        await sendUserBusinessViewRequests();
+    }
+
 })
+
+
 
 const sendUserBusinessViewRequests = async () => {
     let identity = identitySore.authenticationJwt
@@ -133,6 +170,28 @@ const sendUserBusinessViewRequests = async () => {
         businessCategories.value = (await businessCategoriesService.getAll(identity))
 
     }
+}
+
+const addUserToTheRoleAndNavigate = async () => {
+    let identity = identitySore.authenticationJwt
+
+    if (identity) {
+        let roleAdding = await identityService.addUserToBusinessManagerRole(identity)
+
+        // Update JWT because user roles are added to it
+        await identityService.refreshToken(identity)
+        if (roleAdding) {
+            await sendUserBusinessViewRequests();
+            userInManagerRole.value = true
+
+        } else {
+            messageStore.addMessage({
+                message: "Error occurred when initializing user access", status: ""
+            })
+            return
+        }
+    }
+
 }
 
 onMounted(async () => {

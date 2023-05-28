@@ -75,36 +75,46 @@ export abstract class BaseService {
                 const messageStore = useMessageStore();
 
 
-
                 if (error.response) {
                     const message: IMessage = {message: error.message, status: error.response.statusText}
 
 
-
                     if (error.response.data) {
-                        const responseDate: IErrorData = (error.response.data) as IErrorData
 
-                        console.log("Initial response",responseDate)
-                        message.message = error.response.data as string
 
-                        if (responseDate) {
-                            message.status += ": " +responseDate.status.toString()
+                        message.message = JSON.stringify(error.response.data)
 
-                            if (responseDate.errors) {
-                                message.message = ": " + JSON.stringify(responseDate.errors)
-                            }
+                        //
+                        //   const responseDate: IErrorData = (error.response.data) as IErrorData
+//
+                        //   console.log("Initial response",responseDate)
+                        //   message.message = error.response.data as string
 
-                            if (responseDate.error) {
-                                message.message += ": " + responseDate.error
-                            }
+                        //   if (responseDate) {
+                        //       message.status += ": " +responseDate.status.toString()
 
-                            if (responseDate.message) {
-                                message.message += ": " + responseDate.message;
-                            }
-                        } else {
-                            console.log("Error response",error.response.data)
-                            message.message = error.response.data as string
-                        }
+
+                        //       if (responseDate.errors) {
+                        //           message.message = ": " + JSON.stringify(responseDate.errors)
+
+                        //           console.log("response errprs", responseDate.errors)
+                        //       }
+
+                        //       if (responseDate.error) {
+                        //           message.message += ": " + responseDate.error
+                        //           console.log("response error", responseDate.error)
+
+                        //       }
+
+                        //       if (responseDate.message) {
+                        //           message.message += ": " + responseDate.message;
+                        //           console.log("response message", responseDate.message)
+
+                        //       }
+                        //   } else {
+                        //       console.log("Error response",error.response.data)
+                        //       message.message = error.response.data as string
+                        //   }
 
                     }
 

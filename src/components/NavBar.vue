@@ -40,6 +40,10 @@
                         <li class="nav-link text-dark ">
                             <span class="text-dark custom-mouse-over" @click="doLogout">Logout</span>
                         </li>
+
+                        <li class="nav-link text-dark " v-if="identitySore.userName">
+                            <span class="text-dark">Hey {{identitySore.userName}}</span>
+                        </li>
                     </ul>
                 </div>
             </div>

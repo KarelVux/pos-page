@@ -3,6 +3,7 @@ import type {IRegisterData} from "@/dto/identity/IRegisterData";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import type {ILoginData} from "@/dto/identity/ILoginData";
 import {useIdentityStore} from "@/stores/identityStore";
+import {findUserNameFromJwt} from "@/helpers/jwtHelper";
 
 export class IdentityService extends BaseService {
     constructor() {
@@ -34,6 +35,11 @@ export class IdentityService extends BaseService {
             console.log('login response', response);
             if (response.status === 200) {
                 this.identityStore.$state.authenticationJwt = response.data;
+                const username = findUserNameFromJwt(this.identityStore.$state.authenticationJwt.jwt);
+                if (username) {
+                    this.identityStore.$state.userName = username;
+
+                }
                 return response.data;
             }
 
@@ -61,6 +67,7 @@ export class IdentityService extends BaseService {
             console.log('logout response', response);
             if (response.status === 200) {
                 this.identityStore.$state.authenticationJwt = undefined;
+                this.identityStore.$state.userName = undefined;
 
                 return true;
             }
@@ -80,7 +87,7 @@ export class IdentityService extends BaseService {
 
             console.log('refresh token response', response);
             if (response.status === 200) {
-                this.identityStore.$state.authenticationJwt  = response.data;
+                this.identityStore.$state.authenticationJwt = response.data;
                 return response.data;
             }
             return undefined;
@@ -90,4 +97,23 @@ export class IdentityService extends BaseService {
         }
     }
 
+    async addUserToBusinessManagerRole(data: IJWTResponse): Promise<boolean | undefined> {
+        try {
+            const response = await this.axios.post('addUserToBusinessManagerRole',
+                null
+                , {
+                    headers: {
+                        'Authorization': 'Bearer ' + data.jwt
+                    }
+                });
+            if (response.status === 200) {
+                return true;
+            }
+
+            return undefined;
+        } catch (e) {
+            console.log('error: ', (e as Error).message);
+            return undefined;
+        }
+    }
 }
