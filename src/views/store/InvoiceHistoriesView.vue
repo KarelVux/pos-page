@@ -108,7 +108,6 @@ onBeforeMount(async () => {
             } else {
                 openInvoices.value.push(item)
             }
-
         });
     }
 })

@@ -29,7 +29,6 @@ export default class ShopsService extends BaseService {
                     params: {
                         settlementId: params.settlementId,
                         businessCategoryId: params.businessCategoryId,
-
                     }
                 }
             );
