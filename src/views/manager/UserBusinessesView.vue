@@ -92,7 +92,7 @@
 
 import {useIdentityStore} from "@/stores/identityStore";
 import {ManagerBusinessService} from "@/services/manager/ManagerBusinessService";
-import {onBeforeMount, onBeforeUpdate, onMounted, onUpdated, ref, watch} from "vue";
+import {onBeforeMount, onMounted, ref, watch} from "vue";
 import type {IManagerBusiness} from "@/dto/manager/IManagerBusiness";
 import {useMessageStore} from "@/stores/messageStore";
 import {SettlementsService} from "@/services/management/SettlementsService";
@@ -101,9 +101,10 @@ import type {ISettlement} from "@/dto/management/ISettlement";
 import type {IBusinessCategory} from "@/dto/shop/IBusinessCategory";
 import LoadingData from "@/components/shared/LoadingData.vue";
 import BusinessCreateEditModal from "@/components/manager/BusinessCreateEditModal.vue";
-import {findUserNameFromJwt, findUserRoleFromJwt} from "@/helpers/jwtHelper";
+import {findUserRoleFromJwt} from "@/helpers/jwtHelper";
 import {useRouter} from "vue-router";
 import {IdentityService} from "@/services/identity/IdentityService";
+import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
 
 const managerBusinessService = new ManagerBusinessService();
 const identitySore = useIdentityStore();
@@ -150,7 +151,6 @@ onBeforeMount(async () => {
 })
 
 
-
 const sendUserBusinessViewRequests = async () => {
     let identity = identitySore.authenticationJwt
 
@@ -162,7 +162,9 @@ const sendUserBusinessViewRequests = async () => {
             console.log(managerBusinessesData.value)
         } else {
             messageStore.addMessage({
-                message: "Unable to initialize user businesses", status: ""
+                message: "Unable to initialize user businesses",
+                status: "",
+                type: MessagePopupTypeEnum.Error
             })
         }
 
@@ -186,7 +188,8 @@ const addUserToTheRoleAndNavigate = async () => {
 
         } else {
             messageStore.addMessage({
-                message: "Error occurred when initializing user access", status: ""
+                message: "Error occurred when initializing user access", status: "", type: MessagePopupTypeEnum.Error
+
             })
             return
         }

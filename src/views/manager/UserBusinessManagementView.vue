@@ -151,18 +151,33 @@
                         <td class=" px-1">{{ openInvoice.totalPriceWithoutTax }}</td>
                         <td class=" px-1">{{ openInvoice.taxAmount }}</td>
                         <td class=" px-1">{{ openInvoice.finalTotalPrice }}</td>
-                        <td class=" px-1">{{ openInvoice.invoiceAcceptanceStatus }}</td>
+                        <td class=" px-1">
+                            <p v-if="openInvoice.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.Unknown">
+                                Unknown
+                            </p>
+                            <p v-else-if="openInvoice.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.UserAccepted">
+                                User accepted
+                            </p>
+
+                            <p v-else-if="openInvoice.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.BusinessAccepted">
+                                Business accepted
+                            </p>
+                            <p v-else-if="openInvoice.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.BusinessRejected">
+                                Business rejected
+                            </p>
+
+                        </td>
                         <td class=" px-1">
                             <p v-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.GivenToClient">
                                 Given to client
                             </p>
-                            <p v-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Ready">
+                            <p v-else-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Ready">
                                 Ready
                             </p>
-                            <p v-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.BusinessIsPreparing">
+                            <p v-else-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.BusinessIsPreparing">
                                 Preparing
                             </p>
-                            <p v-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Unknown">
+                            <p v-else-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Unknown">
                                 Needs business acceptance
                             </p>
 
@@ -247,6 +262,8 @@ import type {IManagerInvoice} from "@/dto/manager/IManagerInvoice";
 import {getFormattedDate} from "@/helpers/UnifiedFormatter";
 import {OrderAcceptanceStatusEnum} from "@/dto/enums/OrderAcceptanceStatusEnum";
 import {InvoiceAcceptanceStatusEnum} from "@/dto/enums/InvoiceAcceptanceStatusEnum";
+import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
+import type {IMessage} from "@/dto/shared/IMessage";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
@@ -293,13 +310,21 @@ const acceptInvoice = async (invoice: IManagerInvoice) => {
         totalPriceWithoutTax: invoice.totalPriceWithoutTax,
     }
 
+    invoiceChangeableData.order.orderAcceptanceStatus = OrderAcceptanceStatusEnum.BusinessIsPreparing;
+
     if (identity) {
         let returnableInvoice = await invoiceService.update(identity, invoiceChangeableData.id!, invoiceChangeableData)
         if (returnableInvoice) {
             console.log("Successfully changed")
+            var message: IMessage = {
+                message: "Status was successfully changed",
+                type: MessagePopupTypeEnum.Info
+            }
+            messageStore.addMessage(message)
         } else {
             messageStore.addMessage({
-                message: "Unable to edit invoice ", status: ""
+                message: "Unable to edit invoice ", status: "", type: MessagePopupTypeEnum.Error
+
             })
         }
     }
@@ -316,7 +341,8 @@ const loadPageData = async () => {
             managerBusinessData.value = business;
         } else {
             messageStore.addMessage({
-                message: "Unable to find business " + route.params.id, status: ""
+                message: "Unable to find business " + route.params.id, status: "", type: MessagePopupTypeEnum.Error
+
             })
         }
 

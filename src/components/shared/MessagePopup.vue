@@ -1,11 +1,13 @@
 <template>
-    <div class="alert alert-danger alert-dismissible fade show  mt-alerts " role="alert">
+    <div :class="'alert ' + popupMessage.type + ' alert-dismissible fade show  mt-alerts' " role="alert">
 
         <div class="row">
             <div class="col-md-12">
 
                 <div class="col-md-11">
-                    <strong>({{props.count}}) {{ props.popupMessage.status }}</strong>
+                    <strong>({{ props.count }}) <span v-if="props.popupMessage.status"> {{
+                            props.popupMessage.status
+                        }}</span></strong>
                     <p>
                         {{ props.popupMessage.message }}
                     </p>

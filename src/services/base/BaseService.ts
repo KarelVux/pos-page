@@ -1,11 +1,11 @@
+import type {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
 import Axios, {AxiosError} from 'axios';
-import type {AxiosResponse, AxiosRequestConfig, AxiosInstance} from 'axios';
 import {IdentityService} from "@/services/identity/IdentityService";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import {useIdentityStore} from "@/stores/identityStore";
 import type {IMessage} from "@/dto/shared/IMessage";
 import {useMessageStore} from "@/stores/messageStore";
-import type {IErrorData} from "@/dto/shared/IErrorData";
+import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
 
 export abstract class BaseService {
     private static hostBaseURL = 'http://localhost:5009/api/';
@@ -76,7 +76,7 @@ export abstract class BaseService {
 
 
                 if (error.response) {
-                    const message: IMessage = {message: error.message, status: error.response.statusText}
+                    const message: IMessage = {message: error.message, status: error.response.statusText, type: MessagePopupTypeEnum.Error}
 
 
                     console.log("error.response",error.response)
