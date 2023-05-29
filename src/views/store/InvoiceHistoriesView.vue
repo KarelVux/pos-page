@@ -78,6 +78,7 @@ import {onBeforeMount, onMounted, onUnmounted, ref} from "vue";
 import InvoicesService from "@/services/shop/InvoicesService";
 import type {IInvoice} from "../../dto/shop/IInvoice";
 import {getFormattedDate} from "@/helpers/UnifiedFormatter";
+import {OrderAcceptanceStatusEnum} from "@/dto/enums/OrderAcceptanceStatusEnum";
 
 const identitySore = useIdentityStore();
 
@@ -103,7 +104,7 @@ onBeforeMount(async () => {
 
     if (invoices) {
         invoices.forEach(function (item) {
-            if (item.order.givenToClient && item.paymentCompleted) {
+            if (item.order.orderAcceptanceStatus === OrderAcceptanceStatusEnum.GivenToClient && item.paymentCompleted) {
                 closedInvoices.value.push(item)
             } else {
                 openInvoices.value.push(item)

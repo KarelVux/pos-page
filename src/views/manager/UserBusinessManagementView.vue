@@ -125,8 +125,9 @@
                         <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Subtotal</th>
                         <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Tax</th>
                         <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Total</th>
-                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Business accepted</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Acceptance status</th>
                         <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Order Status</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -150,20 +151,34 @@
                         <td class=" px-1">{{ openInvoice.totalPriceWithoutTax }}</td>
                         <td class=" px-1">{{ openInvoice.taxAmount }}</td>
                         <td class=" px-1">{{ openInvoice.finalTotalPrice }}</td>
-                        <td class=" px-1">{{ openInvoice.order.accepted }}</td>
+                        <td class=" px-1">{{ openInvoice.invoiceAcceptanceStatus }}</td>
                         <td class=" px-1">
-                            <p v-if="openInvoice.order.givenToClient">
+                            <p v-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.GivenToClient">
                                 Given to client
                             </p>
-                            <p v-if="openInvoice.order.ready">
+                            <p v-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Ready">
                                 Ready
                             </p>
-                            <p v-if="openInvoice.order.accepted">
+                            <p v-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.BusinessIsPreparing">
                                 Preparing
                             </p>
-                            <p v-if="!openInvoice.order.accepted">
+                            <p v-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Unknown">
                                 Needs business acceptance
                             </p>
+
+                        </td>
+                        <td class=" px-1">
+
+                            <button type="button" class="btn btn-outline-primary w-100">
+                                Accept
+                            </button>
+                            <button type="button" class="btn btn-outline-info  w-100">
+                                Payment completed
+                            </button>
+
+                            <button type="button" class="btn btn-outline-danger   w-100">
+                                Delete
+                            </button>
 
                         </td>
 
@@ -217,7 +232,7 @@
 <script lang="ts" setup>
 import {ManagerBusinessService} from "@/services/manager/ManagerBusinessService";
 import {useIdentityStore} from "@/stores/identityStore";
-import {onBeforeMount, onMounted, ref, watch} from "vue";
+import {onBeforeMount, ref, watch} from "vue";
 import type {IManagerBusiness} from "@/dto/manager/IManagerBusiness";
 import {useRoute} from "vue-router";
 import {useMessageStore} from "@/stores/messageStore";
@@ -229,7 +244,7 @@ import {tr} from "vuetify/locale";
 import {InvoiceService} from "@/services/manager/InvoiceService";
 import type {IManagerInvoice} from "@/dto/manager/IManagerInvoice";
 import {getFormattedDate} from "@/helpers/UnifiedFormatter";
-import OrderProgressStatus from "@/components/Shops/Elements/OrderProgressStatus.vue";
+import {OrderAcceptanceStatusEnum} from "@/dto/enums/OrderAcceptanceStatusEnum";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
@@ -280,7 +295,7 @@ const loadPageData = async () => {
             closedInvoices.value = []
             openInvoices.value = []
             invoices.forEach(function (item) {
-                if (item.order.givenToClient && item.paymentCompleted) {
+                if (item.order.orderAcceptanceStatus === OrderAcceptanceStatusEnum.GivenToClient && item.paymentCompleted) {
                     closedInvoices.value.push(item)
                 } else {
                     openInvoices.value.push(item)

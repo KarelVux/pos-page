@@ -1,14 +1,12 @@
 import type {IBaseEntity} from "@/dto/management/IBaseEntity";
 import type {IManagerInvoice} from "@/dto/manager/IManagerInvoice";
-import type {IManagerInvoiceRow} from "@/dto/manager/IManagerInvoiceRow";
 import type {IManagerOrderFeedback} from "@/dto/manager/IManagerOrderFeedback";
+import type {OrderAcceptanceStatusEnum} from "@/dto/enums/OrderAcceptanceStatusEnum";
 
 export interface IManagerOrder extends IBaseEntity {
     startTime: Date
-    givenToClientTime : Date
-    accepted: boolean
-    ready: boolean
-    givenToClient: boolean
+    givenToClientTime: Date
+    orderAcceptanceStatus: OrderAcceptanceStatusEnum
     customerComment: string
     invoiceId: string
     invoice: IManagerInvoice

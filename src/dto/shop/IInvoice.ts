@@ -1,6 +1,7 @@
 import type {IBaseEntity} from "@/dto/management/IBaseEntity";
 import type {IOrder} from "@/dto/shop/IOrder";
 import type {IInvoiceRow} from "@/dto/shop/IInvoiceRow";
+import type {InvoiceAcceptanceStatusEnum} from "@/dto/enums/InvoiceAcceptanceStatusEnum";
 
 export interface IInvoice extends IBaseEntity {
     finalTotalPrice: number
@@ -8,7 +9,7 @@ export interface IInvoice extends IBaseEntity {
     taxAmount: number
     totalPriceWithoutTax: number
     paymentCompleted: boolean
-    userAccepted: boolean
+    invoiceAcceptanceStatus: InvoiceAcceptanceStatusEnum,
     creationTime: Date
     businessId: string
     orderId: string
