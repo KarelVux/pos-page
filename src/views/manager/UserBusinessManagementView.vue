@@ -184,14 +184,34 @@
                         </td>
                         <td class=" px-1">
 
-                            <button type="button" class="btn btn-outline-primary w-100"
-                                    @click="acceptInvoice(openInvoice)">
+                            <button
+                                v-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Unknown || openInvoice.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.UserAccepted"
+                                type="button" class="btn btn-outline-primary w-100"
+                                @click="acceptInvoice(openInvoice)">
                                 Accept
                             </button>
-                            <button type="button" class="btn btn-outline-danger   w-100">
+
+                            <button
+                                v-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.BusinessIsPreparing && openInvoice.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.BusinessAccepted"
+                                type="button" class="btn btn-outline-primary w-100"
+                                @click="moveToReadyStatus(openInvoice)">
+                                Move order to ready status
+                            </button>
+
+                            <button
+                                v-if="openInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Ready && openInvoice.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.BusinessAccepted"
+                                type="button" class="btn btn-outline-primary w-100"
+                                @click="moveToGivenToClientStatus(openInvoice)">
+                                Move order to given to client status
+                            </button>
+
+
+                            <button type="button" class="btn btn-outline-danger   w-100"
+                                    @click="rejectInvocie(openInvoice)">
                                 Decline
                             </button>
-                            <button type="button" class="btn btn-outline-info  w-100">
+                            <button type="button" class="btn btn-outline-info  w-100"
+                                    @click="paymentCompleted(openInvoice)">
                                 Payment completed
                             </button>
 
@@ -280,6 +300,9 @@ const closedInvoices = ref<IManagerInvoice[]>([]);
 watch(() => managerBusinessData.value, async () => {
 });
 
+watch(() => [openInvoices.value, closedInvoices.value], async () => {
+});
+
 
 // Method to update objectData
 const updateObjectData = async () => {
@@ -327,9 +350,159 @@ const acceptInvoice = async (invoice: IManagerInvoice) => {
 
             })
         }
+
+        await loadInvoiceData();
+    }
+}
+
+
+const rejectInvocie = async (invoice: IManagerInvoice) => {
+    let identity = identitySore.authenticationJwt
+
+    let invoiceChangeableData: IManagerInvoice = {
+        id: invoice.id,
+        appUserId: invoice.appUserId,
+        businessId: invoice.businessId,
+        creationTime: invoice.creationTime,
+        finalTotalPrice: invoice.finalTotalPrice,
+        invoiceAcceptanceStatus: InvoiceAcceptanceStatusEnum.BusinessRejected,
+        order: invoice.order,
+        orderId: invoice.orderId,
+        paymentCompleted: invoice.paymentCompleted,
+        taxAmount: invoice.taxAmount,
+        totalPriceWithoutTax: invoice.totalPriceWithoutTax,
     }
 
-    //   await updateObjectData();
+    invoiceChangeableData.order.orderAcceptanceStatus = OrderAcceptanceStatusEnum.Closed;
+
+    if (identity) {
+        let returnableInvoice = await invoiceService.update(identity, invoiceChangeableData.id!, invoiceChangeableData)
+        if (returnableInvoice) {
+            console.log("Successfully changed")
+            var message: IMessage = {
+                message: "Status was successfully changed",
+                type: MessagePopupTypeEnum.Info
+            }
+            messageStore.addMessage(message)
+        } else {
+            messageStore.addMessage({
+                message: "Unable to edit invoice ", status: "", type: MessagePopupTypeEnum.Error
+
+            })
+        }
+        await loadInvoiceData();
+    }
+}
+
+const moveToReadyStatus = async (invoice: IManagerInvoice) => {
+    let identity = identitySore.authenticationJwt
+
+    let invoiceChangeableData: IManagerInvoice = {
+        id: invoice.id,
+        appUserId: invoice.appUserId,
+        businessId: invoice.businessId,
+        creationTime: invoice.creationTime,
+        finalTotalPrice: invoice.finalTotalPrice,
+        invoiceAcceptanceStatus: invoice.invoiceAcceptanceStatus,
+        order: invoice.order,
+        orderId: invoice.orderId,
+        paymentCompleted: invoice.paymentCompleted,
+        taxAmount: invoice.taxAmount,
+        totalPriceWithoutTax: invoice.totalPriceWithoutTax,
+    }
+
+    invoiceChangeableData.order.orderAcceptanceStatus = OrderAcceptanceStatusEnum.Ready;
+
+    if (identity) {
+        let returnableInvoice = await invoiceService.update(identity, invoiceChangeableData.id!, invoiceChangeableData)
+        if (returnableInvoice) {
+            console.log("Successfully changed")
+            var message: IMessage = {
+                message: "Status was successfully changed ",
+                type: MessagePopupTypeEnum.Info
+            }
+            messageStore.addMessage(message)
+        } else {
+            messageStore.addMessage({
+                message: "Unable to edit invoice ", status: "", type: MessagePopupTypeEnum.Error
+
+            })
+        }
+        await loadInvoiceData();
+    }
+}
+
+const moveToGivenToClientStatus = async (invoice: IManagerInvoice) => {
+    let identity = identitySore.authenticationJwt
+
+    let invoiceChangeableData: IManagerInvoice = {
+        id: invoice.id,
+        appUserId: invoice.appUserId,
+        businessId: invoice.businessId,
+        creationTime: invoice.creationTime,
+        finalTotalPrice: invoice.finalTotalPrice,
+        invoiceAcceptanceStatus: invoice.invoiceAcceptanceStatus,
+        order: invoice.order,
+        orderId: invoice.orderId,
+        paymentCompleted: invoice.paymentCompleted,
+        taxAmount: invoice.taxAmount,
+        totalPriceWithoutTax: invoice.totalPriceWithoutTax,
+    }
+
+    invoiceChangeableData.order.orderAcceptanceStatus = OrderAcceptanceStatusEnum.GivenToClient;
+
+    if (identity) {
+        let returnableInvoice = await invoiceService.update(identity, invoiceChangeableData.id!, invoiceChangeableData)
+        if (returnableInvoice) {
+            console.log("Successfully changed")
+            var message: IMessage = {
+                message: "Status was successfully changed ",
+                type: MessagePopupTypeEnum.Info
+            }
+            messageStore.addMessage(message)
+        } else {
+            messageStore.addMessage({
+                message: "Unable to edit invoice ", status: "", type: MessagePopupTypeEnum.Error
+
+            })
+        }
+        await loadInvoiceData();
+    }
+}
+const paymentCompleted = async (invoice: IManagerInvoice) => {
+    let identity = identitySore.authenticationJwt
+
+    let invoiceChangeableData: IManagerInvoice = {
+        id: invoice.id,
+        appUserId: invoice.appUserId,
+        businessId: invoice.businessId,
+        creationTime: invoice.creationTime,
+        finalTotalPrice: invoice.finalTotalPrice,
+        invoiceAcceptanceStatus: invoice.invoiceAcceptanceStatus,
+        order: invoice.order,
+        orderId: invoice.orderId,
+        paymentCompleted: true,
+        taxAmount: invoice.taxAmount,
+        totalPriceWithoutTax: invoice.totalPriceWithoutTax,
+    }
+
+    if (identity) {
+        let returnableInvoice = await invoiceService.update(identity, invoiceChangeableData.id!, invoiceChangeableData)
+        if (returnableInvoice) {
+            console.log("Successfully changed")
+            var message: IMessage = {
+                message: "Status was successfully changed ",
+                type: MessagePopupTypeEnum.Info
+            }
+            messageStore.addMessage(message)
+        } else {
+            messageStore.addMessage({
+                message: "Unable to edit invoice ", status: "", type: MessagePopupTypeEnum.Error
+
+            })
+        }
+        await loadInvoiceData();
+    }
 }
 
 const loadPageData = async () => {
@@ -369,8 +542,38 @@ const loadPageData = async () => {
         }
 
 
+       await loadInvoiceData();
     }
 }
+
+const loadInvoiceData = async () => {
+    let identity = identitySore.authenticationJwt
+
+    if (identity) {
+        let invoices = await invoiceService.getBusinessInvoices(identity, businessId.value!)
+        if (invoices) {
+            console.log("Got invoices", invoices)
+            closedInvoices.value = []
+            openInvoices.value = []
+            invoices.forEach(function (item) {
+                if (item.order.orderAcceptanceStatus === OrderAcceptanceStatusEnum.GivenToClient && item.paymentCompleted) {
+                    closedInvoices.value.push(item)
+                } else {
+                    openInvoices.value.push(item)
+                }
+            });
+
+
+            console.log("closed invoice", closedInvoices)
+            console.log("open invoice", openInvoices)
+        } else {
+            console.warn("Error occurred when checking invoices ")
+        }
+
+
+    }
+}
+
 
 </script>
 
