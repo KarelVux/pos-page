@@ -8,7 +8,7 @@ import {useMessageStore} from "@/stores/messageStore";
 import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
 
 export abstract class BaseService {
-    private static hostBaseURL = 'http://localhost:5009/api/';
+    private static hostBaseURL = import.meta.env.VITE_BACKEND_URL;
     protected axios: AxiosInstance;
 
 

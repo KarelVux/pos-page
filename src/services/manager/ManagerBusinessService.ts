@@ -3,6 +3,6 @@ import type {IManagerBusiness} from "@/dto/manager/IManagerBusiness";
 
 export class ManagerBusinessService extends BaseEntityService<IManagerBusiness> {
     constructor() {
-        super('v1/manager/businesses');
+        super('/manager/businesses');
     }
 }

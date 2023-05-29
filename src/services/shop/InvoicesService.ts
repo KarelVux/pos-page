@@ -13,7 +13,7 @@ export interface IGetBusinessQueryParams {
 
 export default class InvoicesService extends BaseService {
     constructor() {
-        super('v1/public/invoices/');
+        super('/public/invoices/');
     }
 
 

@@ -44,3 +44,22 @@ npm run build
 ```sh
 npm run lint
 ```
+
+
+# Publish docker image
+
+~~~bash
+# local setup
+ npm run build   
+ docker build -t pos_frontend .    
+ docker run --name pos_frontend --rm -it -p 8001:80 pos_frontend
+ 
+ 
+npm run build   
+docker build -t pos_frontend .
+docker tag pos_frontend kavuks/pos_frontend:latest
+docker push kavuks/pos_frontend:latest
+
+
+
+~~~

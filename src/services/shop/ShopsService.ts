@@ -14,7 +14,7 @@ export interface IGetBusinessQueryParams {
 
 export default class ShopsService extends BaseService {
     constructor() {
-        super('v1/public/shops/');
+        super('/public/shops/');
     }
 
 

@@ -5,6 +5,6 @@ import type {IManagerProduct} from "@/dto/manager/IManagerProduct";
 
 export class ProductService extends BaseEntityService<IManagerProduct> {
     constructor() {
-        super('v1/manager/product');
+        super('/manager/product');
     }
 }

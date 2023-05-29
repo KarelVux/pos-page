@@ -4,7 +4,7 @@ import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 
 export class InvoiceService extends BaseEntityService<IManagerInvoice> {
     constructor() {
-        super('v1/manager/invoices');
+        super('/manager/invoices');
     }
 
     async getBusinessInvoices(jwtData: IJWTResponse, businessId: string): Promise<IManagerInvoice[] | undefined> {

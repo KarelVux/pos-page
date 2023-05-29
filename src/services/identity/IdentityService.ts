@@ -7,7 +7,7 @@ import {findUserNameFromJwt} from "@/helpers/jwtHelper";
 
 export class IdentityService extends BaseService {
     constructor() {
-        super('v1/identity/account/');
+        super('/identity/account/');
     }
 
     identityStore = useIdentityStore();
