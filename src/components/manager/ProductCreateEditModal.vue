@@ -2,24 +2,26 @@
     <!-- Start modal-->
     <section>
         <div class="d-flex">
-
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                    data-bs-target="#addNewProduct">
+                    :data-bs-target="'#' + uniqueId">
+
                 <span v-if="props.create">
                 Add new product
                 </span>
                 <span v-else>
                 Edit
                 </span>
-
             </button>
             <!-- Modal -->
-            <div class="modal fade" id="addNewProduct" data-bs-backdrop="static" data-bs-keyboard="false"
-                 tabindex="-1" aria-labelledby="addNewProductLabel" aria-hidden="true">
+
+            <div class="modal fade" :id="uniqueId" data-bs-backdrop="static" data-bs-keyboard="false"
+                 tabindex="-1" :aria-labelledby="uniqueId + 'Label'" aria-hidden="true">
+                {{ props.create }}
+
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="addNewProductLabel">
+                            <h1 class="modal-title fs-5" :id="uniqueId + 'Label'">
                                 <span v-if="props.create">
                                     Add new product
                                 </span>
@@ -115,7 +117,7 @@
                                     Save Updates
                                 </span>
                             </button>
-                            <p id="productCreatorHider" data-bs-dismiss="modal" style="visibility: hidden"></p>
+                            <p :id="uniqueHiderId" data-bs-dismiss="modal" style="visibility: hidden"></p>
                         </div>
                     </div>
                 </div>
@@ -128,12 +130,13 @@
 <script lang="ts" setup>
 
 
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, ref, registerRuntimeCompiler} from "vue";
 import {useIdentityStore} from "@/stores/identityStore";
 import type {IManagerProduct} from "@/dto/manager/IManagerProduct";
 import type {IProductCategory} from "@/dto/shop/IProductCategory";
 import {ProductCategoriesService} from "@/services/management/ProductCategoriesService";
 import {ProductService} from "@/services/manager/ProductService";
+import {generateRandomString} from "@/helpers/Randomiser";
 
 
 const productCategories = ref<IProductCategory[]>()
@@ -143,16 +146,18 @@ const productService = new ProductService();
 
 const identitySore = useIdentityStore();
 
-
 interface IProps {
     productData: IManagerProduct,
     businessId: string,
     create: boolean
 }
 
+const uniqueId = ref<string>(generateRandomString())
+const uniqueHiderId = ref<string>(generateRandomString())
 // Define the props and emits
 const props = defineProps<IProps>();
 const emits = defineEmits(['update']);
+const createAProduct = ref<boolean>(props.create)
 
 // Create a localData ref to hold the updated values
 const originalData = ref<IManagerProduct>(props.productData)
@@ -226,7 +231,7 @@ const onSubmit = async (event: MouseEvent) => {
     if (props.create) {
 
         console.log("Display data", displayData.value)
-        displayData.value.businessId =  props.businessId
+        displayData.value.businessId = props.businessId
         product = await productService.create(identity, displayData.value)
         if (product) {
             console.log("Product creation was successful")
@@ -249,7 +254,7 @@ const onSubmit = async (event: MouseEvent) => {
     }
 
     emits('update');
-    let hider = document.getElementById('productCreatorHider');
+    let hider = document.getElementById(uniqueHiderId.value);
     hider!.click()
 
 }

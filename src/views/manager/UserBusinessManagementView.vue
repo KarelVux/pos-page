@@ -18,7 +18,8 @@
                 <div v-if="managerBusinessData">
                     <div class="row">
                         <div class="col text-end">
-                            <ProductCreateEditModal productData="" :businessId="businessId!" :create="true"   @update="updateObjectData"/>
+                            <ProductCreateEditModal productData="" :businessId="businessId!" :create="true"
+                                                    @update="updateObjectData"/>
                         </div>
                     </div>
                     <table v-if=" managerBusinessData && managerBusinessData.products"
@@ -87,7 +88,8 @@
                                 {{ item.frozen }}
                             </td>
                             <td>
-                                Action
+                                <ProductCreateEditModal :productData="item" :businessId="businessId!" :create="false"
+                                                        @update="updateObjectData"/>
                             </td>
                         </tr>
                         </tbody>
