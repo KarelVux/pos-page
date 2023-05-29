@@ -4,7 +4,7 @@
         <div class="d-flex">
 
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                    data-bs-target="#addNewBusiness">
+                    :data-bs-target="'#' + uniqueId">
                 <span v-if="props.create">
                 Add new business
                 </span>
@@ -14,12 +14,12 @@
 
             </button>
             <!-- Modal -->
-            <div class="modal fade" id="addNewBusiness" data-bs-backdrop="static" data-bs-keyboard="false"
-                 tabindex="-1" aria-labelledby="addNewBusinessLabel" aria-hidden="true">
+            <div class="modal fade" :id="uniqueId" data-bs-backdrop="static" data-bs-keyboard="false"
+                 tabindex="-1" :aria-labelledby="uniqueId + 'Label'" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="addNewBusinessLabel">
+                            <h1 class="modal-title fs-5" :id="uniqueId + 'Label'">
                                 <span v-if="props.create">
                                     Add new business
                                 </span>
@@ -105,7 +105,7 @@
                                     Save Updates
                                 </span>
                             </button>
-                            <p id="businessCreatorHider" data-bs-dismiss="modal" style="visibility: hidden"></p>
+                            <p :id="uniqueHiderId" data-bs-dismiss="modal" style="visibility: hidden"></p>
 
                         </div>
                     </div>
@@ -128,6 +128,7 @@ import {useIdentityStore} from "@/stores/identityStore";
 import {useMessageStore} from "@/stores/messageStore";
 import {SettlementsService} from "@/services/management/SettlementsService";
 import {BusinessCategoriesService} from "@/services/management/BusinessCategoriesService";
+import {generateRandomString} from "@/helpers/Randomiser";
 
 
 const settlements = ref<ISettlement[]>()
@@ -144,6 +145,10 @@ interface IProps {
     businessData: IManagerBusiness,
     create: boolean
 }
+
+const uniqueId = ref<string>(generateRandomString())
+const uniqueHiderId = ref<string>(generateRandomString())
+
 
 // Define the props and emits
 const props = defineProps<IProps>();
@@ -233,7 +238,7 @@ const onSubmit = async (event: MouseEvent) => {
     }
 
     emits('update');
-    let hider = document.getElementById('businessCreatorHider');
+    let hider = document.getElementById(uniqueHiderId.value);
     hider!.click()
 
 }
