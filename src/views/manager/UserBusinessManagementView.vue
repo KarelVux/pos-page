@@ -112,27 +112,61 @@
         <div class="card my-2" v-if="openInvoices.length > 0">
             <div class="card-body mb-4">
                 <h2 class="card-title text-center py-2">
-                    Active invocie orders
+                    Active invoice orders
                 </h2>
                 <table class="table border-bottom border-gray-200 mt-3">
                     <thead>
                     <tr>
-                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm px-0">Invoice ID</th>
-                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm x px-0">Business name</th>
-                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Order date</th>
-                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Final price</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Invoice ID</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Creation Time</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Username</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Payment Completed</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Products</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Subtotal</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Tax</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Total</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Business accepted</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Order Status</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="openInvoice in openInvoices " :key="openInvoice.id">
-                        <td class="px-0 custom-link"
-                        >{{ openInvoice.id }}
+                        <td class="px-1">
+                            {{ openInvoice.id }}
                         </td>
-                        <td class=" px-0">{{ openInvoice.businessId }}</td>
-                        <td class="text-end px-0">
+                        <td class=" px-1">
                             {{ getFormattedDate(openInvoice.creationTime) }}
                         </td>
-                        <td class="text-end px-0">{{ openInvoice.finalTotalPrice }}</td>
+                        <td class=" px-1">{{ openInvoice.userName }}</td>
+
+                        <td class=" px-1">{{ openInvoice.paymentCompleted }}</td>
+
+                        <td class=" px-1">
+                            <p v-for="(invoiceRow, index) in openInvoice.invoiceRows" :key="index">
+                                {{ invoiceRow.productUnitCount }} X {{ invoiceRow.productName }} =
+                                {{ invoiceRow.finalProductPrice }}
+                            </p>
+                        </td>
+                        <td class=" px-1">{{ openInvoice.totalPriceWithoutTax }}</td>
+                        <td class=" px-1">{{ openInvoice.taxAmount }}</td>
+                        <td class=" px-1">{{ openInvoice.finalTotalPrice }}</td>
+                        <td class=" px-1">{{ openInvoice.order.accepted }}</td>
+                        <td class=" px-1">
+                            <p v-if="openInvoice.order.givenToClient">
+                                Given to client
+                            </p>
+                            <p v-if="openInvoice.order.ready">
+                                Ready
+                            </p>
+                            <p v-if="openInvoice.order.accepted">
+                                Preparing
+                            </p>
+                            <p v-if="!openInvoice.order.accepted">
+                                Needs business acceptance
+                            </p>
+
+                        </td>
+
                     </tr>
                     </tbody>
                 </table>
@@ -195,6 +229,7 @@ import {tr} from "vuetify/locale";
 import {InvoiceService} from "@/services/manager/InvoiceService";
 import type {IManagerInvoice} from "@/dto/manager/IManagerInvoice";
 import {getFormattedDate} from "@/helpers/UnifiedFormatter";
+import OrderProgressStatus from "@/components/Shops/Elements/OrderProgressStatus.vue";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
@@ -245,7 +280,7 @@ const loadPageData = async () => {
             closedInvoices.value = []
             openInvoices.value = []
             invoices.forEach(function (item) {
-                if (item.paymentCompleted) {
+                if (item.order.givenToClient && item.paymentCompleted) {
                     closedInvoices.value.push(item)
                 } else {
                     openInvoices.value.push(item)

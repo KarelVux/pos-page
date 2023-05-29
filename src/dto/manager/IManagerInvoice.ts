@@ -10,6 +10,7 @@ export interface IManagerInvoice extends IBaseEntity {
     userAccepted: boolean,
     creationTime: Date
     appUserId: string
+    userName: string
     businessId: string
     orderId: string
     order: IManagerOrder

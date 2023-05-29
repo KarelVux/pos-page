@@ -24,7 +24,7 @@
                         </td>
                         <td class=" px-0">{{ openInvoice.businessId }}</td>
                         <td class="text-end px-0">
-                            {{getFormattedDate(openInvoice.creationTime) }}
+                            {{ getFormattedDate(openInvoice.creationTime) }}
                         </td>
                         <td class="text-end px-0">{{ openInvoice.finalTotalPrice }}</td>
                     </tr>
@@ -103,7 +103,7 @@ onBeforeMount(async () => {
 
     if (invoices) {
         invoices.forEach(function (item) {
-            if (item.paymentCompleted) {
+            if (item.order.givenToClient && item.paymentCompleted) {
                 closedInvoices.value.push(item)
             } else {
                 openInvoices.value.push(item)
