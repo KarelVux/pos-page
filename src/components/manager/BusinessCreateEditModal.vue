@@ -89,7 +89,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Description</label>
-                                <input type="email" class="form-control"
+                                <input type="text" class="form-control"
                                        v-model="displayData.description">
                             </div>
 
