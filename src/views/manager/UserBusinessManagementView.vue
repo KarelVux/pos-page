@@ -242,6 +242,8 @@ const loadPageData = async () => {
 
         if (invoices) {
             console.log("Got invoices", invoices)
+            closedInvoices.value = []
+            openInvoices.value = []
             invoices.forEach(function (item) {
                 if (item.paymentCompleted) {
                     closedInvoices.value.push(item)

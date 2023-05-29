@@ -176,6 +176,7 @@ onBeforeMount(async () => {
 })
 
 const originalToDisplay = () =>{
+    displayData.value.id = originalData.value.id
     displayData.value.address = originalData.value.address
     displayData.value.businessCategoryId = originalData.value.businessCategoryId
     displayData.value.description = originalData.value.description
@@ -186,6 +187,7 @@ const originalToDisplay = () =>{
 }
 
 const mapDisplayToOriginal = () =>{
+    originalData.value.id = displayData.value.id
     originalData.value.address = displayData.value.address
     originalData.value.businessCategoryId = displayData.value.businessCategoryId
     originalData.value.description = displayData.value.description
@@ -225,10 +227,10 @@ const onSubmit = async (event: MouseEvent) => {
         }
     } else {
 
-        mapDisplayToOriginal();
+        // mapDisplayToOriginal();
 
 
-        let [, status] = await managerBusinessService.update(identity, originalData.value.id!, originalData.value)
+        let [, status] = await managerBusinessService.update(identity, displayData.value.id!, displayData.value)
         if (status) {
             console.log("Business Edit was successful")
         } else {

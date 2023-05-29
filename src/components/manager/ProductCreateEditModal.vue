@@ -184,6 +184,7 @@ onBeforeMount(async () => {
 })
 
 const originalToDisplay = () => {
+    displayData.value.id = originalData.value.id
     displayData.value.businessId = originalData.value.businessId
     displayData.value.currency = originalData.value.currency
     displayData.value.description = originalData.value.description
@@ -197,6 +198,7 @@ const originalToDisplay = () => {
 }
 
 const mapDisplayToOriginal = () => {
+    originalData.value.id = displayData.value.id
     originalData.value.businessId = displayData.value.businessId
     originalData.value.currency = displayData.value.currency
     originalData.value.description = displayData.value.description
@@ -241,10 +243,10 @@ const onSubmit = async (event: MouseEvent) => {
         }
     } else {
 
-        mapDisplayToOriginal();
+      //  mapDisplayToOriginal();
 
 
-        let [, status] = await productService.update(identity, originalData.value.id!, originalData.value)
+        let [, status] = await productService.update(identity, displayData.value.id!, displayData.value)
         if (status) {
             console.log("Product Edit was successful")
         } else {
