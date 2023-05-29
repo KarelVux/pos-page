@@ -79,10 +79,30 @@ export abstract class BaseService {
                     const message: IMessage = {message: error.message, status: error.response.statusText}
 
 
+                    console.log("error.response",error.response)
+
+                    message.status = error.response.status.toString() + " "+ error.response.statusText
+                    message.message  = JSON.stringify(error.response.data)
+                    messageStore.addMessage(message)
+
+
+                    console.log(messageStore.getAllMessages())
+                    console.log(messageStore.getAllMessages())
+
+                    /*
+
+                    for (const key in parsedJson as any) {
+                        if (key.endsWith("errors") || key.endsWith("error")) {
+                            message.message = (parsedJson as any)[key];
+                        }
+                    }
+
+
+                    console.log("here is message data", message)
                     if (error.response.data) {
 
 
-                        message.message = JSON.stringify(error.response.data)
+                      //   message.message = JSON.stringify(error.response.data)
 
                         //
                         //   const responseDate: IErrorData = (error.response.data) as IErrorData
@@ -117,10 +137,7 @@ export abstract class BaseService {
                         //   }
 
                     }
-
-                    console.log("message, ", message)
-                    messageStore.addMessage(message)
-                    console.log(message)
+*/
                 }
 
 

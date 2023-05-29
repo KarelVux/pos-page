@@ -169,16 +169,17 @@
                         </td>
                         <td class=" px-1">
 
-                            <button type="button" class="btn btn-outline-primary w-100">
+                            <button type="button" class="btn btn-outline-primary w-100"
+                                    @click="acceptInvoice(openInvoice)">
                                 Accept
+                            </button>
+                            <button type="button" class="btn btn-outline-danger   w-100">
+                                Decline
                             </button>
                             <button type="button" class="btn btn-outline-info  w-100">
                                 Payment completed
                             </button>
 
-                            <button type="button" class="btn btn-outline-danger   w-100">
-                                Delete
-                            </button>
 
                         </td>
 
@@ -245,6 +246,7 @@ import {InvoiceService} from "@/services/manager/InvoiceService";
 import type {IManagerInvoice} from "@/dto/manager/IManagerInvoice";
 import {getFormattedDate} from "@/helpers/UnifiedFormatter";
 import {OrderAcceptanceStatusEnum} from "@/dto/enums/OrderAcceptanceStatusEnum";
+import {InvoiceAcceptanceStatusEnum} from "@/dto/enums/InvoiceAcceptanceStatusEnum";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
@@ -273,6 +275,37 @@ onBeforeMount(async () => {
     await loadPageData();
 
 })
+
+const acceptInvoice = async (invoice: IManagerInvoice) => {
+    let identity = identitySore.authenticationJwt
+
+    let invoiceChangeableData: IManagerInvoice = {
+        id: invoice.id,
+        appUserId: invoice.appUserId,
+        businessId: invoice.businessId,
+        creationTime: invoice.creationTime,
+        finalTotalPrice: invoice.finalTotalPrice,
+        invoiceAcceptanceStatus: InvoiceAcceptanceStatusEnum.BusinessAccepted,
+        order: invoice.order,
+        orderId: invoice.orderId,
+        paymentCompleted: invoice.paymentCompleted,
+        taxAmount: invoice.taxAmount,
+        totalPriceWithoutTax: invoice.totalPriceWithoutTax,
+    }
+
+    if (identity) {
+        let returnableInvoice = await invoiceService.update(identity, invoiceChangeableData.id!, invoiceChangeableData)
+        if (returnableInvoice) {
+            console.log("Successfully changed")
+        } else {
+            messageStore.addMessage({
+                message: "Unable to edit invoice ", status: ""
+            })
+        }
+    }
+
+    //   await updateObjectData();
+}
 
 const loadPageData = async () => {
     let identity = identitySore.authenticationJwt

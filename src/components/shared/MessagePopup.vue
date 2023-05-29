@@ -55,7 +55,7 @@ onUnmounted(() => {
 
 <style scoped>
 .mt-alerts {
-    position: absolute;
+    position: fixed;
     left: 25%;
     right: 25%;
     z-index: 9999;

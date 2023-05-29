@@ -11,9 +11,9 @@ export interface IManagerInvoice extends IBaseEntity {
     invoiceAcceptanceStatus: InvoiceAcceptanceStatusEnum,
     creationTime: Date
     appUserId: string
-    userName: string
+    userName?: string
     businessId: string
     orderId: string
     order: IManagerOrder
-    invoiceRows: IManagerInvoiceRow[]
+    invoiceRows?: IManagerInvoiceRow[]
 }

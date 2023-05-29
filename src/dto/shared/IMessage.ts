@@ -1,4 +1,4 @@
 export  interface IMessage{
-    status: string,
-    message: string
+    status?: string,
+    message?: string
 }
