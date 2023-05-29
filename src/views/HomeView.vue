@@ -40,7 +40,7 @@ const handleClick = async () => {
 
     }
     if (identitySore.$state.authenticationJwt) {
-        var businesses = await shopsService.getBusinesses(identitySore.$state.authenticationJwt.jwt, params);
+        var businesses = await shopsService.getBusinesses(identity, params);
         console.log("List of buseinesses", businesses);
 
     } else {

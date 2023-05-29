@@ -9,7 +9,8 @@
                         <h1 class="pe-3">Owned businesses</h1>
 
                         <BusinessCreateEditModal :create="true"
-                                                 @update="updateObjectData" businessData=""/>
+                                                 @update="updateObjectData"
+                                                 :businessData="{} as IManagerBusiness"/>
                     </div>
                 </section>
                 <!-- End modal-->

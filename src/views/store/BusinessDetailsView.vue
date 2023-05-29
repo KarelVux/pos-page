@@ -150,6 +150,7 @@ import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
 import router from "@/router";
 import InvoicesService from "../../services/shop/InvoicesService";
 import BusinessIntroduction from "@/components/Shops/BusinessIntroduction.vue";
+import type IInvoiceCreateEditProduct from "@/dto/shop/IInvoiceCreateEditProduct";
 
 const identitySore = useIdentityStore();
 const shopsService = new ShopsService();
@@ -177,7 +178,7 @@ const createInvoice = async () => {
             if (itemProduct.id &&
                 itemProduct.userSelectedProductCount > 0 &&
                 itemProduct.userSelectedProductCount <= itemProduct.unitCount) {
-                const invoiceCreateEditProduct = {
+                const invoiceCreateEditProduct : IInvoiceCreateEditProduct= {
                     productId: itemProduct.id,
                     productUnitCount: itemProduct.userSelectedProductCount,
                 }

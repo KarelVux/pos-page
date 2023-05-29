@@ -11,7 +11,7 @@
         {{ header }}
       </strong>
     </h4>
-    <p class="text-center" v-if="strongText?.trim().length > 0">
+    <p class="text-center" v-if="strongText && strongText.trim().length > 0">
       <strong>
         {{ strongText }}
       </strong>
@@ -25,13 +25,13 @@ import {onMounted, onUpdated, watch} from "vue";
 interface IProps {
   header: string,
   strongText: string,
-  progressbarWidth: number
+  progressbarWidth: string
 }
 
 const props = defineProps({
   header: String,
   strongText: String,
-  progressbarWidth: Number
+  progressbarWidth: String
 });
 
 // watch(() => [props.progressbarWidth, props.strongText, props.header], () => {});

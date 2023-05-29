@@ -25,11 +25,12 @@ import FooterBar from "@/components/FooterBar.vue";
 import {useMessageStore} from "@/stores/messageStore";
 import {onBeforeMount, onMounted, onUpdated} from "vue";
 import MessagePopup from "@/components/shared/MessagePopup.vue";
+import {ref, computed} from 'vue';
+import type {IMessage} from "@/dto/shared/IMessage";
 
 const messageStore = useMessageStore();
 
-import {ref, computed} from 'vue';
-import type {IMessage} from "@/dto/shared/IMessage";
+
 
 // Compute a reactive variable to determine if the popup should be shown
 const messageIsFound = computed(() => {

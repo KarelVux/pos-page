@@ -1,4 +1,4 @@
 export default interface IInvoiceCreateEditProduct {
     productId: string;
-    productUnitCount: BigInt;
+    productUnitCount: number;
 }

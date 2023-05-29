@@ -23,7 +23,7 @@
                         <h2 class="d-flex me-2"> Business products</h2>
                         <ProductCreateEditModal
                             class="d-flex ms-2"
-                            productData=""
+                            :productData="{ } as IManagerProduct"
                             :businessId="businessId!"
                             :create="true"
                             @update="updateObjectData"/>
@@ -284,6 +284,7 @@ import {OrderAcceptanceStatusEnum} from "@/dto/enums/OrderAcceptanceStatusEnum";
 import {InvoiceAcceptanceStatusEnum} from "@/dto/enums/InvoiceAcceptanceStatusEnum";
 import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
 import type {IMessage} from "@/dto/shared/IMessage";
+import  type {IManagerProduct} from "@/dto/manager/IManagerProduct";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
