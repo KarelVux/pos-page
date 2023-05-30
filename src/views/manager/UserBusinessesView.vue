@@ -10,7 +10,14 @@
 
                         <BusinessCreateEditModal :create="true"
                                                  @update="updateObjectData"
-                                                 :businessData="{} as IManagerBusiness"/>
+                                                 :businessData="{} as IManagerBusiness"
+                                                 :businessCategories="businessCategories"
+                                                 :settlements="settlements"
+                        />
+
+                        <BusinessCategoryCreateModal
+                            @update="updateObjectData"
+                        />
                     </div>
                 </section>
                 <!-- End modal-->
@@ -107,6 +114,7 @@ import {useRouter} from "vue-router";
 import {IdentityService} from "@/services/identity/IdentityService";
 import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
 import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
+import BusinessCategoryCreateModal from "@/components/manager/BusinessCategoryCreateModal.vue";
 
 const managerBusinessService = new ManagerBusinessService();
 const identitySore = useIdentityStore();
@@ -121,6 +129,7 @@ const businessCategories = ref<IBusinessCategory[]>()
 
 
 const managerBusinessesData = ref<IManagerBusiness[]>();
+
 
 const registerBusinessInputData = ref<IManagerBusiness>({
     address: "",
@@ -201,6 +210,7 @@ const addUserToTheRoleAndNavigate = async () => {
 
 }
 
+
 onMounted(async () => {
     console.log("Open business details")
     let identity = identitySore.authenticationJwt;
@@ -211,7 +221,7 @@ onMounted(async () => {
     }
 })
 
-watch(() => managerBusinessesData.value, async () => {
+watch(() => [managerBusinessesData.value, settlements.value, businessCategories.value], async () => {
     // do something when the data changes
 });
 

@@ -5,13 +5,15 @@
                 Hey ,
             </h2>
             <p class="fs-sm">
-                This is the receipt for a payment of <strong>{{ props.invoiceDataVal.finalTotalPrice }}</strong>
+                This is the invoice <strong>{{props.invoiceDataVal.id}}</strong> for a payment of <strong>{{ props.invoiceDataVal.finalTotalPrice }}</strong>
             </p>
 
             <table class="table border-bottom border-gray-200 mt-3">
                 <thead>
                 <tr>
-                    <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm px-0">ProductName</th>
+                    <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm px-0">Product Name</th>
+                    <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm px-0">Product Count</th>
+                    <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm px-0">Unit Price</th>
                     <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Tax Percent</th>
                     <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Tax Amount</th>
                     <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Amount</th>
@@ -20,6 +22,8 @@
                 <tbody v-if="invoiceDataVal.invoiceRows">
                 <tr v-for="invoiceRow in invoiceDataVal.invoiceRows" :key="invoiceRow.id">
                     <td class="px-0">{{ invoiceRow.productName }}</td>
+                    <td class="px-0">{{ invoiceRow.productUnitCount }}</td>
+                    <td class="px-0">{{ invoiceRow.productPricePerUnit }}</td>
                     <td class="text-end px-0">{{ invoiceRow.taxPercent }}</td>
                     <td class="text-end px-0">{{ invoiceRow.taxAmountFromPercent }}</td>
                     <td class="text-end px-0">{{ invoiceRow.finalProductPrice }}</td>

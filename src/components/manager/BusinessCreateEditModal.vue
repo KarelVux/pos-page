@@ -119,20 +119,16 @@
 <script lang="ts" setup>
 
 
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, ref, watch} from "vue";
 import type {IManagerBusiness} from "@/dto/manager/IManagerBusiness";
-import type {ISettlement} from "@/dto/management/ISettlement";
-import type {IBusinessCategory} from "@/dto/shop/IBusinessCategory";
 import {ManagerBusinessService} from "@/services/manager/ManagerBusinessService";
 import {useIdentityStore} from "@/stores/identityStore";
 import {useMessageStore} from "@/stores/messageStore";
 import {SettlementsService} from "@/services/management/SettlementsService";
 import {BusinessCategoriesService} from "@/services/management/BusinessCategoriesService";
 import {generateRandomString} from "@/helpers/Randomiser";
-
-
-const settlements = ref<ISettlement[]>()
-const businessCategories = ref<IBusinessCategory[]>()
+import type {IManagerSettlement} from "@/dto/manager/IManagerSettlement";
+import type {IManagerBusinessCategory} from "@/dto/manager/IManagerBusinessCategory";
 
 const managerBusinessService = new ManagerBusinessService();
 const identitySore = useIdentityStore();
@@ -143,16 +139,21 @@ const businessCategoriesService = new BusinessCategoriesService();
 
 interface IProps {
     businessData: IManagerBusiness,
+    settlements: IManagerSettlement[],
+    businessCategories: IManagerBusinessCategory[],
     create: boolean
 }
 
-const uniqueId = ref<string>(generateRandomString())
-const uniqueHiderId = ref<string>(generateRandomString())
+const uniqueId = ref<string>('s' + generateRandomString())
+const uniqueHiderId = ref<string>('s' + generateRandomString())
 
 
 // Define the props and emits
 const props = defineProps<IProps>();
 const emits = defineEmits(['update']);
+
+const settlements = ref<IManagerSettlement[]>(props.settlements)
+const businessCategories = ref<IManagerBusinessCategory[]>(props.businessCategories)
 
 // Create a localData ref to hold the updated values
 const originalData = ref<IManagerBusiness>(props.businessData)
@@ -175,7 +176,7 @@ onBeforeMount(async () => {
     }
 })
 
-const originalToDisplay = () =>{
+const originalToDisplay = () => {
     displayData.value.id = originalData.value.id
     displayData.value.address = originalData.value.address
     displayData.value.businessCategoryId = originalData.value.businessCategoryId
@@ -186,7 +187,7 @@ const originalToDisplay = () =>{
     displayData.value.settlementId = originalData.value.settlementId
 }
 
-const mapDisplayToOriginal = () =>{
+const mapDisplayToOriginal = () => {
     originalData.value.id = displayData.value.id
     originalData.value.address = displayData.value.address
     originalData.value.businessCategoryId = displayData.value.businessCategoryId
@@ -206,6 +207,14 @@ const sendUserBusinessViewRequests = async () => {
     }
 }
 
+
+watch(() => props.settlements, (newSettlement) => {
+    settlements.value = newSettlement;
+});
+
+watch(() => props.businessCategories, (newBusinessCategory) => {
+    businessCategories.value = newBusinessCategory;
+});
 
 const onSubmit = async (event: MouseEvent) => {
     event.preventDefault();
