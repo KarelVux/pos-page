@@ -63,3 +63,16 @@ docker push kavuks/pos_frontend:latest
 
 
 ~~~
+
+# Publish docker image automatic
+
+~~~bash
+docker push kavuks/pos_frontend:latest
+docker tag pos_frontend kavuks/pos_frontend:latest
+docker build -t pos_frontend .
+npm run build   
+
+
+
+
+~~~
