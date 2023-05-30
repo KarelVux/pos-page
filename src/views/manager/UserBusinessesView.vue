@@ -18,6 +18,10 @@
                         <BusinessCategoryCreateModal
                             @update="updateObjectData"
                         />
+                        <SettlementCreateModal
+                            @update="updateObjectData"
+                        />
+
                     </div>
                 </section>
                 <!-- End modal-->
@@ -115,6 +119,7 @@ import {IdentityService} from "@/services/identity/IdentityService";
 import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
 import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 import BusinessCategoryCreateModal from "@/components/manager/BusinessCategoryCreateModal.vue";
+import SettlementCreateModal from "@/components/manager/SettlementCreateModal.vue";
 
 const managerBusinessService = new ManagerBusinessService();
 const identitySore = useIdentityStore();
