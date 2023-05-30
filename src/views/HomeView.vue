@@ -4,8 +4,7 @@
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
                 <p>
-                    <button type="button" class="btn btn-secondary" @click="handleClick">Secondary</button>
-                    <RouterLink to="/store/business">Go to businesses</RouterLink>
+                    <RouterLink to="/store/business">Start your journey</RouterLink>
 
 
                 </p>
