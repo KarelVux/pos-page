@@ -327,8 +327,9 @@ import {OrderAcceptanceStatusEnum} from "@/dto/enums/OrderAcceptanceStatusEnum";
 import {InvoiceAcceptanceStatusEnum} from "@/dto/enums/InvoiceAcceptanceStatusEnum";
 import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
 import type {IMessage} from "@/dto/shared/IMessage";
-import  type {IManagerProduct} from "@/dto/manager/IManagerProduct";
+import type {IManagerProduct} from "@/dto/manager/IManagerProduct";
 import InvoiceDetailsModal from "@/components/manager/InvoiceDetailsModal.vue";
+import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
@@ -356,6 +357,8 @@ const updateObjectData = async () => {
 };
 
 onBeforeMount(async () => {
+    await redirectUserIfIdentityTokenIsNull();
+
     businessId.value = route.params.id as string
     await loadPageData();
 
@@ -587,7 +590,7 @@ const loadPageData = async () => {
         }
 
 
-       await loadInvoiceData();
+        await loadInvoiceData();
     }
 }
 

@@ -34,6 +34,7 @@ import InvoiceDetailsCard from "@/components/Shops/InvoiceDetailsCard.vue";
 import {useMessageStore} from "@/stores/messageStore";
 import type {IMessage} from "@/dto/shared/IMessage";
 import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
+import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 
 const identitySore = useIdentityStore();
 const invoicesService = new InvoicesService();
@@ -85,6 +86,7 @@ const goBackAndEdit = async () => {
 
 
 onBeforeMount(async () => {
+    await redirectUserIfIdentityTokenIsNull();
     let identity = identitySore.authenticationJwt;
 
     if (identity === undefined) {

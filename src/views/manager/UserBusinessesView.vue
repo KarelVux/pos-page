@@ -106,6 +106,7 @@ import {findUserRoleFromJwt} from "@/helpers/jwtHelper";
 import {useRouter} from "vue-router";
 import {IdentityService} from "@/services/identity/IdentityService";
 import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
+import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 
 const managerBusinessService = new ManagerBusinessService();
 const identitySore = useIdentityStore();
@@ -139,6 +140,8 @@ const registerBusinessInputData = ref<IManagerBusiness>({
 const userInManagerRole = ref<boolean>(false)
 
 onBeforeMount(async () => {
+    await redirectUserIfIdentityTokenIsNull();
+
     let identity = identitySore.authenticationJwt;
 
     let userRole = findUserRoleFromJwt(identity!.jwt)

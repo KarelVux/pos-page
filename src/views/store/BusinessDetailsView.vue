@@ -144,13 +144,13 @@ import ShopsService from "@/services/shop/ShopsService";
 import {useRoute} from "vue-router";
 import type {IBusiness} from "@/dto/shop/IBusiness";
 import NotFound from "@/components/NotFound.vue";
-import SimpleRowValuePair from "@/components/Shops/Elements/SimpleRowValuePair.vue";
 import type {IProduct} from "@/dto/shop/IProduct";
 import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
 import router from "@/router";
 import InvoicesService from "../../services/shop/InvoicesService";
 import BusinessIntroduction from "@/components/Shops/BusinessIntroduction.vue";
 import type IInvoiceCreateEditProduct from "@/dto/shop/IInvoiceCreateEditProduct";
+import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 
 const identitySore = useIdentityStore();
 const shopsService = new ShopsService();
@@ -208,11 +208,12 @@ const createInvoice = async () => {
 }
 
 onBeforeMount(async () => {
-
+    await redirectUserIfIdentityTokenIsNull();
     await loadData();
 })
 
 const loadData = async () => {
+
     console.log("Open business details")
     let identity = identitySore.authenticationJwt;
 

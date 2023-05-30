@@ -86,6 +86,7 @@ import InvoicesService from "@/services/shop/InvoicesService";
 import type {IInvoice} from "../../dto/shop/IInvoice";
 import {getFormattedDate} from "@/helpers/UnifiedFormatter";
 import {OrderAcceptanceStatusEnum} from "@/dto/enums/OrderAcceptanceStatusEnum";
+import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 
 const identitySore = useIdentityStore();
 
@@ -101,6 +102,8 @@ const closedInvoices = ref<IInvoice[]>([]);
 const passableData = ref<IInvoice>();
 
 onBeforeMount(async () => {
+    await redirectUserIfIdentityTokenIsNull();
+
     let identity = identitySore.authenticationJwt;
 
     if (identity === undefined) {

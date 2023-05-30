@@ -72,7 +72,6 @@
 </template>
 
 <script setup lang="ts">
-import {onBeforeMount, onMounted, onUpdated, ref, watch} from "vue";
 import {useIdentityStore} from "@/stores/identityStore";
 import {SettlementsService} from "@/services/management/SettlementsService";
 import type IBusinessSearch from "@/dto/shop/businessView/IBusinessSearch";
@@ -83,6 +82,8 @@ import type {IBusiness} from "@/dto/shop/IBusiness";
 import ShopsService from "@/services/shop/ShopsService";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import {ManagerBusinessService} from "@/services/manager/ManagerBusinessService";
+import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
+import {onBeforeMount, onMounted, ref, watch} from "vue";
 
 
 const identitySore = useIdentityStore();
@@ -136,7 +137,7 @@ const performSearch = async () => {
             inputValues.value.businessSearchName!.trim().length > 0) {
 
             businesses.value = responseBusinesses.filter(x => x.name.toLowerCase().includes(inputValues.value.businessSearchName.toLowerCase().trim()))
-        }else{
+        } else {
             businesses.value = responseBusinesses;
 
         }
@@ -145,6 +146,11 @@ const performSearch = async () => {
         businesses.value = []
     }
 }
+
+onBeforeMount(async () => {
+    await redirectUserIfIdentityTokenIsNull();
+});
+
 onMounted(async () => {
     console.log("Open business details")
     let identity = identitySore.authenticationJwt;

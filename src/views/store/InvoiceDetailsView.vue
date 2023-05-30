@@ -22,6 +22,7 @@ import {onBeforeMount, ref} from "vue";
 import type {IInvoice} from "@/dto/shop/IInvoice";
 import InvoicesService from "@/services/shop/InvoicesService";
 import InvoiceDetailsCard from "@/components/Shops/InvoiceDetailsCard.vue";
+import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 
 const identitySore = useIdentityStore();
 const invoicesService = new InvoicesService();
@@ -33,6 +34,8 @@ const invoiceData = ref<IInvoice>()
 
 
 onBeforeMount(async () => {
+    await redirectUserIfIdentityTokenIsNull();
+
     invoiceData.value = {} as IInvoice
     let identity = identitySore.authenticationJwt;
 

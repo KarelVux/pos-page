@@ -11,32 +11,36 @@
                 <div>
 
                 </div>
-                <OrderProgressStatus v-if="invoiceData.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.GivenToClient"
-                                     header="Order has been picked up. Have a nice meal"
-                                     strongText=""
-                                     progressbarWidth="100"
+                <OrderProgressStatus
+                    v-if="invoiceData.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.GivenToClient"
+                    header="Order has been picked up. Have a nice meal"
+                    strongText=""
+                    progressbarWidth="100"
                 />
-                <OrderProgressStatus v-else-if="invoiceData.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Ready"
-                                     header="Your order is ready for pickup"
-                                     strongText=""
-                                     progressbarWidth="75"
+                <OrderProgressStatus
+                    v-else-if="invoiceData.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Ready"
+                    header="Your order is ready for pickup"
+                    strongText=""
+                    progressbarWidth="75"
                 />
-                <OrderProgressStatus v-else-if="invoiceData.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.BusinessIsPreparing"
-                                     header="Business owner has accepted the order and preparing it"
-                                     strongText=""
-                                     progressbarWidth="50"
+                <OrderProgressStatus
+                    v-else-if="invoiceData.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.BusinessIsPreparing"
+                    header="Business owner has accepted the order and preparing it"
+                    strongText=""
+                    progressbarWidth="50"
                 />
-                <OrderProgressStatus v-else-if="invoiceData.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Unknown"
-                                     header="Business owner is checking the order"
-                                     strongText="Please wait"
-                                     progressbarWidth="25"
+                <OrderProgressStatus
+                    v-else-if="invoiceData.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Unknown"
+                    header="Business owner is checking the order"
+                    strongText="Please wait"
+                    progressbarWidth="25"
                 />
 
-                <div  v-if="businessLimitedData">
+                <div v-if="businessLimitedData">
                     <BusinessIntroduction :businessDetails="businessLimitedData"/>
                 </div>
 
-                <div  v-if="invoiceData">
+                <div v-if="invoiceData">
                     <InvoiceDetailsCard :invoiceDataVal="invoiceData"/>
                 </div>
             </div>
@@ -62,6 +66,7 @@ import BusinessIntroduction from "@/components/Shops/BusinessIntroduction.vue";
 import InvoiceDetailsCard from "@/components/Shops/InvoiceDetailsCard.vue";
 import {OrderAcceptanceStatusEnum} from "@/dto/enums/OrderAcceptanceStatusEnum";
 import LoadingData from "@/components/shared/LoadingData.vue";
+import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 
 const identitySore = useIdentityStore();
 
@@ -79,6 +84,8 @@ const route = useRoute();
 let timerId: number;
 
 onBeforeMount(async () => {
+    await redirectUserIfIdentityTokenIsNull();
+
     let identity = identitySore.authenticationJwt;
     let id = route.params.id
     console.log("Invoice details id is recieved", id)
