@@ -107,9 +107,6 @@ import {ManagerBusinessService} from "@/services/manager/ManagerBusinessService"
 import {onBeforeMount, onMounted, ref, watch} from "vue";
 import type {IManagerBusiness} from "@/dto/manager/IManagerBusiness";
 import {useMessageStore} from "@/stores/messageStore";
-import {SettlementsService} from "@/services/management/SettlementsService";
-import {BusinessCategoriesService} from "@/services/management/BusinessCategoriesService";
-import type {ISettlement} from "@/dto/management/ISettlement";
 import type {IBusinessCategory} from "@/dto/shop/IBusinessCategory";
 import LoadingData from "@/components/shared/LoadingData.vue";
 import BusinessCreateEditModal from "@/components/manager/BusinessCreateEditModal.vue";
@@ -120,16 +117,19 @@ import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
 import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 import BusinessCategoryCreateModal from "@/components/manager/BusinessCategoryCreateModal.vue";
 import SettlementCreateModal from "@/components/manager/SettlementCreateModal.vue";
+import {SettlementService} from "@/services/manager/SettlementService";
+import {BusinessCategoriesService} from "@/services/manager/BusinessCategoriesService";
+import type {IManagerSettlement} from "@/dto/manager/IManagerSettlement";
 
 const managerBusinessService = new ManagerBusinessService();
 const identitySore = useIdentityStore();
 const messageStore = useMessageStore();
-const settlementService = new SettlementsService();
+const settlementService = new SettlementService();
 const identityService = new IdentityService();
 const businessCategoriesService = new BusinessCategoriesService();
 const router = useRouter()
 
-const settlements = ref<ISettlement[]>()
+const settlements = ref<IManagerSettlement[]>()
 const businessCategories = ref<IBusinessCategory[]>()
 
 

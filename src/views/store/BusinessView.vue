@@ -73,21 +73,20 @@
 
 <script setup lang="ts">
 import {useIdentityStore} from "@/stores/identityStore";
-import {SettlementsService} from "@/services/management/SettlementsService";
 import type IBusinessSearch from "@/dto/shop/businessView/IBusinessSearch";
-import type {ISettlement} from "@/dto/management/ISettlement";
-import {BusinessCategoriesService} from "@/services/management/BusinessCategoriesService";
 import type {IBusinessCategory} from "@/dto/shop/IBusinessCategory";
 import type {IBusiness} from "@/dto/shop/IBusiness";
 import ShopsService from "@/services/shop/ShopsService";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
-import {ManagerBusinessService} from "@/services/manager/ManagerBusinessService";
 import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 import {onBeforeMount, onMounted, ref, watch} from "vue";
+import {SettlementService} from "../../services/manager/SettlementService";
+import {BusinessCategoriesService} from "../../services/manager/BusinessCategoriesService";
+import type {IManagerSettlement} from "../../dto/manager/IManagerSettlement";
 
 
 const identitySore = useIdentityStore();
-const settlementService = new SettlementsService();
+const settlementService = new SettlementService();
 const businessCategoriesService = new BusinessCategoriesService();
 const shopsService = new ShopsService();
 
@@ -98,7 +97,7 @@ const inputValues = ref<IBusinessSearch>({
 })
 
 const businesses = ref<IBusiness[]>()
-const settlements = ref<ISettlement[]>()
+const settlements = ref<IManagerSettlement[]>()
 const businessCategories = ref<IBusinessCategory[]>()
 /*
 const managerBusinessService = new ManagerBusinessService();
