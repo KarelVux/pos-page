@@ -115,7 +115,6 @@ onMounted(() => {
 
         if (identity && props.id)
             invoiceData.value = await invoicesService.getInvoice(identity, props.id)
-
             if (invoiceData.value?.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.BusinessRejected && invoiceData.value?.order?.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Closed ){
                 message.value = {
                     message: "Business rejected your order",
@@ -124,7 +123,7 @@ onMounted(() => {
                     messageStore.addMessage(message.value!)
                 clearInterval(timerId);
             }
-    }, 5000);
+    }, 15000);
 });
 
 // call out to remove memory leaks?
