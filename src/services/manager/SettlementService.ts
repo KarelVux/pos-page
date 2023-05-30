@@ -4,7 +4,7 @@ import type {IManagerSettlement} from "@/dto/manager/IManagerSettlement";
 
 export class SettlementService extends BaseService {
     constructor() {
-        super('/management/settlements');
+        super('/manager/settlements');
     }
 
 

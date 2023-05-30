@@ -128,36 +128,31 @@
 </template>
 
 <script lang="ts" setup>
-
-
-import {onBeforeMount, ref, registerRuntimeCompiler} from "vue";
+import {onBeforeMount, ref, registerRuntimeCompiler, watch} from "vue";
 import {useIdentityStore} from "@/stores/identityStore";
 import type {IManagerProduct} from "@/dto/manager/IManagerProduct";
-import type {IProductCategory} from "@/dto/shop/IProductCategory";
-import {ProductCategoriesService} from "@/services/management/ProductCategoriesService";
 import {ProductService} from "@/services/manager/ProductService";
 import {generateRandomString} from "@/helpers/Randomiser";
+import type {IManagerProductCategory} from "@/dto/manager/IManagerProductCategory";
+import  {ProductCategoryService} from "@/services/manager/ProductCategoryService";
 
-
-const productCategories = ref<IProductCategory[]>()
-
-const productCategoriesService = new ProductCategoriesService();
 const productService = new ProductService();
 
 const identitySore = useIdentityStore();
 
 interface IProps {
     productData: IManagerProduct,
+    productCategories: IManagerProductCategory[],
     businessId: string,
     create: boolean
 }
 
-const uniqueId = ref<string>(generateRandomString())
-const uniqueHiderId = ref<string>(generateRandomString())
+const uniqueId = ref<string>('s' +generateRandomString())
+const uniqueHiderId = ref<string>('s' +generateRandomString())
 // Define the props and emits
 const props = defineProps<IProps>();
 const emits = defineEmits(['update']);
-const createAProduct = ref<boolean>(props.create)
+const productCategories = ref<IManagerProductCategory[]>(props.productCategories)
 
 // Create a localData ref to hold the updated values
 const originalData = ref<IManagerProduct>(props.productData)
@@ -167,7 +162,6 @@ const displayData = ref<IManagerProduct>({
     description: "",
     frozen: false,
     name: "",
-    productCategoryId: "",
     taxPercent: 0,
     unitCount: 0,
     unitDiscount: 0,
@@ -175,8 +169,6 @@ const displayData = ref<IManagerProduct>({
 } as IManagerProduct)
 
 onBeforeMount(async () => {
-    await sendInitialRequests();
-
     if (!props.create) {
         originalToDisplay();
 
@@ -211,13 +203,9 @@ const mapDisplayToOriginal = () => {
     originalData.value.unitPrice = displayData.value.unitPrice
 }
 
-const sendInitialRequests = async () => {
-    let identity = identitySore.authenticationJwt
-
-    if (identity) {
-        productCategories.value = (await productCategoriesService.getAll(identity))
-    }
-}
+watch(() => props.productCategories, (newProductCategories) => {
+    productCategories.value = newProductCategories;
+});
 
 
 const onSubmit = async (event: MouseEvent) => {
@@ -243,7 +231,7 @@ const onSubmit = async (event: MouseEvent) => {
         }
     } else {
 
-      //  mapDisplayToOriginal();
+        //  mapDisplayToOriginal();
 
 
         let [, status] = await productService.update(identity, displayData.value.id!, displayData.value)

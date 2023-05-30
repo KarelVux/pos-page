@@ -8,13 +8,15 @@
 
                         <div class="d-flex flex-row">
 
-                        <button class="btn btn-primary me-2" @click="loadPageData"><i class="bi bi-arrow-clockwise me-2"></i>Refresh page data</button>
-                        <BusinessCreateEditModal
-                            :businessData="managerBusinessData"
-                            :create="false"
-                            :settlements="settlements"
-                            :businessCategories="businessCategories"
-                            @update="updateObjectData"/>
+                            <button class="btn btn-primary me-2" @click="loadPageData"><i
+                                class="bi bi-arrow-clockwise me-2"></i>Refresh page data
+                            </button>
+                            <BusinessCreateEditModal
+                                :businessData="managerBusinessData"
+                                :create="false"
+                                :settlements="settlements"
+                                :businessCategories="businessCategories"
+                                @update="updateObjectData"/>
                         </div>
 
                     </BusinessIntroduction>
@@ -36,7 +38,12 @@
                             :productData="{ } as IManagerProduct"
                             :businessId="businessId!"
                             :create="true"
+                            :productCategories="productCategories"
                             @update="updateObjectData"/>
+                        <ProductCategoryCreateModal
+                            class="d-flex ms-2"
+                            @update="updateObjectData"
+                        />
                     </div>
 
                     <table v-if=" managerBusinessData && managerBusinessData.products"
@@ -105,8 +112,13 @@
                                 {{ item.frozen }}
                             </td>
                             <td>
-                                <ProductCreateEditModal :productData="item" :businessId="businessId!" :create="false"
-                                                        @update="updateObjectData"/>
+                                <ProductCreateEditModal
+                                    :productData="item"
+                                    :businessId="businessId!"
+                                    :create="false"
+                                    :productCategories="productCategories"
+                                    @update="updateObjectData"
+                                />
                             </td>
                         </tr>
                         </tbody>
@@ -343,12 +355,16 @@ import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 import type {IManagerSettlement} from "../../dto/manager/IManagerSettlement";
 import type {IManagerBusinessCategory} from "../../dto/manager/IManagerBusinessCategory";
 import {SettlementService} from "../../services/manager/SettlementService";
-import {BusinessCategoriesService} from "../../services/manager/BusinessCategoriesService";
+import ProductCategoryCreateModal from "@/components/manager/ProductCategoryCreateModal.vue";
+import type {IManagerProductCategory} from "@/dto/manager/IManagerProductCategory";
+import {ProductCategoryService} from "@/services/manager/ProductCategoryService";
+import {BusinessCategoriesService} from "@/services/manager/BusinessCategoriesService";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
 const settlementService = new SettlementService();
 const businessCategoriesService = new BusinessCategoriesService();
+const productCategoryService = new ProductCategoryService();
 const identitySore = useIdentityStore();
 const messageStore = useMessageStore();
 
@@ -360,6 +376,7 @@ const openInvoices = ref<IManagerInvoice[]>([]);
 const closedInvoices = ref<IManagerInvoice[]>([]);
 const settlements = ref<IManagerSettlement[]>([]);
 const businessCategories = ref<IManagerBusinessCategory[]>([]);
+const productCategories = ref<IManagerProductCategory[]>([]);
 
 watch(() => managerBusinessData.value, async () => {
 });
@@ -367,6 +384,9 @@ watch(() => managerBusinessData.value, async () => {
 watch(() => [openInvoices.value, closedInvoices.value], async () => {
 });
 
+watch(() => [productCategories.value], async () => {
+    console.log("productCategories.value 232323" , productCategories.value)
+});
 
 
 // Method to update objectData
@@ -586,8 +606,11 @@ const loadPageData = async () => {
             })
         }
 
-        settlements.value = await settlementService.getAll(identity)
-        businessCategories.value = await businessCategoriesService.getAll(identity)
+        productCategories.value = (await productCategoryService.getAll(identity))!
+        settlements.value = (await settlementService.getAll(identity))!
+        businessCategories.value = (await businessCategoriesService.getAll(identity))!
+
+        console.log("product categories on  page load called out", productCategories)
 
         await loadInvoiceData();
     }

@@ -1,16 +1,16 @@
-import type {IManagerBusinessCategory} from "@/dto/manager/IManagerBusinessCategory";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import {BaseService} from "@/services/base/BaseService";
+import type {IManagerProductCategory} from "@/dto/manager/IManagerProductCategory";
 
-export class BusinessCategoriesService extends BaseService {
+export class ProductCategoryService extends BaseService {
     constructor() {
-        super('/manager/BusinessCategories');
+        super('/manager/productCategories');
     }
 
 
-    async getAll(jwtData: IJWTResponse): Promise<IManagerBusinessCategory[] | undefined> {
+    async getAll(jwtData: IJWTResponse): Promise<IManagerProductCategory[] | undefined> {
         try {
-            const response = await this.axios.get<IManagerBusinessCategory[]>('',
+            const response = await this.axios.get<IManagerProductCategory[]>('',
                 {
                     headers: {
                         'Authorization': 'Bearer ' + jwtData.jwt
@@ -30,9 +30,9 @@ export class BusinessCategoriesService extends BaseService {
         }
     }
 
-    async getById(jwtData: IJWTResponse, id: string): Promise<IManagerBusinessCategory | undefined> {
+    async getById(jwtData: IJWTResponse, id: string): Promise<IManagerProductCategory | undefined> {
         try {
-            const response = await this.axios.get<IManagerBusinessCategory>(`/${id}`,
+            const response = await this.axios.get<IManagerProductCategory>(`/${id}`,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + jwtData.jwt
@@ -51,9 +51,9 @@ export class BusinessCategoriesService extends BaseService {
         }
     }
 
-    async create(jwtData: IJWTResponse, entity: IManagerBusinessCategory): Promise<IManagerBusinessCategory | undefined> {
+    async create(jwtData: IJWTResponse, entity: IManagerProductCategory): Promise<IManagerProductCategory | undefined> {
         try {
-            const response = await this.axios.post<IManagerBusinessCategory>('', entity,
+            const response = await this.axios.post<IManagerProductCategory>('', entity,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + jwtData.jwt
