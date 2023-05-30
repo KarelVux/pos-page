@@ -136,8 +136,8 @@ const businessCategoriesService = new BusinessCategoriesService();
 
 
 interface IProps {
-    businessData: IManagerBusiness,
-    settlements: IManagerSettlement[],
+    businessData: IManagerBusiness ,
+    settlements: IManagerSettlement[] ,
     businessCategories: IManagerBusinessCategory[],
     create: boolean
 }

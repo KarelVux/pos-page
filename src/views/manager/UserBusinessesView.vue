@@ -129,11 +129,11 @@ const identityService = new IdentityService();
 const businessCategoriesService = new BusinessCategoriesService();
 const router = useRouter()
 
-const settlements = ref<IManagerSettlement[]>()
-const businessCategories = ref<IBusinessCategory[]>()
+const settlements = ref<IManagerSettlement[]>([])
+const businessCategories = ref<IBusinessCategory[]>([])
 
 
-const managerBusinessesData = ref<IManagerBusiness[]>();
+const managerBusinessesData = ref<IManagerBusiness[]>([]);
 
 
 const registerBusinessInputData = ref<IManagerBusiness>({
@@ -186,8 +186,8 @@ const sendUserBusinessViewRequests = async () => {
             })
         }
 
-        settlements.value = (await settlementService.getAll(identity))
-        businessCategories.value = (await businessCategoriesService.getAll(identity))
+        settlements.value = (await settlementService.getAll(identity))!
+        businessCategories.value = (await businessCategoriesService.getAll(identity))!
 
     }
 }
