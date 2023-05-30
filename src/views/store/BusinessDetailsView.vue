@@ -199,7 +199,7 @@ const createInvoice = async () => {
             console.log("result", result)
             if (result && result.id) {
 
-                await router.push({name: 'invoiceDetails', params: {id: result.id}});
+                await router.push({name: 'invoiceAcceptance', params: {id: result.id}});
             }
         }
     }

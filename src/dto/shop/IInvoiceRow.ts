@@ -9,5 +9,6 @@ export interface IInvoiceRow extends IBaseEntity {
     taxAmountFromPercent: number
     productId: string
     currency: string
-    comment: string
+    comment: string,
+    invoiceId: string
 }

@@ -11,19 +11,22 @@
             <table class="table border-bottom border-gray-200 mt-3">
                 <thead>
                 <tr>
-                    <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm px-0">Description</th>
+                    <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm px-0">ProductName</th>
                     <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Tax Percent</th>
                     <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Tax Amount</th>
                     <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Amount</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="invoiceDataVal.invoiceRows">
                 <tr v-for="invoiceRow in invoiceDataVal.invoiceRows" :key="invoiceRow.id">
                     <td class="px-0">{{ invoiceRow.productName }}</td>
                     <td class="text-end px-0">{{ invoiceRow.taxPercent }}</td>
                     <td class="text-end px-0">{{ invoiceRow.taxAmountFromPercent }}</td>
                     <td class="text-end px-0">{{ invoiceRow.finalProductPrice }}</td>
                 </tr>
+                </tbody>
+                <tbody v-else>
+                Unable to load table data
                 </tbody>
             </table>
 
@@ -54,9 +57,10 @@
 
 <script lang="ts" setup>
 import type {IInvoice} from "@/dto/shop/IInvoice";
+import type {IManagerInvoice} from "@/dto/manager/IManagerInvoice";
 
 interface IProps {
-    invoiceDataVal: IInvoice,
+    invoiceDataVal: IInvoice | IManagerInvoice,
 }
 
 const props = defineProps<IProps>();

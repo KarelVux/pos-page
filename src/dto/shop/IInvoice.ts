@@ -13,7 +13,6 @@ export interface IInvoice extends IBaseEntity {
     creationTime: Date
     businessId: string
     orderId: string
-    order: IOrder
+    order?: IOrder
     invoiceRows: IInvoiceRow []
-
 }

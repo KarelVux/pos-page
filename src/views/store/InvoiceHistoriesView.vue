@@ -49,7 +49,14 @@
                     </thead>
                     <tbody>
                     <tr v-for="closedInvoice in closedInvoices " :key="closedInvoice.id">
-                        <td class="px-0">{{ closedInvoice.id }}</td>
+                        <td class="px-0">
+
+                            <RouterLink :to="{name: 'invoiceDetails', params: {id: closedInvoice.id}}">
+                                {{
+                                    closedInvoice.id
+                                }}
+                            </RouterLink>
+                        </td>
                         <td class=" px-0">{{ closedInvoice.businessId }}</td>
 
                         <td class="text-end px-0">{{
@@ -73,8 +80,8 @@
 <script lang="ts" setup>
 
 import {useIdentityStore} from "@/stores/identityStore";
-import {useRoute, RouterLink, useRouter} from "vue-router";
-import {onBeforeMount, onMounted, onUnmounted, ref} from "vue";
+import {useRouter} from "vue-router";
+import {onBeforeMount, ref} from "vue";
 import InvoicesService from "@/services/shop/InvoicesService";
 import type {IInvoice} from "../../dto/shop/IInvoice";
 import {getFormattedDate} from "@/helpers/UnifiedFormatter";
@@ -91,6 +98,7 @@ const router = useRouter()
 
 const openInvoices = ref<IInvoice[]>([]);
 const closedInvoices = ref<IInvoice[]>([]);
+const passableData = ref<IInvoice>();
 
 onBeforeMount(async () => {
     let identity = identitySore.authenticationJwt;
@@ -104,7 +112,7 @@ onBeforeMount(async () => {
 
     if (invoices) {
         invoices.forEach(function (item) {
-            if (item.order.orderAcceptanceStatus === OrderAcceptanceStatusEnum.GivenToClient && item.paymentCompleted) {
+            if (item.order!.orderAcceptanceStatus === OrderAcceptanceStatusEnum.GivenToClient && item.paymentCompleted) {
                 closedInvoices.value.push(item)
             } else {
                 openInvoices.value.push(item)

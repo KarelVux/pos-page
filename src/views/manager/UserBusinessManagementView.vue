@@ -13,10 +13,10 @@
                 <!-- End Business info-->
             </div>
         </div>
+        <!-- Start Product info-->
+
         <div class="card my-1">
             <div class="card-body ">
-
-                <!-- Start Product info-->
                 <div v-if="managerBusinessData">
                     <div class="card-title d-flex  justify-content-center py-2">
 
@@ -28,7 +28,6 @@
                             :create="true"
                             @update="updateObjectData"/>
                     </div>
-
 
                     <table v-if=" managerBusinessData && managerBusinessData.products"
                            class="table table-striped table-sm ">
@@ -103,10 +102,10 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- End Product info-->
             </div>
 
         </div>
+        <!-- End Product info-->
 
         <!-- Start invoices -->
         <div class="card my-2" v-if="openInvoices.length > 0">
@@ -133,7 +132,7 @@
                     <tbody>
                     <tr v-for="openInvoice in openInvoices " :key="openInvoice.id">
                         <td class="px-1">
-                            {{ openInvoice.id }}
+                            <InvoiceDetailsModal :invoiceData="openInvoice"/>
                         </td>
                         <td class=" px-1">
                             {{ getFormattedDate(openInvoice.creationTime) }}
@@ -214,49 +213,93 @@
                                     @click="paymentCompleted(openInvoice)">
                                 Payment completed
                             </button>
-
-
                         </td>
-
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="card my-2">
+        <div class="card my-2" v-if="closedInvoices.length > 0">
             <div class="card-body mb-4">
                 <h2 class="card-title text-center py-2">
                     Invoice history
                 </h2>
-                <table class="table border-bottom border-gray-200 mt-3" v-if="closedInvoices.length > 0">
+                <table class="table border-bottom border-gray-200 mt-3">
                     <thead>
                     <tr>
-                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm px-0">Invoice ID</th>
-                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-0">Business name</th>
-                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Order date</th>
-                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Final price</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Invoice ID</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Creation Time</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Username</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Payment Completed</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Products</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Subtotal</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Tax</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Total</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Acceptance status</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-1">Order Status</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="closedInvoice in closedInvoices " :key="closedInvoice.id">
-                        <td class="px-0">{{ closedInvoice.id }}</td>
-                        <td class=" px-0">{{ closedInvoice.businessId }}</td>
-
-                        <td class="text-end px-0">{{
-                                getFormattedDate(closedInvoice.creationTime)
-                            }}
+                        <td class="px-1">
+                            <InvoiceDetailsModal :invoiceData="closedInvoice"/>
                         </td>
-                        <td class="text-end px-0">{{ closedInvoice.finalTotalPrice }}</td>
+                        <td class=" px-1">
+                            {{ getFormattedDate(closedInvoice.creationTime) }}
+                        </td>
+                        <td class=" px-1">{{ closedInvoice.userName }}</td>
+
+                        <td class=" px-1">{{ closedInvoice.paymentCompleted }}</td>
+
+                        <td class=" px-1">
+                            <p v-for="(invoiceRow, index) in closedInvoice.invoiceRows" :key="index">
+                                {{ invoiceRow.productUnitCount }} X {{ invoiceRow.productName }} =
+                                {{ invoiceRow.finalProductPrice }}
+                            </p>
+                        </td>
+                        <td class=" px-1">{{ closedInvoice.totalPriceWithoutTax }}</td>
+                        <td class=" px-1">{{ closedInvoice.taxAmount }}</td>
+                        <td class=" px-1">{{ closedInvoice.finalTotalPrice }}</td>
+                        <td class=" px-1">
+                            <p v-if="closedInvoice.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.Unknown">
+                                Unknown
+                            </p>
+                            <p v-else-if="closedInvoice.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.UserAccepted">
+                                User accepted
+                            </p>
+
+                            <p v-else-if="closedInvoice.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.BusinessAccepted">
+                                Business accepted
+                            </p>
+                            <p v-else-if="closedInvoice.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.BusinessRejected">
+                                Business rejected
+                            </p>
+
+                        </td>
+                        <td class=" px-1">
+                            <p v-if="closedInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.GivenToClient">
+                                Given to client
+                            </p>
+                            <p v-else-if="closedInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Ready">
+                                Ready
+                            </p>
+                            <p v-else-if="closedInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.BusinessIsPreparing">
+                                Preparing
+                            </p>
+                            <p v-else-if="closedInvoice.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Unknown">
+                                Needs business acceptance
+                            </p>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
-                <div v-else>
-                    Sorry there are not any open invoices
-                </div>
+
             </div>
         </div>
-
+        <div v-else>
+            Sorry there are not any open invoices
+        </div>
         <!-- End invoices -->
     </div>
     <div v-else>
@@ -285,6 +328,7 @@ import {InvoiceAcceptanceStatusEnum} from "@/dto/enums/InvoiceAcceptanceStatusEn
 import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
 import type {IMessage} from "@/dto/shared/IMessage";
 import  type {IManagerProduct} from "@/dto/manager/IManagerProduct";
+import InvoiceDetailsModal from "@/components/manager/InvoiceDetailsModal.vue";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
