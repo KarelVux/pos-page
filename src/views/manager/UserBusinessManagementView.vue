@@ -5,8 +5,15 @@
                 <!-- Start Business info-->
                 <div>
                     <BusinessIntroduction :businessDetails="managerBusinessData">
-                        <BusinessCreateEditModal :businessData="managerBusinessData" :create="false"
+
+                        <div class="d-flex flex-row">
+
+                        <button class="btn btn-primary me-2" @click="loadPageData"><i class="bi bi-arrow-clockwise me-2"></i>Refresh page data</button>
+                        <BusinessCreateEditModal
+                            :businessData="managerBusinessData" :create="false"
                                                  @update="updateObjectData"/>
+                        </div>
+
                     </BusinessIntroduction>
                 </div>
 
@@ -348,6 +355,7 @@ watch(() => managerBusinessData.value, async () => {
 
 watch(() => [openInvoices.value, closedInvoices.value], async () => {
 });
+
 
 
 // Method to update objectData
