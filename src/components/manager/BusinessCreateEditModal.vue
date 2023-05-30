@@ -124,16 +124,15 @@ import type {IManagerBusiness} from "@/dto/manager/IManagerBusiness";
 import {ManagerBusinessService} from "@/services/manager/ManagerBusinessService";
 import {useIdentityStore} from "@/stores/identityStore";
 import {useMessageStore} from "@/stores/messageStore";
-import {SettlementsService} from "@/services/management/SettlementsService";
-import {BusinessCategoriesService} from "@/services/management/BusinessCategoriesService";
 import {generateRandomString} from "@/helpers/Randomiser";
 import type {IManagerSettlement} from "@/dto/manager/IManagerSettlement";
 import type {IManagerBusinessCategory} from "@/dto/manager/IManagerBusinessCategory";
+import {SettlementService} from "@/services/manager/SettlementService";
+import {BusinessCategoriesService} from "@/services/manager/BusinessCategoriesService";
 
 const managerBusinessService = new ManagerBusinessService();
 const identitySore = useIdentityStore();
-const messageStore = useMessageStore();
-const settlementService = new SettlementsService();
+const settlementService = new SettlementService();
 const businessCategoriesService = new BusinessCategoriesService();
 
 
@@ -202,8 +201,8 @@ const sendUserBusinessViewRequests = async () => {
     let identity = identitySore.authenticationJwt
 
     if (identity) {
-        settlements.value = (await settlementService.getAll(identity))
-        businessCategories.value = (await businessCategoriesService.getAll(identity))
+        settlements.value = (await settlementService.getAll(identity))!
+        businessCategories.value = (await businessCategoriesService.getAll(identity))!
     }
 }
 

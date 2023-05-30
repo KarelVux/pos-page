@@ -10,8 +10,11 @@
 
                         <button class="btn btn-primary me-2" @click="loadPageData"><i class="bi bi-arrow-clockwise me-2"></i>Refresh page data</button>
                         <BusinessCreateEditModal
-                            :businessData="managerBusinessData" :create="false"
-                                                 @update="updateObjectData"/>
+                            :businessData="managerBusinessData"
+                            :create="false"
+                            :settlements="settlements"
+                            :businessCategories="businessCategories"
+                            @update="updateObjectData"/>
                         </div>
 
                     </BusinessIntroduction>
@@ -337,9 +340,15 @@ import type {IMessage} from "@/dto/shared/IMessage";
 import type {IManagerProduct} from "@/dto/manager/IManagerProduct";
 import InvoiceDetailsModal from "@/components/manager/InvoiceDetailsModal.vue";
 import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
+import type {IManagerSettlement} from "../../dto/manager/IManagerSettlement";
+import type {IManagerBusinessCategory} from "../../dto/manager/IManagerBusinessCategory";
+import {SettlementService} from "../../services/manager/SettlementService";
+import {BusinessCategoriesService} from "../../services/manager/BusinessCategoriesService";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
+const settlementService = new SettlementService();
+const businessCategoriesService = new BusinessCategoriesService();
 const identitySore = useIdentityStore();
 const messageStore = useMessageStore();
 
@@ -349,6 +358,8 @@ const managerBusinessData = ref<IManagerBusiness>();
 const businessId = ref<string>()
 const openInvoices = ref<IManagerInvoice[]>([]);
 const closedInvoices = ref<IManagerInvoice[]>([]);
+const settlements = ref<IManagerSettlement[]>([]);
+const businessCategories = ref<IManagerBusinessCategory[]>([]);
 
 watch(() => managerBusinessData.value, async () => {
 });
@@ -574,6 +585,9 @@ const loadPageData = async () => {
 
             })
         }
+
+        settlements.value = await settlementService.getAll(identity)
+        businessCategories.value = await businessCategoriesService.getAll(identity)
 
         await loadInvoiceData();
     }
