@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-body p-5">
+        <div class="card-body p-5" v-if="invoiceDataVal">
             <h2>
                 Hey ,
             </h2>
@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>
-
+        <div v-else>Faulty invoice data was received</div>
         <slot></slot>
     </div>
 </template>
