@@ -1,5 +1,5 @@
 <template>
-    <main class="mt-5 pt-4">
+    <main class="">
         <div v-if="businessDetails" class="container mt-5">
             <BusinessIntroduction :businessDetails="businessDetails"/>
             <section>
@@ -181,28 +181,27 @@
 import {onBeforeMount, onMounted, ref, watch} from 'vue'
 import {useIdentityStore} from "@/stores/identityStore";
 import ShopsService from "@/services/shop/ShopsService";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import type {IBusiness} from "@/dto/shop/IBusiness";
 import NotFound from "@/components/NotFound.vue";
 import type {IProduct} from "@/dto/shop/IProduct";
 import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
-import router from "@/router";
 import InvoicesService from "../../services/shop/InvoicesService";
 import BusinessIntroduction from "@/components/Shops/BusinessIntroduction.vue";
 import type IInvoiceCreateEditProduct from "@/dto/shop/IInvoiceCreateEditProduct";
-import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 import InvoiceDetailsCard from "@/components/Shops/InvoiceDetailsCard.vue";
 import type {IMessage} from "@/dto/shared/IMessage";
 import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
 import {useMessageStore} from "@/stores/messageStore";
 import type {IInvoice} from "@/dto/shop/IInvoice";
-import {tr} from "vuetify/locale";
+import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
 
 const identitySore = useIdentityStore();
 const shopsService = new ShopsService();
 const invoicesService = new InvoicesService();
 
 const route = useRoute();
+const router = useRouter();
 const businessDetails = ref<IBusiness>()
 const showCreationModal = ref<boolean>(false)
 const messageStore = useMessageStore();
@@ -352,7 +351,6 @@ const goBackAndEdit = async () => {
             invoiceData.value = undefined
             let hider = document.getElementById('closeModal');
             hider!.click()
-            //   await router.push({name: 'businessDetails', params: {id: invoiceData.value!.businessId}});
         } else {
             console.warn("Error occurred when deleting invoice")
         }
