@@ -12,6 +12,7 @@ export interface IInvoice extends IBaseEntity {
     invoiceAcceptanceStatus: InvoiceAcceptanceStatusEnum,
     creationTime: Date
     businessId: string
+    businessName?: string
     orderId: string
     order?: IOrder
     invoiceRows: IInvoiceRow []

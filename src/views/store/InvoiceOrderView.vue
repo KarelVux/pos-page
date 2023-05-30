@@ -8,15 +8,13 @@
                 <h2 class="card-title text-center py-2">
                     Here is you order status from {{ businessLimitedData.name }}
                 </h2>
-                <div>
-
-                </div>
                 <OrderProgressStatus
-                    v-if="invoiceData.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.GivenToClient"
-                    header="Order has been picked up. Have a nice meal"
+                    v-if="invoiceData.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.BusinessRejected"
+                    header="Sorry but business has rejected your order and your order has been canceled"
                     strongText=""
-                    progressbarWidth="100"
+                    progressbarWidth="0"
                 />
+
                 <OrderProgressStatus
                     v-else-if="invoiceData.order.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Ready"
                     header="Your order is ready for pickup"
@@ -55,7 +53,7 @@
 
 <script lang="ts" setup>
 import {useIdentityStore} from "@/stores/identityStore";
-import {useRoute, RouterLink} from "vue-router";
+import {useRoute} from "vue-router";
 import {onBeforeMount, onMounted, onUnmounted, ref} from "vue";
 import InvoicesService from "@/services/shop/InvoicesService";
 import type {IInvoice} from "@/dto/shop/IInvoice";
@@ -67,8 +65,13 @@ import InvoiceDetailsCard from "@/components/Shops/InvoiceDetailsCard.vue";
 import {OrderAcceptanceStatusEnum} from "@/dto/enums/OrderAcceptanceStatusEnum";
 import LoadingData from "@/components/shared/LoadingData.vue";
 import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
+import type {IMessage} from "@/dto/shared/IMessage";
+import {InvoiceAcceptanceStatusEnum} from "@/dto/enums/InvoiceAcceptanceStatusEnum";
+import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
+import {useMessageStore} from "@/stores/messageStore";
 
 const identitySore = useIdentityStore();
+const messageStore = useMessageStore();
 
 const invoicesService = new InvoicesService();
 const shopsService = new ShopsService();
@@ -79,6 +82,8 @@ const invoiceData = ref<IInvoice>()
 const props = defineProps({
     id: String,
 })
+
+const message = ref<IMessage>()
 
 const route = useRoute();
 let timerId: number;
@@ -110,6 +115,15 @@ onMounted(() => {
 
         if (identity && props.id)
             invoiceData.value = await invoicesService.getInvoice(identity, props.id)
+
+            if (invoiceData.value?.invoiceAcceptanceStatus == InvoiceAcceptanceStatusEnum.BusinessRejected && invoiceData.value?.order?.orderAcceptanceStatus == OrderAcceptanceStatusEnum.Closed ){
+                message.value = {
+                    message: "Business rejected your order",
+                    type: MessagePopupTypeEnum.Error
+                }
+                    messageStore.addMessage(message.value!)
+                clearInterval(timerId);
+            }
     }, 5000);
 });
 

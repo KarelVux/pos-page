@@ -567,29 +567,6 @@ const loadPageData = async () => {
             })
         }
 
-        let invoices = await invoiceService.getBusinessInvoices(identity, businessId.value!)
-
-
-        if (invoices) {
-            console.log("Got invoices", invoices)
-            closedInvoices.value = []
-            openInvoices.value = []
-            invoices.forEach(function (item) {
-                if (item.order.orderAcceptanceStatus === OrderAcceptanceStatusEnum.GivenToClient && item.paymentCompleted) {
-                    closedInvoices.value.push(item)
-                } else {
-                    openInvoices.value.push(item)
-                }
-            });
-
-
-            console.log("closed invoice", closedInvoices)
-            console.log("open invoice", openInvoices)
-        } else {
-            console.warn("Error occurred when checking invoices ")
-        }
-
-
         await loadInvoiceData();
     }
 }
@@ -604,7 +581,7 @@ const loadInvoiceData = async () => {
             closedInvoices.value = []
             openInvoices.value = []
             invoices.forEach(function (item) {
-                if (item.order.orderAcceptanceStatus === OrderAcceptanceStatusEnum.GivenToClient && item.paymentCompleted) {
+                if (item.invoiceAcceptanceStatus === InvoiceAcceptanceStatusEnum.BusinessRejected || (item.order.orderAcceptanceStatus === OrderAcceptanceStatusEnum.GivenToClient && item.paymentCompleted)) {
                     closedInvoices.value.push(item)
                 } else {
                     openInvoices.value.push(item)

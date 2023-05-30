@@ -22,10 +22,12 @@
                             class="px-0 custom-link"
                         >{{ openInvoice.id }}
                         </td>
-                        <td class=" px-0">{{ openInvoice.businessId }}</td>
+                        <td class=" px-0" v-if="openInvoice.businessName">{{ openInvoice.businessName }}</td>
+                        <td class=" px-0" v-else>{{ openInvoice.businessId }}</td>
                         <td class="text-end px-0">
                             {{ getFormattedDate(openInvoice.creationTime) }}
                         </td>
+                        <td class="text-end px-0">{{ openInvoice.finalTotalPrice }}</td>
                         <td class="text-end px-0">{{ openInvoice.finalTotalPrice }}</td>
                     </tr>
                     </tbody>
@@ -45,6 +47,10 @@
                         <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm  px-0">Business name</th>
                         <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Order date</th>
                         <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Final price</th>
+                        <th scope="col" class="fs-sm text-dark text-uppercase-bold-sm text-end px-0">Was successfully
+                            completed
+                        </th>
+
                     </tr>
                     </thead>
                     <tbody>
@@ -57,18 +63,25 @@
                                 }}
                             </RouterLink>
                         </td>
-                        <td class=" px-0">{{ closedInvoice.businessId }}</td>
-
+                        <td class=" px-0" v-if="closedInvoice.businessName">{{ closedInvoice.businessName }}</td>
+                        <td class=" px-0" v-else>{{ closedInvoice.businessId }}</td>
                         <td class="text-end px-0">{{
                                 getFormattedDate(closedInvoice.creationTime)
                             }}
                         </td>
                         <td class="text-end px-0">{{ closedInvoice.finalTotalPrice }}</td>
+                        <td class="text-end px-0">
+                            <span
+                                v-if="closedInvoice.order!.orderAcceptanceStatus === OrderAcceptanceStatusEnum.GivenToClient && closedInvoice.paymentCompleted"
+                                class="text-success">Yes</span>
+                            <span v-else class="text-danger">No (Cancelled)</span>
+                        </td>
+
                     </tr>
                     </tbody>
                 </table>
                 <div v-else>
-                    Sorry there are not any open invoices
+                    Sorry there are not any open invoicesdsds
                 </div>
             </div>
         </div>
@@ -87,6 +100,7 @@ import type {IInvoice} from "../../dto/shop/IInvoice";
 import {getFormattedDate} from "@/helpers/UnifiedFormatter";
 import {OrderAcceptanceStatusEnum} from "@/dto/enums/OrderAcceptanceStatusEnum";
 import {redirectUserIfIdentityTokenIsNull} from "@/helpers/UserReidrecter";
+import {InvoiceAcceptanceStatusEnum} from "@/dto/enums/InvoiceAcceptanceStatusEnum";
 
 const identitySore = useIdentityStore();
 
@@ -99,7 +113,6 @@ const router = useRouter()
 
 const openInvoices = ref<IInvoice[]>([]);
 const closedInvoices = ref<IInvoice[]>([]);
-const passableData = ref<IInvoice>();
 
 onBeforeMount(async () => {
     await redirectUserIfIdentityTokenIsNull();
@@ -115,7 +128,7 @@ onBeforeMount(async () => {
 
     if (invoices) {
         invoices.forEach(function (item) {
-            if (item.order!.orderAcceptanceStatus === OrderAcceptanceStatusEnum.GivenToClient && item.paymentCompleted) {
+            if (item.invoiceAcceptanceStatus === InvoiceAcceptanceStatusEnum.BusinessRejected || (item.order!.orderAcceptanceStatus === OrderAcceptanceStatusEnum.GivenToClient && item.paymentCompleted)) {
                 closedInvoices.value.push(item)
             } else {
                 openInvoices.value.push(item)
