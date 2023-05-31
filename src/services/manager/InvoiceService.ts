@@ -1,6 +1,7 @@
 import {BaseEntityService} from '../base/BaseEntityService';
 import type {IManagerInvoice} from "@/dto/manager/IManagerInvoice";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
+import  type {IManagerInvoiceOrderLimitedEdit} from "@/dto/manager/IManagerInvoiceOrderLimitedEdit";
 
 export class InvoiceService extends BaseEntityService<IManagerInvoice> {
     constructor() {
@@ -31,4 +32,27 @@ export class InvoiceService extends BaseEntityService<IManagerInvoice> {
             return undefined;
         }
     }
+
+    async doPartialUpdateWithLimitedData(jwtData: IJWTResponse, invoiceId: string, data: IManagerInvoiceOrderLimitedEdit): Promise<number | undefined> {
+        try {
+            const response = await this.axios.patch(`/${invoiceId}`,
+                data,
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + jwtData.jwt
+                    }
+                }
+            );
+
+            console.log('register response', response);
+            if (response.status === 204) {
+                return response.status;
+            }
+            return undefined;
+        } catch (e) {
+            console.log('error: ', (e as Error).message);
+            return undefined;
+        }
+    }
+
 }

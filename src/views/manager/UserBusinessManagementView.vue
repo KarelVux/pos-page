@@ -341,7 +341,6 @@ import BusinessIntroduction from "@/components/Shops/BusinessIntroduction.vue";
 import LoadingData from "@/components/shared/LoadingData.vue";
 import BusinessCreateEditModal from "@/components/manager/BusinessCreateEditModal.vue";
 import ProductCreateEditModal from "@/components/manager/ProductCreateEditModal.vue";
-import {tr} from "vuetify/locale";
 import {InvoiceService} from "@/services/manager/InvoiceService";
 import type {IManagerInvoice} from "@/dto/manager/IManagerInvoice";
 import {getFormattedDate} from "@/helpers/UnifiedFormatter";
@@ -359,6 +358,7 @@ import ProductCategoryCreateModal from "@/components/manager/ProductCategoryCrea
 import type {IManagerProductCategory} from "@/dto/manager/IManagerProductCategory";
 import {ProductCategoryService} from "@/services/manager/ProductCategoryService";
 import {BusinessCategoriesService} from "@/services/manager/BusinessCategoriesService";
+import type {IManagerInvoiceOrderLimitedEdit} from "@/dto/manager/IManagerInvoiceOrderLimitedEdit";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
@@ -385,7 +385,7 @@ watch(() => [openInvoices.value, closedInvoices.value], async () => {
 });
 
 watch(() => [productCategories.value], async () => {
-    console.log("productCategories.value 232323" , productCategories.value)
+    console.log("productCategories.value 232323", productCategories.value)
 });
 
 
@@ -406,24 +406,17 @@ onBeforeMount(async () => {
 const acceptInvoice = async (invoice: IManagerInvoice) => {
     let identity = identitySore.authenticationJwt
 
-    let invoiceChangeableData: IManagerInvoice = {
+    let invoiceChangeableData: IManagerInvoiceOrderLimitedEdit = {
         id: invoice.id,
-        appUserId: invoice.appUserId,
-        businessId: invoice.businessId,
-        creationTime: invoice.creationTime,
-        finalTotalPrice: invoice.finalTotalPrice,
         invoiceAcceptanceStatus: InvoiceAcceptanceStatusEnum.BusinessAccepted,
-        order: invoice.order,
-        orderId: invoice.orderId,
-        paymentCompleted: invoice.paymentCompleted,
-        taxAmount: invoice.taxAmount,
-        totalPriceWithoutTax: invoice.totalPriceWithoutTax,
+        orderAcceptanceStatus: invoice.order.orderAcceptanceStatus,
+        paymentCompleted: invoice.paymentCompleted
     }
 
-    invoiceChangeableData.order.orderAcceptanceStatus = OrderAcceptanceStatusEnum.BusinessIsPreparing;
+    invoiceChangeableData.orderAcceptanceStatus = OrderAcceptanceStatusEnum.BusinessIsPreparing;
 
     if (identity) {
-        let returnableInvoice = await invoiceService.update(identity, invoiceChangeableData.id!, invoiceChangeableData)
+        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id!, invoice.businessId, invoiceChangeableData)
         if (returnableInvoice) {
             console.log("Successfully changed")
             var message: IMessage = {
@@ -446,24 +439,17 @@ const acceptInvoice = async (invoice: IManagerInvoice) => {
 const rejectInvocie = async (invoice: IManagerInvoice) => {
     let identity = identitySore.authenticationJwt
 
-    let invoiceChangeableData: IManagerInvoice = {
+    let invoiceChangeableData: IManagerInvoiceOrderLimitedEdit = {
         id: invoice.id,
-        appUserId: invoice.appUserId,
-        businessId: invoice.businessId,
-        creationTime: invoice.creationTime,
-        finalTotalPrice: invoice.finalTotalPrice,
         invoiceAcceptanceStatus: InvoiceAcceptanceStatusEnum.BusinessRejected,
-        order: invoice.order,
-        orderId: invoice.orderId,
-        paymentCompleted: invoice.paymentCompleted,
-        taxAmount: invoice.taxAmount,
-        totalPriceWithoutTax: invoice.totalPriceWithoutTax,
+        orderAcceptanceStatus: invoice.order.orderAcceptanceStatus,
+        paymentCompleted: invoice.paymentCompleted
     }
 
-    invoiceChangeableData.order.orderAcceptanceStatus = OrderAcceptanceStatusEnum.Closed;
+    invoiceChangeableData.orderAcceptanceStatus = OrderAcceptanceStatusEnum.Closed;
 
     if (identity) {
-        let returnableInvoice = await invoiceService.update(identity, invoiceChangeableData.id!, invoiceChangeableData)
+        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id!, invoice.businessId, invoiceChangeableData)
         if (returnableInvoice) {
             console.log("Successfully changed")
             var message: IMessage = {
@@ -484,24 +470,17 @@ const rejectInvocie = async (invoice: IManagerInvoice) => {
 const moveToReadyStatus = async (invoice: IManagerInvoice) => {
     let identity = identitySore.authenticationJwt
 
-    let invoiceChangeableData: IManagerInvoice = {
+    let invoiceChangeableData: IManagerInvoiceOrderLimitedEdit = {
         id: invoice.id,
-        appUserId: invoice.appUserId,
-        businessId: invoice.businessId,
-        creationTime: invoice.creationTime,
-        finalTotalPrice: invoice.finalTotalPrice,
         invoiceAcceptanceStatus: invoice.invoiceAcceptanceStatus,
-        order: invoice.order,
-        orderId: invoice.orderId,
-        paymentCompleted: invoice.paymentCompleted,
-        taxAmount: invoice.taxAmount,
-        totalPriceWithoutTax: invoice.totalPriceWithoutTax,
+        orderAcceptanceStatus: invoice.order.orderAcceptanceStatus,
+        paymentCompleted: invoice.paymentCompleted
     }
 
-    invoiceChangeableData.order.orderAcceptanceStatus = OrderAcceptanceStatusEnum.Ready;
+    invoiceChangeableData.orderAcceptanceStatus = OrderAcceptanceStatusEnum.Ready;
 
     if (identity) {
-        let returnableInvoice = await invoiceService.update(identity, invoiceChangeableData.id!, invoiceChangeableData)
+        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id!, invoice.businessId, invoiceChangeableData)
         if (returnableInvoice) {
             console.log("Successfully changed")
             var message: IMessage = {
@@ -522,24 +501,17 @@ const moveToReadyStatus = async (invoice: IManagerInvoice) => {
 const moveToGivenToClientStatus = async (invoice: IManagerInvoice) => {
     let identity = identitySore.authenticationJwt
 
-    let invoiceChangeableData: IManagerInvoice = {
+    let invoiceChangeableData: IManagerInvoiceOrderLimitedEdit = {
         id: invoice.id,
-        appUserId: invoice.appUserId,
-        businessId: invoice.businessId,
-        creationTime: invoice.creationTime,
-        finalTotalPrice: invoice.finalTotalPrice,
         invoiceAcceptanceStatus: invoice.invoiceAcceptanceStatus,
-        order: invoice.order,
-        orderId: invoice.orderId,
-        paymentCompleted: invoice.paymentCompleted,
-        taxAmount: invoice.taxAmount,
-        totalPriceWithoutTax: invoice.totalPriceWithoutTax,
+        orderAcceptanceStatus: invoice.order.orderAcceptanceStatus,
+        paymentCompleted: invoice.paymentCompleted
     }
 
-    invoiceChangeableData.order.orderAcceptanceStatus = OrderAcceptanceStatusEnum.GivenToClient;
+    invoiceChangeableData.orderAcceptanceStatus = OrderAcceptanceStatusEnum.GivenToClient;
 
     if (identity) {
-        let returnableInvoice = await invoiceService.update(identity, invoiceChangeableData.id!, invoiceChangeableData)
+        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id!, invoice.businessId, invoiceChangeableData)
         if (returnableInvoice) {
             console.log("Successfully changed")
             var message: IMessage = {
@@ -550,7 +522,6 @@ const moveToGivenToClientStatus = async (invoice: IManagerInvoice) => {
         } else {
             messageStore.addMessage({
                 message: "Unable to edit invoice ", status: "", type: MessagePopupTypeEnum.Error
-
             })
         }
         await loadInvoiceData();
@@ -559,22 +530,15 @@ const moveToGivenToClientStatus = async (invoice: IManagerInvoice) => {
 const paymentCompleted = async (invoice: IManagerInvoice) => {
     let identity = identitySore.authenticationJwt
 
-    let invoiceChangeableData: IManagerInvoice = {
+    let invoiceChangeableData: IManagerInvoiceOrderLimitedEdit = {
         id: invoice.id,
-        appUserId: invoice.appUserId,
-        businessId: invoice.businessId,
-        creationTime: invoice.creationTime,
-        finalTotalPrice: invoice.finalTotalPrice,
         invoiceAcceptanceStatus: invoice.invoiceAcceptanceStatus,
-        order: invoice.order,
-        orderId: invoice.orderId,
-        paymentCompleted: true,
-        taxAmount: invoice.taxAmount,
-        totalPriceWithoutTax: invoice.totalPriceWithoutTax,
+        orderAcceptanceStatus: invoice.order.orderAcceptanceStatus,
+        paymentCompleted: true
     }
 
     if (identity) {
-        let returnableInvoice = await invoiceService.update(identity, invoiceChangeableData.id!, invoiceChangeableData)
+        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id!, invoice.businessId, invoiceChangeableData)
         if (returnableInvoice) {
             console.log("Successfully changed")
             var message: IMessage = {

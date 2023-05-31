@@ -49,7 +49,6 @@
 import type {ILoginData} from "@/dto/identity/ILoginData";
 import {IdentityService} from "@/services/identity/IdentityService";
 import {ref} from "vue";
-import {Modal} from "bootstrap";
 
 
 const identityService = new IdentityService();
