@@ -9,7 +9,7 @@ import type {IManagerProduct} from "@/dto/manager/IManagerProduct";
 export interface IManagerBusiness extends IBaseEntity {
     name: string
     description: string
-    picturePath: string
+    picturePath?: string
     rating: number
     longitude: number
     latitude: number

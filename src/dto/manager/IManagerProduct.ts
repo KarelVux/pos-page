@@ -9,6 +9,7 @@ import type {IManagerProductTag} from "@/dto/manager/IManagerProductTag";
 export interface IManagerProduct extends IBaseEntity {
     name: string
     description: string
+    PicturePath?: string
     unitPrice: number
     unitDiscount: number
     unitCount: number

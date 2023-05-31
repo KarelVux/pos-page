@@ -14,7 +14,7 @@ export interface IBusiness extends IBaseEntity {
     email: string,
     businessCategoryId: string,
     businessCategory: IBusinessCategory,
-    picturePath: string,
+    picturePath?: string,
     settlementId: string,
     settlement: IManagerSettlement,
     products: IProduct[],

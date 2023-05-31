@@ -69,8 +69,13 @@
                                             <div class="col-xl-3 col-md-4 d-flex justify-content-center">
                                                 <div
                                                     class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
-                                                    <img src="../../assets/image-not-found.png"
-                                                         class="w-100">
+                                                    <img v-if="!product.picturePath"
+                                                         src="https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80"
+                                                         class="img-fluid w-100" alt=""/>
+                                                    <img v-else
+                                                         :src="product.picturePath"
+                                                         class="img-fluid w-100" alt=""/>
+
                                                     <a href="#!">
                                                         <div class="hover-overlay">
                                                             <div class="mask"
@@ -178,7 +183,7 @@
 
 <script setup lang="ts">
 
-import {onBeforeMount, onMounted, ref, watch} from 'vue'
+import {onBeforeMount, ref, watch} from 'vue'
 import {useIdentityStore} from "@/stores/identityStore";
 import ShopsService from "@/services/shop/ShopsService";
 import {useRoute, useRouter} from "vue-router";

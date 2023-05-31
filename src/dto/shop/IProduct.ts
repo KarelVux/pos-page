@@ -4,6 +4,7 @@ import type {IProductCategory} from "@/dto/shop/IProductCategory";
 export interface IProduct extends IBaseEntity {
     name: string,
     description: string,
+    picturePath?: string,
     unitPrice: number,
     unitDiscount: number,
     userSelectedProductCount: number,
