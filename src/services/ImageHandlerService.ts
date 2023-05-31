@@ -4,7 +4,7 @@ import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 
 export default class ImageHandlerService extends BaseService {
     constructor() {
-        super('/images/');
+        super('/images');
     }
 
 
@@ -14,7 +14,7 @@ export default class ImageHandlerService extends BaseService {
             const formData = new FormData();
             formData.append('file', fileData);
 
-            const response = await this.axios.post('http://localhost:5009/api/v1/images/upload', formData,
+            const response = await this.axios.post('/upload', formData,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + jwtData.jwt
@@ -23,7 +23,7 @@ export default class ImageHandlerService extends BaseService {
             );
 
             if (response.status === 200) {
-                console.log( 'Image uploaded successfully.');
+                console.log('Image uploaded successfully.');
             } else {
                 console.log('Failed to upload image.');
             }
@@ -33,28 +33,32 @@ export default class ImageHandlerService extends BaseService {
             console.log('error: ', (e as Error).message);
             return undefined;
         }
+    }
 
-
-/*
+    async getAllUploadedImages(jwtData: IJWTResponse): Promise<string []> {
         try {
-            const formData = new FormData();
-            formData.append('file', fileData);
 
-            const response = await fetch('http://localhost:5009/api/v1/images/upload', {
-                method: 'POST',
-                body: formData,
-            });
 
-            if (response.status == 200) {
-                console.log( 'Image uploaded successfully.');
+            const response = await this.axios.get<string[]>('thumbnails',
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + jwtData.jwt
+                    }
+                }
+            );
+
+            if (response.status === 200) {
+                console.log('Image uploaded successfully.');
+                return response.data;
             } else {
-                console.log( 'Failed to upload image.');
+                console.log('Failed to upload image.');
             }
-        } catch (error) {
-            console.error(error);
-            console.error ('An error occurred during the image upload.');
+
+            return [];
+        } catch (e) {
+            console.log('error: ', (e as Error).message);
+            return [];
         }
-        */
     }
 
 }

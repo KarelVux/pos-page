@@ -1,7 +1,7 @@
 import type {IBaseEntity} from "@/dto/management/IBaseEntity";
 import type {IBusinessCategory} from "@/dto/shop/IBusinessCategory";
-import type {ISettlement} from "@/dto/management/ISettlement";
 import type {IProduct} from "@/dto/shop/IProduct";
+import type {IManagerSettlement} from "@/dto/manager/IManagerSettlement";
 
 export interface IBusiness extends IBaseEntity {
     name: string,
@@ -16,6 +16,6 @@ export interface IBusiness extends IBaseEntity {
     businessCategory: IBusinessCategory,
     picturePath: string,
     settlementId: string,
-    settlement: ISettlement,
+    settlement: IManagerSettlement,
     products: IProduct[],
 }

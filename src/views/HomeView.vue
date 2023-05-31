@@ -5,8 +5,6 @@
             <div class="col-lg-6 col-md-8 mx-auto">
                 <p>
                     <RouterLink to="/store/business">Start your journey</RouterLink>
-
-
                 </p>
             </div>
         </div>
@@ -17,6 +15,21 @@
             <button @click="uploadImage" :disabled="!selectedImage">Upload</button>
             <div v-if="uploadStatus">{{ uploadStatus }}</div>
         </div>
+
+        <div >
+            <h1>Uploaded images</h1>
+            <div v-if="uploadedImages">
+
+                <p>Here are [{{uploadedImages.length}}]</p>
+
+                    <div class="card" v-for="image in uploadedImages" :key="image">
+                        <img :src="image" class="card-img-top" alt="...">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>Images not found</p>
+            </div>
     </section>
 </template>
 
@@ -32,6 +45,21 @@ const identitySore = useIdentityStore();
 const selectedImage = ref<File | undefined>();
 const uploadStatus = ref<string | undefined>();
 
+
+const uploadedImages = ref<string[]>([]);
+onBeforeMount(async () => {
+    await loadImages();
+});
+
+const loadImages = async () => {
+    let identity = identitySore.$state.authenticationJwt as IJWTResponse;
+    if (identitySore.$state.authenticationJwt) {
+        uploadedImages.value = await imageHandlerService.getAllUploadedImages(identity);
+        console.log(uploadedImages.value);
+    } else {
+        console.log("Unable to get businesses because identiy is udnefined")
+    }
+}
 const handleFileInputChange = (event: Event) => {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
