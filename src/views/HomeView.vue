@@ -8,28 +8,32 @@
                 </p>
             </div>
         </div>
+        <!--
+                <div>
+                    <p>Input</p>
+                    <input type="file" accept="image/*" @change="handleFileInputChange">
+                    <button @click="uploadImage" :disabled="!selectedImage">Upload</button>
+                    <div v-if="uploadStatus">{{ uploadStatus }}</div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-danger" @click="deleteThumbnails">Danger delete all images</button>
+                </div>
+                <div>
+                    <h1>Uploaded images</h1>
+                    <div v-if="uploadedImages">
 
-        <div>
-            <p>Input</p>
-            <input type="file" accept="image/*" @change="handleFileInputChange">
-            <button @click="uploadImage" :disabled="!selectedImage">Upload</button>
-            <div v-if="uploadStatus">{{ uploadStatus }}</div>
-        </div>
+                        <p>Here are [{{ uploadedImages.length }}]</p>
 
-        <div >
-            <h1>Uploaded images</h1>
-            <div v-if="uploadedImages">
-
-                <p>Here are [{{uploadedImages.length}}]</p>
-
-                    <div class="card" v-for="image in uploadedImages" :key="image">
-                        <img :src="image" class="card-img-top" alt="...">
+                        <div class="card" v-for="image in uploadedImages" :key="image">
+                            <img :src="image" class="card-img-top" alt="...">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div>
-                <p>Images not found</p>
-            </div>
+                <div>
+                    <p>Images not found</p>
+                </div>
+
+                -->
     </section>
 </template>
 
@@ -54,7 +58,7 @@ onBeforeMount(async () => {
 const loadImages = async () => {
     let identity = identitySore.$state.authenticationJwt as IJWTResponse;
     if (identitySore.$state.authenticationJwt) {
-        uploadedImages.value = await imageHandlerService.getAllUploadedImages(identity);
+        uploadedImages.value = await imageHandlerService.getAllUploadedThumbnails(identity);
         console.log(uploadedImages.value);
     } else {
         console.log("Unable to get businesses because identiy is udnefined")
@@ -79,5 +83,20 @@ const uploadImage = async () => {
         }
     }
 ;
+
+
+/*
+const deleteThumbnails = async () => {
+        {
+            let identity = identitySore.$state.authenticationJwt as IJWTResponse;
+            if (identitySore.$state.authenticationJwt) {
+                await imageHandlerService.deleteThumbnails(identity);
+            } else {
+                console.log("Unable to get businesses because identiy is udnefined")
+            }
+        }
+    }
+;
+*/
 </script>
 

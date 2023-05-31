@@ -35,7 +35,7 @@ export default class ImageHandlerService extends BaseService {
         }
     }
 
-    async getAllUploadedImages(jwtData: IJWTResponse): Promise<string []> {
+    async getAllUploadedThumbnails(jwtData: IJWTResponse): Promise<string []> {
         try {
 
 
@@ -48,10 +48,10 @@ export default class ImageHandlerService extends BaseService {
             );
 
             if (response.status === 200) {
-                console.log('Image uploaded successfully.');
+                console.log('Image received');
                 return response.data;
             } else {
-                console.log('Failed to upload image.');
+                console.log('Failed to recieve image.');
             }
 
             return [];
@@ -61,4 +61,32 @@ export default class ImageHandlerService extends BaseService {
         }
     }
 
+
+    /*
+    async deleteThumbnails(jwtData: IJWTResponse): Promise<string []> {
+        try {
+
+
+            const response = await this.axios.delete<string[]>('thumbnails',
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + jwtData.jwt
+                    }
+                }
+            );
+
+            if (response.status === 200) {
+                console.log('Image deleted successfully.');
+                return response.data;
+            } else {
+                console.log('Failed to deleted image.');
+            }
+
+            return [];
+        } catch (e) {
+            console.log('error: ', (e as Error).message);
+            return [];
+        }
+    }
+*/
 }

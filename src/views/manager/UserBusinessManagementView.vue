@@ -5,9 +5,7 @@
                 <!-- Start Business info-->
                 <div>
                     <BusinessIntroduction :businessDetails="managerBusinessData">
-
                         <div class="d-flex flex-row">
-
                             <button class="btn btn-primary me-2" @click="loadPageData"><i
                                 class="bi bi-arrow-clockwise me-2"></i>Refresh page data
                             </button>
@@ -17,6 +15,12 @@
                                 :settlements="settlements"
                                 :businessCategories="businessCategories"
                                 @update="updateObjectData"/>
+                        </div>
+
+                        <div>
+                            <p>Input</p>
+                            <input type="file" accept="image/*" @change="handleFileInputChange">
+                            <button @click="uploadImage" >Upload</button>
                         </div>
 
                     </BusinessIntroduction>
@@ -377,6 +381,8 @@ import {BusinessCategoriesService} from "@/services/manager/BusinessCategoriesSe
 import type {IManagerInvoiceOrderLimitedEdit} from "@/dto/manager/IManagerInvoiceOrderLimitedEdit";
 import OrderFeedbackService from "@/services/manager/OrderFeedbackService";
 import type {IManagerOrderFeedback} from "@/dto/manager/IManagerOrderFeedback";
+import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
+import {PictureService} from "@/services/manager/PictureService";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
@@ -384,6 +390,8 @@ const settlementService = new SettlementService();
 const businessCategoriesService = new BusinessCategoriesService();
 const productCategoryService = new ProductCategoryService();
 const orderFeedbackService = new OrderFeedbackService();
+const pictureService = new PictureService();
+
 const identitySore = useIdentityStore();
 const messageStore = useMessageStore();
 const route = useRoute();
@@ -396,6 +404,7 @@ const settlements = ref<IManagerSettlement[]>([]);
 const businessCategories = ref<IManagerBusinessCategory[]>([]);
 const productCategories = ref<IManagerProductCategory[]>([]);
 const orderFeedbackData = ref<IManagerOrderFeedback>();
+const selectedImage = ref<File | undefined>();
 
 watch(() => managerBusinessData.value, async () => {
 });
@@ -653,6 +662,25 @@ const loadOrderFeedbackData = async (orderId: string) => {
     }
 }
 
+const handleFileInputChange = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+        selectedImage.value = target.files[0];
+    }
+};
+
+const uploadImage = async () => {
+        {
+            if (!selectedImage.value) return;
+            let identity = identitySore.$state.authenticationJwt as IJWTResponse;
+            if (identitySore.$state.authenticationJwt && managerBusinessData.value?.id) {
+                await pictureService.postBusinessPicture(identity,  managerBusinessData.value?.id! ,selectedImage.value);
+            } else {
+                console.log("Unable to upload business picture");
+            }
+        }
+    }
+;
 
 </script>
 
