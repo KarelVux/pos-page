@@ -16,6 +16,7 @@
                             <button type="button" class="btn btn-primary w-100 mt-1"  :id="uniqueHiderId" data-bs-dismiss="modal" >
                                 Close
                             </button>
+                            <slot></slot>
                         </div>
 
                     </div>

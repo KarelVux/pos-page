@@ -265,7 +265,23 @@
                     <tbody>
                     <tr v-for="closedInvoice in closedInvoices " :key="closedInvoice.id">
                         <td class="px-1">
-                            <InvoiceDetailsModal :invoiceData="closedInvoice"/>
+                            <InvoiceDetailsModal
+                                :invoiceData="closedInvoice"
+                                @click="loadOrderFeedbackData(closedInvoice.orderId)"
+                            >
+                                <div class="card mt-2">
+                                    <div class="card-body p-5" v-if="orderFeedbackData">
+                                        <h2>
+                                            Here is the previously submitted order feedback
+                                        </h2>
+                                        <div>
+                                            <p><strong>Rating</strong>: {{ orderFeedbackData.rating }}</p>
+                                            <p><strong>Description</strong></p>
+                                            <p>{{ orderFeedbackData.description }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </InvoiceDetailsModal>
                         </td>
                         <td class=" px-1">
                             {{ getFormattedDate(closedInvoice.creationTime) }}
@@ -359,15 +375,17 @@ import type {IManagerProductCategory} from "@/dto/manager/IManagerProductCategor
 import {ProductCategoryService} from "@/services/manager/ProductCategoryService";
 import {BusinessCategoriesService} from "@/services/manager/BusinessCategoriesService";
 import type {IManagerInvoiceOrderLimitedEdit} from "@/dto/manager/IManagerInvoiceOrderLimitedEdit";
+import OrderFeedbackService from "@/services/manager/OrderFeedbackService";
+import type {IManagerOrderFeedback} from "@/dto/manager/IManagerOrderFeedback";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
 const settlementService = new SettlementService();
 const businessCategoriesService = new BusinessCategoriesService();
 const productCategoryService = new ProductCategoryService();
+const orderFeedbackService = new OrderFeedbackService();
 const identitySore = useIdentityStore();
 const messageStore = useMessageStore();
-
 const route = useRoute();
 
 const managerBusinessData = ref<IManagerBusiness>();
@@ -377,6 +395,7 @@ const closedInvoices = ref<IManagerInvoice[]>([]);
 const settlements = ref<IManagerSettlement[]>([]);
 const businessCategories = ref<IManagerBusinessCategory[]>([]);
 const productCategories = ref<IManagerProductCategory[]>([]);
+const orderFeedbackData = ref<IManagerOrderFeedback>();
 
 watch(() => managerBusinessData.value, async () => {
 });
@@ -415,8 +434,8 @@ const acceptInvoice = async (invoice: IManagerInvoice) => {
 
     invoiceChangeableData.orderAcceptanceStatus = OrderAcceptanceStatusEnum.BusinessIsPreparing;
 
-    if (identity) {
-        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id!, invoice.businessId, invoiceChangeableData)
+    if (identity && invoiceChangeableData.id) {
+        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id, invoiceChangeableData)
         if (returnableInvoice) {
             console.log("Successfully changed")
             var message: IMessage = {
@@ -432,6 +451,8 @@ const acceptInvoice = async (invoice: IManagerInvoice) => {
         }
 
         await loadInvoiceData();
+    } else {
+        console.log("Problem with identity or invoice id")
     }
 }
 
@@ -448,8 +469,8 @@ const rejectInvocie = async (invoice: IManagerInvoice) => {
 
     invoiceChangeableData.orderAcceptanceStatus = OrderAcceptanceStatusEnum.Closed;
 
-    if (identity) {
-        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id!, invoice.businessId, invoiceChangeableData)
+    if (identity && invoiceChangeableData.id) {
+        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id, invoiceChangeableData)
         if (returnableInvoice) {
             console.log("Successfully changed")
             var message: IMessage = {
@@ -464,6 +485,8 @@ const rejectInvocie = async (invoice: IManagerInvoice) => {
             })
         }
         await loadInvoiceData();
+    } else {
+        console.log("Problem with identity or invoice id")
     }
 }
 
@@ -479,8 +502,8 @@ const moveToReadyStatus = async (invoice: IManagerInvoice) => {
 
     invoiceChangeableData.orderAcceptanceStatus = OrderAcceptanceStatusEnum.Ready;
 
-    if (identity) {
-        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id!, invoice.businessId, invoiceChangeableData)
+    if (identity && invoiceChangeableData.id) {
+        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id, invoiceChangeableData)
         if (returnableInvoice) {
             console.log("Successfully changed")
             var message: IMessage = {
@@ -495,6 +518,8 @@ const moveToReadyStatus = async (invoice: IManagerInvoice) => {
             })
         }
         await loadInvoiceData();
+    } else {
+        console.log("Problem with identity or invoice id")
     }
 }
 
@@ -510,8 +535,8 @@ const moveToGivenToClientStatus = async (invoice: IManagerInvoice) => {
 
     invoiceChangeableData.orderAcceptanceStatus = OrderAcceptanceStatusEnum.GivenToClient;
 
-    if (identity) {
-        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id!, invoice.businessId, invoiceChangeableData)
+    if (identity && invoiceChangeableData.id) {
+        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id, invoiceChangeableData)
         if (returnableInvoice) {
             console.log("Successfully changed")
             var message: IMessage = {
@@ -525,6 +550,8 @@ const moveToGivenToClientStatus = async (invoice: IManagerInvoice) => {
             })
         }
         await loadInvoiceData();
+    } else {
+        console.log("Problem with identity or invoice id")
     }
 }
 const paymentCompleted = async (invoice: IManagerInvoice) => {
@@ -537,8 +564,8 @@ const paymentCompleted = async (invoice: IManagerInvoice) => {
         paymentCompleted: true
     }
 
-    if (identity) {
-        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id!, invoice.businessId, invoiceChangeableData)
+    if (identity && invoiceChangeableData.id) {
+        let returnableInvoice = await invoiceService.doPartialUpdateWithLimitedData(identity, invoiceChangeableData.id, invoiceChangeableData)
         if (returnableInvoice) {
             console.log("Successfully changed")
             var message: IMessage = {
@@ -553,6 +580,8 @@ const paymentCompleted = async (invoice: IManagerInvoice) => {
             })
         }
         await loadInvoiceData();
+    } else {
+        console.log("Problem with identity or invoice id")
     }
 }
 
@@ -605,6 +634,22 @@ const loadInvoiceData = async () => {
         }
 
 
+    }
+}
+
+const loadOrderFeedbackData = async (orderId: string) => {
+    let identity = identitySore.authenticationJwt
+    if (identity) {
+        let orderFeedback = await orderFeedbackService.getOrderFeedbackViaOrderId(identity, orderId)
+        if (orderFeedback) {
+            orderFeedbackData.value = orderFeedback
+            console.log("open order feedback", orderFeedbackData.value)
+        } else {
+            orderFeedbackData.value = undefined
+            console.warn("Error occurred when checking order feedback ")
+        }
+    } else {
+        console.warn("Problems with identity")
     }
 }
 
