@@ -36,6 +36,7 @@
                                         <input class="form-control  w-100" type="file" accept="image/*"
                                                @change="handleFileInputChange">
                                         <button type="button" class="btn btn-outline-success w-100 mt-1"
+                                                :disabled="selectedImage == undefined"
                                                 @click="uploadBusinessImage(managerBusinessData.id)">
                                             Add picture
                                         </button>
@@ -141,15 +142,24 @@
                                                 @click="deleteProductImage(item.id)">
                                             Delete picture
                                         </button>
+
                                     </div>
                                     <div v-else>
                                         <div class="mb-3">
                                             <input class="form-control  w-100" type="file" accept="image/*"
                                                    @change="handleFileInputChange">
                                             <button type="button" class="btn btn-outline-success w-100 mt-1"
+                                                    :disabled="selectedImage == undefined"
                                                     @click="uploadProductImage(item.id)">
                                                 Add picture
                                             </button>
+<!--
+                                            <button type="button" class="btn btn-outline-info w-100 mt-1"
+                                                    @click="clearUploadedFileHandler">
+                                                Clear uploaded data
+                                            </button>
+                                            -->
+
                                         </div>
                                     </div>
                                 </div>
@@ -731,6 +741,16 @@ const handleFileInputChange = (event: Event) => {
     }
 };
 
+
+/*
+const clearUploadedFileHandler = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+        target.files = null
+        selectedImage.value = undefined;
+    }
+};
+*/
 const uploadBusinessImage = async (businessId: string) => {
         {
             if (!selectedImage.value) return;
