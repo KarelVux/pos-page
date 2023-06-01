@@ -69,7 +69,7 @@
                                             <div class="col-xl-3 col-md-4 d-flex justify-content-center">
                                                 <div
                                                     class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
-                                                    <img v-if="!product.picturePath"
+                                                    <img v-if="!product.picturePath || product.picturePath.length <= 0"
                                                          src="https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80"
                                                          class="img-fluid w-100" alt=""/>
                                                     <img v-else

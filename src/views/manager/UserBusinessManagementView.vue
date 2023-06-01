@@ -17,10 +17,15 @@
                                 @update="updateObjectData"/>
 
                             <div v-if="managerBusinessData.id">
-                                <div v-if="managerBusinessData.picturePath ">
-
+                                <div v-if="managerBusinessData.picturePath ||managerBusinessData.picturePath?.length >= 0 ">
+                                    <button type="button" class="btn btn-outline-danger"
+                                            @click="deleteBusinessImage(managerBusinessData.id)">
+                                        Delete picture
+                                    </button>
                                 </div>
                                 <div v-else>
+
+
                                     <input type="file" accept="image/*" @change="handleFileInputChange">
                                     <button type="button" class="btn btn-outline-success"
                                             @click="uploadBusinessImage(managerBusinessData.id)">
@@ -393,6 +398,7 @@ import OrderFeedbackService from "@/services/manager/OrderFeedbackService";
 import type {IManagerOrderFeedback} from "@/dto/manager/IManagerOrderFeedback";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import {PictureService} from "@/services/manager/PictureService";
+import {BusinessPictureService} from "@/services/manager/BusinessPictureService";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
@@ -401,6 +407,7 @@ const businessCategoriesService = new BusinessCategoriesService();
 const productCategoryService = new ProductCategoryService();
 const orderFeedbackService = new OrderFeedbackService();
 const pictureService = new PictureService();
+const businessPictureService = new BusinessPictureService();
 
 const identitySore = useIdentityStore();
 const messageStore = useMessageStore();
@@ -701,16 +708,22 @@ const uploadBusinessImage = async (businessId: string) => {
 
 const deleteBusinessImage = async (businessId: string) => {
         {
-            if (!selectedImage.value) return;
+            console.log("delete business image called")
             let identity = identitySore.$state.authenticationJwt as IJWTResponse;
             if (identitySore.$state.authenticationJwt && businessId) {
-                let result = await pictureService.deletePicture(identity, businessId);
-                if (result) {
-                    console.log("Successfully uploaded business picture");
-                    selectedImage.value = undefined;
-                    await loadPageData();
+                let businessPictureDataResponse = await businessPictureService.getBusinessPicture(identity, businessId)
+
+                if (businessPictureDataResponse) {
+                    let result = await pictureService.deletePicture(identity, businessPictureDataResponse.pictureId);
+                    if (result) {
+                        console.log("Successfully deleted business picture");
+                        selectedImage.value = undefined;
+                        await loadPageData();
+                    } else {
+                        console.log("Unable to delete business picture");
+                    }
                 } else {
-                    console.log("Unable to upload business picture");
+                    console.log("Unable get business picture");
                 }
             } else {
                 console.log("Unable to authenticate  or business id is not provided");
