@@ -1,7 +1,7 @@
 import {useIdentityStore} from "@/stores/identityStore";
 import {useMessageStore} from "@/stores/messageStore";
 import {MessagePopupTypeEnum} from "@/components/shared/MessagePopupTypeEnum";
-import {useRoute, useRouter} from "vue-router";
+import {useRouter} from "vue-router";
 
 
 export async function redirectUserIfIdentityTokenIsNull(): Promise<void> {

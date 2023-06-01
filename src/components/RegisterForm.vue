@@ -56,7 +56,6 @@
 import {IdentityService} from "@/services/identity/IdentityService";
 import {ref} from "vue";
 import type {IRegisterData} from "@/dto/identity/IRegisterData";
-import {Modal} from "bootstrap";
 
 
 const identityService = new IdentityService();

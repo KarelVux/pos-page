@@ -2,9 +2,9 @@
     <div class="row">
         <p class="">
             <span class="">
-                <strong>{{strongText}}</strong>
+                <strong>{{props.strongText}}</strong>
            </span>
-              <span>{{ normalText }}</span>
+              <span>{{ props.normalText }}</span>
         </p>
     </div>
 </template>

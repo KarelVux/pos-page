@@ -38,65 +38,13 @@
 </template>
 
 <script setup lang='ts'>
-import {onBeforeMount, onUpdated, ref} from 'vue';
+import {onBeforeMount} from 'vue';
 import {RouterLink} from 'vue-router';
-import {useIdentityStore} from "@/stores/identityStore";
-import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
-import ImageHandlerService from "@/services/ImageHandlerService";
 
-const imageHandlerService = new ImageHandlerService();
-const identitySore = useIdentityStore();
-const selectedImage = ref<File | undefined>();
-const uploadStatus = ref<string | undefined>();
-
-
-const uploadedImages = ref<string[]>([]);
 onBeforeMount(async () => {
-    await loadImages();
 });
 
-const loadImages = async () => {
-    let identity = identitySore.$state.authenticationJwt as IJWTResponse;
-    if (identitySore.$state.authenticationJwt) {
-        uploadedImages.value = await imageHandlerService.getAllUploadedThumbnails(identity);
-        console.log(uploadedImages.value);
-    } else {
-        console.log("Unable to get businesses because identiy is udnefined")
-    }
-}
-const handleFileInputChange = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-        selectedImage.value = target.files[0];
-    }
-};
-
-const uploadImage = async () => {
-        {
-            if (!selectedImage.value) return;
-            let identity = identitySore.$state.authenticationJwt as IJWTResponse;
-            if (identitySore.$state.authenticationJwt) {
-                await imageHandlerService.uploadFile(identity, selectedImage.value);
-            } else {
-                console.log("Unable to get businesses because identiy is udnefined")
-            }
-        }
-    }
-;
 
 
-/*
-const deleteThumbnails = async () => {
-        {
-            let identity = identitySore.$state.authenticationJwt as IJWTResponse;
-            if (identitySore.$state.authenticationJwt) {
-                await imageHandlerService.deleteThumbnails(identity);
-            } else {
-                console.log("Unable to get businesses because identiy is udnefined")
-            }
-        }
-    }
-;
-*/
 </script>
 

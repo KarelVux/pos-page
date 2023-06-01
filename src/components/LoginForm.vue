@@ -58,12 +58,6 @@ const loginData = ref<ILoginData>({
 } as ILoginData);
 
 const validationErrors = ref<string []>([])
-const emits = defineEmits(['update:value']);
-
-const logText =async (event: MouseEvent) => {
-    console.log('onSubmit', event);
-    event.preventDefault();
-}
 
 const onSubmit = async (event: MouseEvent) => {
     console.log('onSubmit', event);

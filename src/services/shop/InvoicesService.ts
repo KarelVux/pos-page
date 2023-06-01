@@ -3,7 +3,6 @@ import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
 import type {IInvoice} from "@/dto/shop/IInvoice";
 import type {IAcceptInvoice} from "@/dto/shop/IAcceptInvoice";
-import type {IInvoiceOrder} from "@/dto/shop/IInvoiceOrder";
 
 export interface IGetBusinessQueryParams {
     settlementId: string;

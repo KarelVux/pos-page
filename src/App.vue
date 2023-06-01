@@ -23,9 +23,9 @@ import {RouterView} from 'vue-router';
 import NavBar from '@/components/NavBar.vue';
 import FooterBar from "@/components/FooterBar.vue";
 import {useMessageStore} from "@/stores/messageStore";
-import {onBeforeMount, onMounted, onUpdated} from "vue";
+import {onBeforeMount,  onUpdated} from "vue";
 import MessagePopup from "@/components/shared/MessagePopup.vue";
-import {ref, computed} from 'vue';
+import {computed} from 'vue';
 import type {IMessage} from "@/dto/shared/IMessage";
 
 const messageStore = useMessageStore();

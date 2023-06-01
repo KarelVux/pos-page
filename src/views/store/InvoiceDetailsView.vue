@@ -47,7 +47,7 @@
 
 <script lang="ts" setup>
 import {useIdentityStore} from "@/stores/identityStore";
-import {RouterLink, useRouter, useRoute} from "vue-router";
+import { useRouter, useRoute} from "vue-router";
 import {onBeforeMount, ref} from "vue";
 import type {IInvoice} from "@/dto/shop/IInvoice";
 import InvoicesService from "@/services/shop/InvoicesService";

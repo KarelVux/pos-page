@@ -1,6 +1,5 @@
-import {ref, computed} from 'vue';
+import {ref} from 'vue';
 import {defineStore} from 'pinia';
-import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import type {IMessage} from "@/dto/shared/IMessage";
 
 export const useMessageStore = defineStore('message', () => {

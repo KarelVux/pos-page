@@ -5,11 +5,11 @@
             <!--Grid column-->
             <div class="col-md-6">
 
-                <img v-if="!businessDetails.picturePath"
+                <img v-if="!props.businessDetails.picturePath"
                      src="https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80"
                      class="img-fluid" alt=""/>
                 <img v-else
-                     :src="businessDetails.picturePath"
+                     :src="props.businessDetails.picturePath"
                      class="img-fluid" alt=""/>
             </div>
             <!--Grid column-->
@@ -18,28 +18,28 @@
             <div class="col-md-6">
                 <!--Content-->
                 <div class="p-4">
-                    <strong><p style="font-size: 20px;">{{ businessDetails.name }}</p></strong>
+                    <p style="font-size: 20px;"><strong>{{ props.businessDetails.name }}</strong></p>
 
-                    <div class="" v-if="businessDetails.businessCategory">
-                        <span class="badge bg-info me-1">{{ businessDetails.businessCategory.title }}</span>
+                    <div class="" v-if="props.businessDetails.businessCategory">
+                        <span class="badge bg-info me-1">{{ props.businessDetails.businessCategory.title }}</span>
                     </div>
 
 
                     <p>{{
-                            businessDetails.description
+                            props. businessDetails.description
                         }}</p>
 
                     <SimpleRowValuePair
                         strongText="Address: "
-                        :normalText="businessDetails.address"
+                        :normalText="props.businessDetails.address"
                     />
                     <SimpleRowValuePair
                         strongText="Email: "
-                        :normalText="businessDetails.email"
+                        :normalText="props.businessDetails.email"
                     />
                     <SimpleRowValuePair
                         strongText="Phone number: "
-                        :normalText="businessDetails.phoneNumber"
+                        :normalText="props.businessDetails.phoneNumber"
                     />
 
                     <slot>

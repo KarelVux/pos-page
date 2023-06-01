@@ -106,9 +106,7 @@ const identitySore = useIdentityStore();
 
 const invoicesService = new InvoicesService();
 
-const props = defineProps({
-    id: String,
-})
+
 const router = useRouter()
 
 const openInvoices = ref<IInvoice[]>([]);

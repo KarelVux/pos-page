@@ -136,20 +136,6 @@ const businessCategories = ref<IBusinessCategory[]>([])
 const managerBusinessesData = ref<IManagerBusiness[]>([]);
 
 
-const registerBusinessInputData = ref<IManagerBusiness>({
-    address: "",
-    businessCategoryId: "",
-    description: "",
-    email: "",
-    latitude: 0,
-    longitude: 0,
-    name: "",
-    phoneNumber: "",
-    picturePath: "",
-    rating: 0,
-    settlementId: ""
-} as IManagerBusiness)
-
 
 const userInManagerRole = ref<boolean>(false)
 

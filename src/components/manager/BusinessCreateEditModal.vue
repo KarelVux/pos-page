@@ -185,16 +185,6 @@ const originalToDisplay = () => {
     displayData.value.settlementId = originalData.value.settlementId
 }
 
-const mapDisplayToOriginal = () => {
-    originalData.value.id = displayData.value.id
-    originalData.value.address = displayData.value.address
-    originalData.value.businessCategoryId = displayData.value.businessCategoryId
-    originalData.value.description = displayData.value.description
-    originalData.value.email = displayData.value.email
-    originalData.value.name = displayData.value.name
-    originalData.value.phoneNumber = displayData.value.phoneNumber
-    originalData.value.settlementId = displayData.value.settlementId
-}
 
 const sendUserBusinessViewRequests = async () => {
     let identity = identitySore.authenticationJwt

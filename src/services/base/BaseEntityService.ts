@@ -1,8 +1,6 @@
 import {BaseService} from "./BaseService";
 import type {IBaseEntity} from "@/dto/management/IBaseEntity";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
-import type {AxiosError} from "axios";
-import {IdentityService} from "@/services/identity/IdentityService";
 
 export abstract class BaseEntityService<TEntity extends IBaseEntity> extends BaseService {
     constructor(

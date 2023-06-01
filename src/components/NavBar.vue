@@ -59,7 +59,7 @@ import LoginForm from "@/components/LoginForm.vue";
 import RegisterForm from "@/components/RegisterForm.vue";
 
 import {useIdentityStore} from "@/stores/identityStore";
-import {onMounted, ref} from "vue";
+import { ref} from "vue";
 import {RouterLink, useRouter} from "vue-router";
 import {IdentityService} from "@/services/identity/IdentityService";
 

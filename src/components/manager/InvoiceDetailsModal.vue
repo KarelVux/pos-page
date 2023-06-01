@@ -1,7 +1,7 @@
 <template>
     <!-- Start modal-->
     <section>
-        <div class="d-flex" v-if="invoiceData">
+        <div class="d-flex" v-if="props.invoiceData">
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                     :data-bs-target="'#' + uniqueId">
                 {{ invoiceData.id }}
@@ -12,7 +12,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <InvoiceDetailsCard :invoice-data-val="invoiceData"/>
+                            <InvoiceDetailsCard :invoice-data-val="props.invoiceData"/>
                             <button type="button" class="btn btn-primary w-100 mt-1"  :id="uniqueHiderId" data-bs-dismiss="modal" >
                                 Close
                             </button>
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div v-else>
-            {{invoiceData}}
+            {{props.invoiceData}}
             Error with invoice data
         </div>
     </section>
@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 
 
-import {onBeforeMount, ref} from "vue";
+import { ref} from "vue";
 import {generateRandomString} from "@/helpers/Randomiser";
 import type {IManagerInvoice} from "@/dto/manager/IManagerInvoice";
 import InvoiceDetailsCard from "@/components/Shops/InvoiceDetailsCard.vue";

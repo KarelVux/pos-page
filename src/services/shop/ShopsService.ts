@@ -1,10 +1,6 @@
 import {BaseService} from "@/services/base/BaseService";
 import type {IBusiness} from "@/dto/shop/IBusiness";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
-import type {ICreateEditInvoice} from "@/dto/shop/ICreateEditInvoice";
-import {da} from "vuetify/locale";
-import type {IInvoice} from "@/dto/shop/IInvoice";
-import type {IAcceptInvoice} from "@/dto/shop/IAcceptInvoice";
 
 export interface IGetBusinessQueryParams {
     settlementId: string;

@@ -128,13 +128,12 @@
 </template>
 
 <script lang="ts" setup>
-import {onBeforeMount, ref, registerRuntimeCompiler, watch} from "vue";
+import {onBeforeMount, ref,  watch} from "vue";
 import {useIdentityStore} from "@/stores/identityStore";
 import type {IManagerProduct} from "@/dto/manager/IManagerProduct";
 import {ProductService} from "@/services/manager/ProductService";
 import {generateRandomString} from "@/helpers/Randomiser";
 import type {IManagerProductCategory} from "@/dto/manager/IManagerProductCategory";
-import  {ProductCategoryService} from "@/services/manager/ProductCategoryService";
 
 const productService = new ProductService();
 
@@ -187,20 +186,6 @@ const originalToDisplay = () => {
     displayData.value.unitCount = originalData.value.unitCount
     displayData.value.unitDiscount = originalData.value.unitDiscount
     displayData.value.unitPrice = originalData.value.unitPrice
-}
-
-const mapDisplayToOriginal = () => {
-    originalData.value.id = displayData.value.id
-    originalData.value.businessId = displayData.value.businessId
-    originalData.value.currency = displayData.value.currency
-    originalData.value.description = displayData.value.description
-    originalData.value.frozen = displayData.value.frozen
-    originalData.value.name = displayData.value.name
-    originalData.value.productCategoryId = displayData.value.productCategoryId
-    originalData.value.taxPercent = displayData.value.taxPercent
-    originalData.value.unitCount = displayData.value.unitCount
-    originalData.value.unitDiscount = displayData.value.unitDiscount
-    originalData.value.unitPrice = displayData.value.unitPrice
 }
 
 watch(() => props.productCategories, (newProductCategories) => {

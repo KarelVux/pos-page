@@ -20,13 +20,6 @@
 
 </template>
 <script setup lang="ts">
-import {onMounted, onUpdated, watch} from "vue";
-
-interface IProps {
-  header: string,
-  strongText: string,
-  progressbarWidth: string
-}
 
 const props = defineProps({
   header: String,

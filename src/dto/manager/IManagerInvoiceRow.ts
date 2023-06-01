@@ -1,5 +1,4 @@
 import type {IBaseEntity} from "@/dto/management/IBaseEntity";
-import type {IManagerProduct} from "@/dto/manager/IManagerProduct";
 
 export interface IManagerInvoiceRow extends IBaseEntity {
     finalProductPrice: number

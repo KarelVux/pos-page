@@ -393,7 +393,6 @@ import OrderFeedbackService from "@/services/manager/OrderFeedbackService";
 import type {IManagerOrderFeedback} from "@/dto/manager/IManagerOrderFeedback";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import {PictureService} from "@/services/manager/PictureService";
-import {vi} from "vuetify/locale";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
