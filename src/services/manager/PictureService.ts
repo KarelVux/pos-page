@@ -35,6 +35,34 @@ export class PictureService extends BaseService {
         }
     }
 
+    async postProductPicture(jwtData: IJWTResponse, productId: string, fileData: File): Promise<IManagerPicture | undefined> {
+        try {
+
+            const formData = new FormData();
+            formData.append('file', fileData);
+
+            const response = await this.axios.post<IManagerPicture>(`/product/${productId}`, formData,
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + jwtData.jwt
+                    }
+                }
+            );
+
+            if (response.status === 201) {
+                console.log('Product image uploaded successfully.');
+                return response.data;
+            } else {
+                console.log('Failed to upload image.');
+            }
+
+            return undefined;
+        } catch (e) {
+            console.log('error: ', (e as Error).message);
+            return undefined;
+        }
+    }
+
     async deletePicture(jwtData: IJWTResponse, pictureId: string): Promise<number | undefined> {
         try {
             const response = await this.axios.delete(`/${pictureId}`,

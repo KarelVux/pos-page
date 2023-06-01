@@ -5,7 +5,7 @@ import type {IManagerProductCategory} from "@/dto/manager/IManagerProductCategor
 export interface IManagerProduct extends IBaseEntity {
     name: string
     description: string
-    PicturePath?: string
+    picturePath?: string
     unitPrice: number
     unitDiscount: number
     unitCount: number

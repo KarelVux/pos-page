@@ -82,6 +82,8 @@
                         <thead>
                         <tr>
                             <th>
+                            </th>
+                            <th>
                                 Name
                             </th>
                             <th>
@@ -108,13 +110,50 @@
                             <th>
                                 Frozen
                             </th>
-                            <th>
-                                Actions
-                            </th>
+
                         </tr>
                         </thead>
                         <tbody class="">
                         <tr v-for="item  in managerBusinessData.products" :key="item.id" class="">
+                            <td>
+                                <div class="">
+
+                                    <img v-if="!item.picturePath || item.picturePath <= 0"
+                                         src="https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80"
+                                         class="img-fluid" alt=""/>
+                                    <img v-else
+                                         :src="item.picturePath"
+                                         class="img-fluid" alt=""/>
+                                </div>
+
+                                <ProductCreateEditModal
+                                    :productData="item"
+                                    :businessId="businessId!"
+                                    :create="false"
+                                    :productCategories="productCategories"
+                                    @update="updateObjectData"
+                                />
+
+                                <div v-if="item && item.id" class="d-flex flex-row">
+                                    <div class="d-flex"
+                                         v-if="item.picturePath ||item.picturePath?.length >= 0 ">
+                                        <button type="button" class="btn btn-outline-danger "
+                                                @click="deleteProductImage(item.id)">
+                                            Delete picture
+                                        </button>
+                                    </div>
+                                    <div v-else>
+                                        <div class="mb-3">
+                                            <input class="form-control  w-100" type="file" accept="image/*"
+                                                   @change="handleFileInputChange">
+                                            <button type="button" class="btn btn-outline-success w-100 mt-1"
+                                                    @click="uploadProductImage(item.id)">
+                                                Add picture
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                             <td>
                                 {{ item.name }}
                             </td>
@@ -142,15 +181,7 @@
                             <td>
                                 {{ item.frozen }}
                             </td>
-                            <td>
-                                <ProductCreateEditModal
-                                    :productData="item"
-                                    :businessId="businessId!"
-                                    :create="false"
-                                    :productCategories="productCategories"
-                                    @update="updateObjectData"
-                                />
-                            </td>
+
                         </tr>
                         </tbody>
                     </table>
@@ -411,6 +442,7 @@ import type {IManagerOrderFeedback} from "@/dto/manager/IManagerOrderFeedback";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import {PictureService} from "@/services/manager/PictureService";
 import {BusinessPictureService} from "@/services/manager/BusinessPictureService";
+import {ProductPictureService} from "@/services/manager/ProductPictureService";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
@@ -420,6 +452,7 @@ const productCategoryService = new ProductCategoryService();
 const orderFeedbackService = new OrderFeedbackService();
 const pictureService = new PictureService();
 const businessPictureService = new BusinessPictureService();
+const productPictureService = new ProductPictureService();
 
 const identitySore = useIdentityStore();
 const messageStore = useMessageStore();
@@ -739,6 +772,53 @@ const deleteBusinessImage = async (businessId: string) => {
                 }
             } else {
                 console.log("Unable to authenticate  or business id is not provided");
+            }
+        }
+    }
+;
+
+
+const uploadProductImage = async (productId: string) => {
+        {
+            if (!selectedImage.value) return;
+            let identity = identitySore.$state.authenticationJwt as IJWTResponse;
+            if (identitySore.$state.authenticationJwt && productId) {
+                let result = await pictureService.postProductPicture(identity, productId, selectedImage.value);
+                if (result) {
+                    console.log("Successfully uploaded product picture");
+                    selectedImage.value = undefined;
+                    await loadPageData();
+                } else {
+                    console.log("Unable to upload product picture");
+                }
+            } else {
+                console.log("Unable to authenticate  or product id is not provided");
+            }
+        }
+    }
+;
+
+const deleteProductImage = async (productId: string) => {
+        {
+            console.log("delete product image called")
+            let identity = identitySore.$state.authenticationJwt as IJWTResponse;
+            if (identitySore.$state.authenticationJwt && productId) {
+                let productPictureDataResponse = await productPictureService.getProductPicturePicture(identity, productId)
+
+                if (productPictureDataResponse) {
+                    let result = await pictureService.deletePicture(identity, productPictureDataResponse.pictureId);
+                    if (result) {
+                        console.log("Successfully deleted product picture");
+                        selectedImage.value = undefined;
+                        await loadPageData();
+                    } else {
+                        console.log("Unable to delete product picture");
+                    }
+                } else {
+                    console.log("Unable get product picture");
+                }
+            } else {
+                console.log("Unable to authenticate  or product id is not provided");
             }
         }
     }
