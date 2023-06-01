@@ -5,32 +5,44 @@
                 <!-- Start Business info-->
                 <div>
                     <BusinessIntroduction :businessDetails="managerBusinessData">
-                        <div class="d-flex flex-row">
-                            <button class="btn btn-primary me-2" @click="loadPageData"><i
-                                class="bi bi-arrow-clockwise me-2"></i>Refresh page data
-                            </button>
-                            <BusinessCreateEditModal
-                                :businessData="managerBusinessData"
-                                :create="false"
-                                :settlements="settlements"
-                                :businessCategories="businessCategories"
-                                @update="updateObjectData"/>
+                        <div class="d-flex  flex-column">
+                            <div class="d-flex flex-row mb-1">
+                                <div>
 
-                            <div v-if="managerBusinessData.id">
-                                <div v-if="managerBusinessData.picturePath ||managerBusinessData.picturePath?.length >= 0 ">
+                                    <button class="btn btn-primary me-2" @click="loadPageData"><i
+                                        class="bi bi-arrow-clockwise me-2"></i>Refresh page data
+                                    </button>
+                                </div>
+                                <div>
+                                    <BusinessCreateEditModal
+                                        :businessData="managerBusinessData"
+                                        :create="false"
+                                        :settlements="settlements"
+                                        :businessCategories="businessCategories"
+                                        @update="updateObjectData"/>
+                                </div>
+                            </div>
+
+                            <div v-if="managerBusinessData.id" class="d-flex flex-row">
+                                <div class="d-flex"
+                                     v-if="managerBusinessData.picturePath ||managerBusinessData.picturePath?.length >= 0 ">
                                     <button type="button" class="btn btn-outline-danger"
                                             @click="deleteBusinessImage(managerBusinessData.id)">
                                         Delete picture
                                     </button>
                                 </div>
                                 <div v-else>
+                                    <div class="mb-3">
+                                        <input class="form-control  w-100" type="file" accept="image/*"
+                                               @change="handleFileInputChange">
+                                        <button type="button" class="btn btn-outline-success w-100 mt-1"
+                                                @click="uploadBusinessImage(managerBusinessData.id)">
+                                            Add picture
+                                        </button>
+
+                                    </div>
 
 
-                                    <input type="file" accept="image/*" @change="handleFileInputChange">
-                                    <button type="button" class="btn btn-outline-success"
-                                            @click="uploadBusinessImage(managerBusinessData.id)">
-                                        Add picture
-                                    </button>
                                 </div>
                             </div>
 
