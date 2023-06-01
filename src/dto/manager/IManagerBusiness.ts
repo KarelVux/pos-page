@@ -20,8 +20,5 @@ export interface IManagerBusiness extends IBaseEntity {
     businessCategory: IManagerBusinessCategory
     settlementId: string
     settlement: IManagerSettlement
-    businessPictures: IManagerBusinessPicture[]
     products: IManagerProduct[]
-    businessManagers: IManagerBusinessManager[]
-    invoices: IManagerInvoice[]
 }

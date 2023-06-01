@@ -15,13 +15,22 @@
                                 :settlements="settlements"
                                 :businessCategories="businessCategories"
                                 @update="updateObjectData"/>
+
+                            <div v-if="managerBusinessData.id">
+                                <div v-if="managerBusinessData.picturePath ">
+
+                                </div>
+                                <div v-else>
+                                    <input type="file" accept="image/*" @change="handleFileInputChange">
+                                    <button type="button" class="btn btn-outline-success"
+                                            @click="uploadBusinessImage(managerBusinessData.id)">
+                                        Add picture
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
 
-                        <div>
-                            <p>Input</p>
-                            <input type="file" accept="image/*" @change="handleFileInputChange">
-                            <button @click="uploadImage" >Upload</button>
-                        </div>
 
                     </BusinessIntroduction>
                 </div>
@@ -44,6 +53,7 @@
                             :create="true"
                             :productCategories="productCategories"
                             @update="updateObjectData"/>
+
                         <ProductCategoryCreateModal
                             class="d-flex ms-2"
                             @update="updateObjectData"
@@ -383,6 +393,7 @@ import OrderFeedbackService from "@/services/manager/OrderFeedbackService";
 import type {IManagerOrderFeedback} from "@/dto/manager/IManagerOrderFeedback";
 import type {IJWTResponse} from "@/dto/identity/IJWTResponse";
 import {PictureService} from "@/services/manager/PictureService";
+import {vi} from "vuetify/locale";
 
 const managerBusinessService = new ManagerBusinessService();
 const invoiceService = new InvoiceService();
@@ -669,18 +680,46 @@ const handleFileInputChange = (event: Event) => {
     }
 };
 
-const uploadImage = async () => {
+const uploadBusinessImage = async (businessId: string) => {
         {
             if (!selectedImage.value) return;
             let identity = identitySore.$state.authenticationJwt as IJWTResponse;
-            if (identitySore.$state.authenticationJwt && managerBusinessData.value?.id) {
-                await pictureService.postBusinessPicture(identity,  managerBusinessData.value?.id! ,selectedImage.value);
+            if (identitySore.$state.authenticationJwt && businessId) {
+                let result = await pictureService.postBusinessPicture(identity, businessId, selectedImage.value);
+                if (result) {
+                    console.log("Successfully uploaded business picture");
+                    selectedImage.value = undefined;
+                    await loadPageData();
+                } else {
+                    console.log("Unable to upload business picture");
+                }
             } else {
-                console.log("Unable to upload business picture");
+                console.log("Unable to authenticate  or business id is not provided");
             }
         }
     }
 ;
+
+const deleteBusinessImage = async (businessId: string) => {
+        {
+            if (!selectedImage.value) return;
+            let identity = identitySore.$state.authenticationJwt as IJWTResponse;
+            if (identitySore.$state.authenticationJwt && businessId) {
+                let result = await pictureService.deletePicture(identity, businessId);
+                if (result) {
+                    console.log("Successfully uploaded business picture");
+                    selectedImage.value = undefined;
+                    await loadPageData();
+                } else {
+                    console.log("Unable to upload business picture");
+                }
+            } else {
+                console.log("Unable to authenticate  or business id is not provided");
+            }
+        }
+    }
+;
+
 
 </script>
 
